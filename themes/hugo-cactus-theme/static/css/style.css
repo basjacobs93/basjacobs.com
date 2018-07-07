@@ -301,8 +301,6 @@ hr {
 	background: #eee;
 }
 
-/*span.code { font-family:Menlo, Monaco, Courier; background-color:#EEE; font-size:14px; }*/
-
 /*pre	{
 	font-family:Menlo, Monaco, Courier;
 	white-space:pre-wrap;
@@ -660,7 +658,11 @@ a.symbol:hover {
 
 code { 
 	font-family:Menlo, Monaco, Courier; 
-	background-color:#EEE; font-size:14px; 
+	background-color:#F0F0F0; font-size:14px; 
 	padding: 2px; 
 	font-weight: 400;
+}
+
+pre code.hljs {
+  padding: 9.5px;
 }

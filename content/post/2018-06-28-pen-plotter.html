@@ -37,7 +37,7 @@ Writing these instructions one by one, I could create all kinds of shapes consis
 <div id="plotter-meets-python" class="section level2">
 <h2>Plotter meets Python</h2>
 <p>Using the Python package <a href="https://github.com/pyserial/pyserial">pySerial</a>, I was able to send commands to the plotter through just a couple of lines of code (see <a href="https://github.com/grbl/grbl/blob/master/doc/script/simple_stream.py">here</a>):</p>
-<pre class="chroma"><code># Open serial port
+<pre class="python"><code># Open serial port
 s = serial.Serial(&#39;/dev/wchusbserial1420&#39;, 115200)
 
 # Wake up
@@ -136,12 +136,11 @@ class Line():
 </div>
 </div>
 </div>
-<div id="look-at-this-harmonograph" class="section level1">
-<h1>Look at this harmonograph</h1>
+<div id="drawing-a-harmonograph" class="section level1">
+<h1>Drawing a harmonograph</h1>
 <p>Another <a href="https://aschinchon.wordpress.com/2014/10/13/beautiful-curves-the-harmonograph/">blog post</a> inspired me to try and plot some harmonographs. A harmonograph is a device that uses pendulums to draw trajectories on a piece of paper. The output of such a harmonograph can be described mathematically and we can simulate a random harmonograph by drawing random numbers and following a trajectory defined by sine waves. I followed the blog post mentioned above which draws 12 random numbers and plots the trajectory defined by</p>
 <p><span class="math display">\[ x(t)=e^{-d_1t}\sin(tf_1+p_1)+e^{-d_2t}\sin(tf_2+p_2)\]</span> <span class="math display">\[y(t)=e^{-d_3t}\sin(tf_3+p_3)+e^{-d_4t}\sin(tf_4+p_4)\]</span> where <span class="math inline">\(t\)</span> runs from <span class="math inline">\(0\)</span> to <span class="math inline">\(1\)</span>.<br />
 In his post, the author implemented the harmonograph in R, but since my plotter works from Python, I ported his code to Python.</p>
-<p>{{&lt; highlight python &gt;}}</p>
 <pre class="python"><code>import numpy as np
 
 # draw the necessary random numbers
@@ -153,7 +152,6 @@ p1, p2, p3, p4 = np.random.uniform(0, np.pi, 4)
 t = np.linspace(1, 100, num = 10**4)
 xs = xt(t)
 ys = yt(t)</code></pre>
-<p>{{&lt;/ highlight &gt;}}</p>
 <p>After this, I could plot the curve by defining lines between subsequent points and sending the instructions to my plotter. Using the classes and functions I defined before, this was very easy:</p>
 <pre class="python"><code>objs = [shapes.Point(xs[0], ys[0])] +\
   [shapes.Line(

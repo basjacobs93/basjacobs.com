@@ -4,13 +4,6 @@ languageCode = "en-us"
 title = "limosa"
 theme = "hugo-cactus-theme"
 
-# Syntax highlighting
-pygmentsStyle = "trac"
-pygmentsUseClasses = true
-pygmentsCodeFences = true
-pygmentsCodefencesGuessSyntax = true
-
-
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 [params]

@@ -33,7 +33,7 @@ Writing these instructions one by one, I could create all kinds of shapes consis
 ## Plotter meets Python
 Using the Python package [pySerial](https://github.com/pyserial/pyserial), I was able to send commands to the plotter through just a couple of lines of code (see [here](https://github.com/grbl/grbl/blob/master/doc/script/simple_stream.py)):
 
-```chroma
+```python
 # Open serial port
 s = serial.Serial('/dev/wchusbserial1420', 115200)
 
@@ -132,7 +132,7 @@ After all this work, I was finally able to plot Picasso's dog.
 
 ![Dog (Picasso/EleksDraw), pen on paper](/post/2018-06-28-pen-plotter_files/picassodog_plot.png){width=600px}
 
-# Look at this harmonograph
+# Drawing a harmonograph
 Another [blog post](https://aschinchon.wordpress.com/2014/10/13/beautiful-curves-the-harmonograph/) inspired me to try and plot some harmonographs. A harmonograph is a device that uses pendulums to draw trajectories on a piece of paper. The output of such a harmonograph can be described mathematically and we can simulate a random harmonograph by drawing random numbers and following a trajectory defined by sine waves. I followed the blog post mentioned above which draws 12 random numbers and plots the trajectory defined by 
 
 $$ x(t)=e^{-d_1t}\sin(tf_1+p_1)+e^{-d_2t}\sin(tf_2+p_2)$$
@@ -140,7 +140,6 @@ $$y(t)=e^{-d_3t}\sin(tf_3+p_3)+e^{-d_4t}\sin(tf_4+p_4)$$
 where $t$ runs from $0$ to $1$.  
 In his post, the author implemented the harmonograph in R, but since my plotter works from Python, I ported his code to Python.
 
-{{< highlight python >}}
 ```python
 import numpy as np
 
@@ -154,8 +153,6 @@ t = np.linspace(1, 100, num = 10**4)
 xs = xt(t)
 ys = yt(t)
 ```
-{{</ highlight >}}
-
 After this, I could plot the curve by defining lines between subsequent points and sending the instructions to my plotter. Using the classes and functions I defined before, this was very easy:
 
 ```python
