@@ -6,10 +6,19 @@
     <description>Recent content on limosa</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 28 Jun 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 15 Jul 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Generating the logo for this site</title>
+      <link>/post/generating-logo/</link>
+      <pubDate>Sun, 15 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/generating-logo/</guid>
+      <description>I wanted a logo for my blog. Something kind of personal, but abstract; preferably something that could be drawn with a single path. I decided to download an elevation map of the Netherlands (where I live) to somehow use a plot of that data as my logo. I thought it would be nice to generate a side view and smooth it. In this short post I will discuss how I did it.</description>
+    </item>
     
     <item>
       <title>Pen plotter</title>
