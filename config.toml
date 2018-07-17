@@ -7,25 +7,23 @@ theme = "hugo-cactus-theme"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 [params]
-	name = "limosa"
-	description = "A blog about math, programming and data science"
-	bio = "A blog about math, programming and data science"
-	enableRSS = false
+    name = "limosa"
+    description = "A blog about math, programming and data science"
+    bio = "A blog about math, programming and data science"
+    enableRSS = false
 
-	# Navigation links
-	home = ""
-	# Pagination links
-	olderPosts = ""
-	newerPosts = ""
-	readMore = ""
-	copyright = ""
-	# 404 page
-	title404 = ""
-	subtitle404 = ""
+    # Navigation links
+    home = ""
+    # Pagination links
+    olderPosts = ""
+    newerPosts = ""
+    readMore = ""
+    copyright = ""
+    # 404 page
+    title404 = ""
+    subtitle404 = ""
 
-	# Choose a font for the social icons in the footer. Either "mono-social" or "font-awesome"
-	iconFont = "mono-social"
-    # The social icons can be styled differently if you use mono as font - circle, rounded, or empty
+    iconFont = "mono-social"
     socialIconStyle = "circle"
 
 # Add additional social link entries underneath

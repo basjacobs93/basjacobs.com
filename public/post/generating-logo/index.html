@@ -1,13 +1,53 @@
----
-title: Generating the logo for this site
-author: Bas
-date: '2018-07-15'
-slug: generating-logo
----
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="limosa">
+<meta name="description" content="A blog about math, programming and data science">
+<meta name="generator" content="Hugo 0.42.1" />
+<title>Generating the logo for this site</title>
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/highlight.css">
 
 
 
-<p>I wanted a logo for my blog. Something kind of personal, but abstract; preferably something that could be drawn with a single path. I decided to download an elevation map of the Netherlands (where I live) to somehow use a plot of that data as my logo. I thought it would be nice to generate a side view and smooth it. In this short post I will discuss how I did it.</p>
+<link rel="stylesheet" href="/css/monosocialiconsfont.css">
+
+
+
+
+  </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='/'> <span class="arrow">←</span>Home</a>
+	
+
+	
+ 		<a href='/about/'>About</a>
+  	
+
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Generating the logo for this site</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        July 15, 2018
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>I wanted a logo for my blog. Something kind of personal, but abstract; preferably something that could be drawn with a single path. I decided to download an elevation map of the Netherlands (where I live) to somehow use a plot of that data as my logo. I thought it would be nice to generate a side view and smooth it. In this short post I will discuss how I did it.</p>
 <div id="the-data" class="section level1">
 <h1>The data</h1>
 <p>The Netherlands have an open database containing elevation data for the whole country. It is called <em>Actueel Hoogtebestand Nederland</em> (Current Elevation database Netherlands) and can be <a href="http://www.ahn.nl/common-nlm/viewer.html">viewed online</a>. On average, it contains eight height measurements per square meter. The measurements are made using aircraft with LiDAR technology. Measuring the entire country takes sevaral years. In particular, I used the database called AHN2, which contains measurements made from 2007 to 2012. According to the website, 99.7% of the measured points are accurate up to 20 cm.<br />
@@ -66,3 +106,42 @@ Smoothing can be done in <code>ggplot</code> by simply replacing <code>geom_line
 <p>That’s it! Once you have an idea, creating your own logo can be a couple of lines of code away.<br />
 The complete <code>R</code> code used can be viewed on my <a href="https://github.com/basjacobs93/limosalogo">Github</a>.</p>
 </div>
+
+    </section>
+</article>
+
+
+
+        
+        <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    
+    <a class="symbol" href="https://www.github.com/basjacobs93">
+        circlegithub
+    </a>
+    
+    <a class="symbol" href="https://www.linkedin.com/in/basjacobs93">
+        circlelinkedin
+    </a>
+    
+
+
+</div>
+
+    
+</footer>
+    </section>
+    <script src="/js/main.js"></script>
+<script src="/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

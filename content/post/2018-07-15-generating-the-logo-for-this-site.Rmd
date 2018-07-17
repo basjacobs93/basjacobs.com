@@ -1,10 +1,8 @@
 ---
 title: Generating the logo for this site
-author: ~
+author: Bas
 date: '2018-07-15'
 slug: generating-logo
-categories: []
-tags: []
 ---
 
 I wanted a logo for my blog. Something kind of personal, but abstract; preferably something that could be drawn with a single path. I decided to download an elevation map of the Netherlands (where I live) to somehow use a plot of that data as my logo. I thought it would be nice to generate a side view and smooth it. In this short post I will discuss how I did it. 

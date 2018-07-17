@@ -1,14 +1,53 @@
----
-title: Pen plotter
-author: Bas
-date: '2018-06-28'
-slug: pen-plotter
-math: true
----
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="limosa">
+<meta name="description" content="A blog about math, programming and data science">
+<meta name="generator" content="Hugo 0.42.1" />
+<title>Pen plotter</title>
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/highlight.css">
 
 
 
-<p>Inspired by <a href="http://www.tobiastoft.com/posts/an-intro-to-pen-plotters">this</a> blog post, I got interested in pen plotters and computer generated art. I liked the minimalist pieces of art a plotter could create, resembling a human hand doodling on a piece of paper. A lot of examples of this art can be found on Twitter at <a href="https://twitter.com/hashtag/plottertwitter">#plottertwitter</a>. By far the most used plotter on Twitter is the <a href="https://www.axidraw.com/">AxiDraw</a>, but since I didn’t want to spend over 400 euros and I liked the prospect of assembling something myself, I decided to buy the <a href="http://eleksmaker.com/nav/eleksdraw/">EleksDraw</a> which was around 100 euros and came completely unassembled. In this blog post, I am summarising the steps I took to go from a box with nuts and bolts to some nice drawings on paper, hopefully inspiring you to try this out as well. Most of the code used can be found on <a href="https://github.com/basjacobs93/plotter">my GitHub</a>. Note that I wrote this code for myself, so please only use it as a reference and don’t use it without understanding what is going on.</p>
+<link rel="stylesheet" href="/css/monosocialiconsfont.css">
+
+
+
+
+  </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='/'> <span class="arrow">←</span>Home</a>
+	
+
+	
+ 		<a href='/about/'>About</a>
+  	
+
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Pen plotter</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        June 28, 2018
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>Inspired by <a href="http://www.tobiastoft.com/posts/an-intro-to-pen-plotters">this</a> blog post, I got interested in pen plotters and computer generated art. I liked the minimalist pieces of art a plotter could create, resembling a human hand doodling on a piece of paper. A lot of examples of this art can be found on Twitter at <a href="https://twitter.com/hashtag/plottertwitter">#plottertwitter</a>. By far the most used plotter on Twitter is the <a href="https://www.axidraw.com/">AxiDraw</a>, but since I didn’t want to spend over 400 euros and I liked the prospect of assembling something myself, I decided to buy the <a href="http://eleksmaker.com/nav/eleksdraw/">EleksDraw</a> which was around 100 euros and came completely unassembled. In this blog post, I am summarising the steps I took to go from a box with nuts and bolts to some nice drawings on paper, hopefully inspiring you to try this out as well. Most of the code used can be found on <a href="https://github.com/basjacobs93/plotter">my GitHub</a>. Note that I wrote this code for myself, so please only use it as a reference and don’t use it without understanding what is going on.</p>
 <div id="buying-and-assembling" class="section level1">
 <h1>Buying and assembling</h1>
 <p>I ordered the EleksDraw from BangGood, which means that the product came from China and took around 3 weeks to arrive. It came in more than a hundred pieces and assembling it took me a couple of hours. The instructions on the website were just clear enough; they consisted of just a series of pictures with no text.</p>
@@ -172,3 +211,78 @@ objs_to_plotter(objs, s)</code></pre>
 <p>All in all, it was a nice journey. I never considered myself an artist, but now I kind of know what it feels like to be one, even though I did not design anything by hand.<br />
 Someday, I want to learn <a href="https://processing.org/">Processing</a>, a programming language designed specifically for creating computer generated art.</p>
 </div>
+
+    </section>
+</article>
+
+
+
+        
+        <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    
+    <a class="symbol" href="https://www.github.com/basjacobs93">
+        circlegithub
+    </a>
+    
+    <a class="symbol" href="https://www.linkedin.com/in/basjacobs93">
+        circlelinkedin
+    </a>
+    
+
+
+</div>
+
+    
+</footer>
+    </section>
+    <script src="/js/main.js"></script>
+<script src="/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-beta/dist/katex.min.css" integrity="sha384-9tPv11A+glH/on/wEu99NVwDPwkMQESOocs/ZGXPoIiLE8MU/qkqUcZ3zzL+6DuH" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-beta/dist/katex.min.js" integrity="sha384-U8Vrjwb8fuHMt6ewaCy8uqeUXv4oitYACKdB0VziCerzt011iQ/0TqlSlv8MReCm" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-beta/dist/contrib/auto-render.min.js" integrity="sha384-aGfk5kvhIq5x1x5YdvCp4upKZYnA8ckafviDpmWEKp4afOZEqOli7gqSnh8I6enH" crossorigin="anonymous"></script>
+<script>
+  renderMathInElement(document.body,
+    {
+        delimiters: [
+              {left: "$", right: "$", display: false},
+              {left: "$$", right: "$$", display: true},
+              {left: "\\(", right: "\\)", display: false},
+              {left: "\\[", right: "\\]", display: true}
+              ]
+    }
+  );
+
+  var inlineMathArray = document.querySelectorAll("script[type='math/tex']");
+  for (var i = 0; i < inlineMathArray.length; i++) {
+    var inlineMath = inlineMathArray[i];
+    var tex = inlineMath.innerText || inlineMath.textContent;
+    var replaced = document.createElement("span");
+    replaced.innerHTML = katex.renderToString(tex, {displayMode: false});
+    inlineMath.parentNode.replaceChild(replaced, inlineMath);
+  }
+
+  var displayMathArray = document.querySelectorAll("script[type='math/tex; mode=display']");
+  for (var i = 0; i < displayMathArray.length; i++) {
+    console.log(i);
+    var displayMath = displayMathArray[i];
+    var tex = displayMath.innerHTML;
+    var replaced = document.createElement("span");
+    replaced.innerHTML = katex.renderToString(tex.replace(/%.*/g, ''), {displayMode: true});
+    displayMath.parentNode.replaceChild(replaced, displayMath);
+  }
+</script>
+
+
+</body>
+</html>
