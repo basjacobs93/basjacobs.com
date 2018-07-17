@@ -67,7 +67,7 @@ links &lt;- str_extract_all(feed, &quot;http[:/.\\w]+\\.zip&quot;)[[1]] %&gt;% u
 For every <code>url</code> in this <code>links</code> vector, I download its contents into a temporary file, unzip it, read it into memory as a GDAL object, take its maximum over an axis and remove the temporary file again.</p>
 <pre class="r"><code>library(rgdal)
 
-# Create temporary folder to store the files in
+# Create temporary folder to store the files in  
 temp &lt;- tempfile(fileext = &quot;.zip&quot;)
 # Download the file and unzip it
 download.file(url, temp, quiet = TRUE)
@@ -91,7 +91,7 @@ Plotting is now an easy task using <code>ggplot</code>.</p>
 <img src="/post/2018-07-15-generating-the-logo-for-this-site_files/sideview.png" alt="Sideview of the Netherlands" width="400" />
 <p class="caption">Sideview of the Netherlands</p>
 </div>
-<p>This plot displays the country as if we were standing in Germany and looking at the Netherlands without the ability to see perspective. There are some weird values here and there, but overall it looks like can be expected. It is too rough to use as a plot; we should apply some smoothing to make it prettier.<br />
+<p>This plot displays the country as if we were standing in Germany and looking at the Netherlands without the ability to see perspective. There are some weird values here and there, but overall it looks like can be expected. It is too rough to use as a logo; we should apply some smoothing to make it prettier.<br />
 Smoothing can be done in <code>ggplot</code> by simply replacing <code>geom_line</code> with <code>geom_smooth</code>. Under the hood, this is using using cubic regression splines to smooth the values. This yields a pretty picture better suited for using as a logo.</p>
 <pre class="r"><code>ggplot(df, aes(x = x, y = elevation)) +
   geom_smooth(se = FALSE) +
@@ -136,7 +136,7 @@ The complete <code>R</code> code used can be viewed on my <a href="https://githu
 </footer>
     </section>
     <script src="/js/main.js"></script>
-<script src="/js/highlight.js"></script>
+<script src="/js/highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 
 

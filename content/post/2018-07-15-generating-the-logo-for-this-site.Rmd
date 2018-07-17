@@ -25,10 +25,10 @@ links <- str_extract_all(feed, "http[:/.\\w]+\\.zip")[[1]] %>% unique
 This results in a vector of 1373 URLs.  
 For every `url` in this `links` vector, I download its contents into a temporary file, unzip it, read it into memory as a GDAL object, take its maximum over an axis and remove the temporary file again.
 
-```r
+``` r
 library(rgdal)
 
-# Create temporary folder to store the files in
+# Create temporary folder to store the files in  
 temp <- tempfile(fileext = ".zip")
 # Download the file and unzip it
 download.file(url, temp, quiet = TRUE)
@@ -57,7 +57,7 @@ ggplot(df, aes(x = x, y = elevation)) +
 
 ![Sideview of the Netherlands](/post/2018-07-15-generating-the-logo-for-this-site_files/sideview.png){width=400px}
 
-This plot displays the country as if we were standing in Germany and looking at the Netherlands without the ability to see perspective. There are some weird values here and there, but overall it looks like can be expected. It is too rough to use as a plot; we should apply some smoothing to make it prettier.  
+This plot displays the country as if we were standing in Germany and looking at the Netherlands without the ability to see perspective. There are some weird values here and there, but overall it looks like can be expected. It is too rough to use as a logo; we should apply some smoothing to make it prettier.  
 Smoothing can be done in `ggplot` by simply replacing `geom_line` with `geom_smooth`. Under the hood, this is using using cubic regression splines to smooth the values. This yields a pretty picture better suited for using as a logo.  
 
 ``` r
