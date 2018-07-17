@@ -5,7 +5,7 @@ hidden: true
 menu: "main"
 ---
 
-My name is Bas Jacobs. I am working as a data scientist in The Netherlands. Before that, I did both my bachelor and master in mathematics. I like solving puzzles, writing code and working on data analysis and machine learning projects.
+My name is Bas Jacobs. I am working as a data scientist in The Netherlands. Before that, I did both my bachelor and master in mathematics. I like solving puzzles, writing code and working on data analysis and machine learning projects. Links to my LinkedIn and GitHub can be found at the bottom of this page.
 
 ***
 
