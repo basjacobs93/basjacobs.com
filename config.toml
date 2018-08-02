@@ -2,7 +2,7 @@
 baseurl = "/"
 languageCode = "en-us"
 title = "limosa"
-theme = "hugo-cactus-theme"
+theme = "limosa-theme"
 
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
@@ -10,23 +10,12 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     name = "limosa"
     description = "A blog about math, programming and data science"
     bio = "A blog about math, programming and data science"
-    enableRSS = false
+    enableRSS = true
 
     # Navigation links
     home = ""
-    # Pagination links
-    olderPosts = ""
-    newerPosts = ""
-    readMore = ""
+    # Copyright
     copyright = ""
     # 404 page
     title404 = ""
     subtitle404 = ""
-
-    iconFont = "mono-social"
-    socialIconStyle = "circle"
-
-# Add additional social link entries underneath
-[social]
-    github   = "https://www.github.com/basjacobs93"
-    linkedin = "https://www.linkedin.com/in/basjacobs93"
