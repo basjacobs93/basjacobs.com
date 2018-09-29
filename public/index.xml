@@ -6,10 +6,20 @@
     <description>Recent content on limosa</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 15 Jul 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 20 Sep 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Learning image representation with Keras in R</title>
+      <link>/post/image-approximation-with-keras-in-r/</link>
+      <pubDate>Thu, 20 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/image-approximation-with-keras-in-r/</guid>
+      <description>An image can be viewed as a function mapping pixel locations \(x,y\) to color values \(R,G,B\). Since neural networks are function approximators, we can train such a network to approximate an image. The network is then a representation of the image as a function and its contents can be displayed by evaluating the network for all pixel pairs \(x,y\).
+The Keras package for R is now approximately 1 year old but I have to admit that I usually go to Python to implement neural networks.</description>
+    </item>
     
     <item>
       <title>Generating the logo for this site</title>
