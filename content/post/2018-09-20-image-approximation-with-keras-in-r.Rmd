@@ -18,7 +18,7 @@ library(keras)
 library(imager)
 ```
 
-To honour the name of this blog, let's pick an image of the bird species godwit (limosa) and load it using `imager`'s `load.image`. 
+To honour the name of this blog, let's pick an image of the bird species godwit (scientific name: _limosa_) and load it using `imager`'s `load.image`. 
 
 ```{r message=FALSE, warning=FALSE}
 # Image from Pixabay
@@ -27,11 +27,14 @@ im <- load.image(im_url)
 dim(im)
 ```
 
-The image is $640x480$ pixels in size, consists of 1 frame (it is not a video) and 3 color channels.  
-Plotting the image is easy. We choose to show the image without axes for aestetic reasons.
+The image is 640x480 pixels in size, consists of 1 frame (it is not a video) and 3 color channels.  
+Plotting the image is easy. We choose to show the image without axes and make the margins small for aestetic reasons.
 
-```{r}
+``` r 
 plot(im, axes = FALSE)
+```
+```{r echo=FALSE, fig.cap='A godwit. Source: pixabay.com'}
+knitr::include_graphics("image.png")
 ```
 
 We convert the image to a data frame by calling `as.data.frame` on the image object. This data frame by default has 4 columns: an _x_ and _y_ column to identify each pixel's location, a color channel column _cc_, and the _value_ this channel takes at this pixel. We spread the key-value pairs in the _cc_ and _value_ columns into columns _cc_1_, _cc_2_, _cc_3_ representing the three color values.
@@ -81,8 +84,8 @@ model %>% fit(
   epochs = 20
 )
 ```
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-load.image("trainplot.png") %>% plot(axes=F)
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.cap='Training progress', out.width='320px'}
+knitr::include_graphics("trainplot.png")
 ```
 
 Training takes about 1 minute, and as can be seen from the training plot, it seems that both the loss and the accuracy have saturated. An accuracy of 0.9 sounds good, but let's take a look at the output image before we get too happy.  
@@ -102,8 +105,8 @@ as.cimg(df_out) %>% list(im, .) %>% imappend("x") %>% plot(axes = F)
 ```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 as.cimg(df_out) %>% list(im, .) %>% imappend("x") %>% save.image("model1.png")
 ```
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-load.image("model1.png") %>% plot(axes=F)
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.cap='The network learned a gradient'}
+knitr::include_graphics("model1.png")
 ```
 
 The result is a vertical gradient, which can also be seen when looking at the model weights.
@@ -145,8 +148,8 @@ as.cimg(df_out) %>% list(im, .) %>% imappend("x") %>% plot(axes = F)
 ```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 as.cimg(df_out) %>% list(im, .) %>% imappend("x") %>% save.image("model2.png")
 ```
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-load.image("model2.png") %>% plot(axes = F)
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.cap='Some features of the bird appear'}
+knitr::include_graphics("model2.png")
 ```
 
 As can be seen, the image is already picking up some countours of the bird, together with some 'rays' coming from the top-left corner. If we go for an even deeper network, more of the bird's features can be recognized from the image.
@@ -183,8 +186,8 @@ as.cimg(df_out) %>% list(im, .) %>% imappend("x") %>% plot(axes=F)
 ```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 as.cimg(df_out) %>% list(im, .) %>% imappend("x") %>% save.image("model3.png")
 ```
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-load.image("model3.png") %>% plot(axes=F)
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.cap='The image is nicely recovered'}
+knitr::include_graphics("model3.png")
 ```
 
 Ways to improve this might include more layers, more epochs, different activation functions, different loss function. For now, I'm really happy with the result!
