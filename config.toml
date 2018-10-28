@@ -6,6 +6,8 @@ theme = "limosa-theme"
 
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
+googleAnalytics = "UA-128252699-1"
+
 [params]
     name = "limosa"
     description = "A blog about math, programming and data science"
