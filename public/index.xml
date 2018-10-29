@@ -6,10 +6,19 @@
     <description>Recent content on limosa</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 20 Sep 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 28 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Showing images on hover in Plotly with R</title>
+      <link>/post/showing-images-on-hover-in-plotly-with-r/</link>
+      <pubDate>Sun, 28 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/showing-images-on-hover-in-plotly-with-r/</guid>
+      <description>For a project I was working on recently, I wanted to turn a ggplot scatterplot into an interactive visualisation: when hovering over a point, a corresponding image needed to be shown. I did not want to use Shiny, since I required the visualisation to be portable. This is possible by manually tinkering with html, but using the plotly and htmlwidgets packages, I was able to achieve what I wanted without the need to leave the comfy RStudio environment, and without needing to host the plot on the plot.</description>
+    </item>
     
     <item>
       <title>Learning image representation with Keras in R</title>
