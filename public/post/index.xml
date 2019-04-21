@@ -6,10 +6,22 @@
     <description>Recent content in Posts on limosa</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 28 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 21 Apr 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Trees and Tents</title>
+      <link>/post/trees-and-tents/</link>
+      <pubDate>Sun, 21 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/trees-and-tents/</guid>
+      <description>Trees and Tents is a logic game in which tents need to be placed in a grid. Every tent must be next to a tree, and tents cannot touch horizontally, vertically or diagonally. For every row and column, the number of tents is given.
+The website https://brainbashers.com/tents.asp posts a new puzzle every day, of which a 12x12 example is the following:
+A 12x12 Trees and Tents puzzle from https://brainbashers.com/tents.asp
+ In this post, I will implement a solver for this puzzle in Julia using the JuMP package for mathematical optimization.</description>
+    </item>
     
     <item>
       <title>Showing images on hover in Plotly with R</title>
