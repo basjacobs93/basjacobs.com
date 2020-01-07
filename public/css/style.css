@@ -10,13 +10,13 @@ body {
 }
 
 h1 {
-  font-size: 1.7em;
+  font-size: 1.6em;
   margin-bottom: 0;
 }
 
 p, li {
   line-height: 1.8;
-	font-size: 1.1em;
+	font-size: 1em;
 }
 
 img {
@@ -65,7 +65,7 @@ header h2 {
 .caption {
   margin-top: 0.5em;
   line-height: 1.4em;
-  font-size: 1em;
+  font-size: 0.9em;
   color: #777;
 }
 
@@ -115,12 +115,22 @@ code {
 	background-color: rgb(250, 250, 250);
 }
 
+blockquote {
+  border-left: 3px solid #999;
+  padding-left: 1em;
+  margin-left: 1em;
+  color: #999;
+  font-style: italic;
+}
+
+
 .hljs {
  display:block;
  overflow-x:auto;
  padding:0.5em;
  color:#333;
- background:#f8f8f8
+ background:#f8f8f8;
+ font-size: 0.9em;
 }
 .hljs-comment,.hljs-quote {
  color:#998;
