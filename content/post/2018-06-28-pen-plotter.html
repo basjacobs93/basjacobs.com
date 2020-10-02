@@ -6,6 +6,7 @@ slug: pen-plotter
 math: true
 ---
 
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 
 <p>Inspired by <a href="http://www.tobiastoft.com/posts/an-intro-to-pen-plotters">this</a> blog post, I got interested in pen plotters and computer generated art. I liked the minimalist pieces of art a plotter could create, resembling a human hand doodling on a piece of paper. A lot of examples of this art can be found on Twitter at <a href="https://twitter.com/hashtag/plottertwitter">#plottertwitter</a>. By far the most used plotter on Twitter is the <a href="https://www.axidraw.com/">AxiDraw</a>, but since I didn’t want to spend over 400 euros and I liked the prospect of assembling something myself, I decided to buy the <a href="http://eleksmaker.com/nav/eleksdraw/">EleksDraw</a> which was around 100 euros and came completely unassembled. In this blog post, I am summarising the steps I took to go from a box with nuts and bolts to some nice drawings on paper, hopefully inspiring you to try this out as well. Most of the code used can be found on <a href="https://github.com/basjacobs93/plotter">my GitHub</a>. Note that I wrote this code for myself, so please only use it as a reference and don’t use it without understanding what is going on.</p>
@@ -16,7 +17,7 @@ math: true
 After assembling it and hooking it up to my computer, I downloaded the EleksMaker software that can be used to convert an image to commands that this plotter can interpret. However, this software only works on Windows (I’m on a MacBook), and even after booting into Windows, it did not work as it should. Most of the menus didn’t show any text and when loading an image, I got an error that I couldn’t understand because it was in Chinese.<br />
 I decided to boot back into MacOS and create some software myself. How hard could it be, right?</p>
 <div class="figure">
-<img src="/post/2018-06-28-pen-plotter_files/plotter.jpg" alt="The assembled EleksDraw should look a little something like this" width="600" />
+<img src="/post/2018-06-28-pen-plotter_files/plotter.jpg" width="600" alt="" />
 <p class="caption">The assembled EleksDraw should look a little something like this</p>
 </div>
 </div>
@@ -76,7 +77,7 @@ Since I figured I would be needing this code more, I wrapped it in a function. I
 <h2>Lines and points</h2>
 <p>What seemed most intuitive to me was converting the SVG <code>&lt;path&gt;</code> element to G-code instructions. Such an element can contain various types of lines and curves that together create a connected (closed or open) path. A path like this can be constructed by tracing an image in a tool like Inkscape or Sketch. My final goal was to be able to plot Picasso’s drawing ‘Dog’, which could be traced with a single path.</p>
 <div class="figure">
-<img src="/post/2018-06-28-pen-plotter_files/picassodog.jpg" alt="Dog (Picasso), pen on paper" width="600" />
+<img src="/post/2018-06-28-pen-plotter_files/picassodog.jpg" width="600" alt="" />
 <p class="caption">Dog (Picasso), pen on paper</p>
 </div>
 <p>An example of the SVG path syntax can be found on <a href="https://www.w3schools.com/graphics/svg_path.asp">w3schools</a>.<br />
@@ -88,12 +89,12 @@ It turned out that parsing such a path was straightforward with regular expressi
 </ol>
 <p>All of these issues were relatively easy to overcome, and after implementing this, I was able to parse an SVG file into a table which I could then convert to G-code. The code for this parser can be found on my GitHub.</p>
 </div>
-<div id="bezier-curves" class="section level2">
+<div id="bézier-curves" class="section level2">
 <h2>Bézier curves</h2>
 <p>Still, I had only created code for drawing points and lines. To plot arcs, I could of course interpolate these using points, but the results were what I expected them to be: not very pretty. G-code supports circle arcs (an arc obtained by tracing part of a circle), so a better way would be to try to approximate the curves using circle arcs.<br />
 When tracing an image with a vector graphics tool like Sketch or Inkscape, the result will be a path consisting of <a href="https://en.wikipedia.org/wiki/B%C3%A9zier_curve">Bézier curves</a>. A Bézier curve is a parametric curve that can be described mathematically. I won’t go into more detail on Bézier curves; that is worth a blog post in itself. One thing that’s important to know is that there are quadratic and cubic Bézier curves. The quadratic curves are a special case of the cubic ones, so if I’m able to draw cubic Bézier curves I’m able to draw both.</p>
 <div class="figure">
-<img src="/post/2018-06-28-pen-plotter_files/cubic_bezier.png" alt="A cubic Bézier curve is defined by 4 points (source: Wikipedia)" width="600" />
+<img src="/post/2018-06-28-pen-plotter_files/cubic_bezier.png" width="600" alt="" />
 <p class="caption">A cubic Bézier curve is defined by 4 points (source: Wikipedia)</p>
 </div>
 <p>It is in general not possible to convert a Bézier curve to a combination of circle arcs, but there are ways that are ‘good enough’. In particular, I implemented <a href="http://dlacko.org/blog/2016/10/19/approximating-bezier-curves-by-biarcs/">this</a> approach in Python, which approximates a cubic Bézier curve with two circle arcs. I updated the classes for points and lines to include addition of points, multiplication of points with scalars, intersections of lines and so on. After these adjustments, it was relatively straightforward to write a <code>CubicBezier</code> class of which an instantiation could convert itself to two objects of class <code>CircleArc</code>.<br />
@@ -131,7 +132,7 @@ class Line():
         return [plt.move(self.P2.x, self.P2.y)]</code></pre>
 <p>After all this work, I was finally able to plot Picasso’s dog.</p>
 <div class="figure">
-<img src="/post/2018-06-28-pen-plotter_files/picassodog_plot.png" alt="Dog (Picasso/EleksDraw), pen on paper" width="600" />
+<img src="/post/2018-06-28-pen-plotter_files/picassodog_plot.png" width="600" alt="" />
 <p class="caption">Dog (Picasso/EleksDraw), pen on paper</p>
 </div>
 </div>
@@ -139,7 +140,9 @@ class Line():
 <div id="drawing-a-harmonograph" class="section level1">
 <h1>Drawing a harmonograph</h1>
 <p>Another <a href="https://aschinchon.wordpress.com/2014/10/13/beautiful-curves-the-harmonograph/">blog post</a> inspired me to try and plot some harmonographs. A harmonograph is a device that uses pendulums to draw trajectories on a piece of paper. The output of such a harmonograph can be described mathematically and we can simulate a random harmonograph by drawing random numbers and following a trajectory defined by sine waves. I followed the blog post mentioned above which draws 12 random numbers and plots the trajectory defined by</p>
-<p><span class="math display">\[ x(t)=e^{-d_1t}\sin(tf_1+p_1)+e^{-d_2t}\sin(tf_2+p_2)\]</span> <span class="math display">\[y(t)=e^{-d_3t}\sin(tf_3+p_3)+e^{-d_4t}\sin(tf_4+p_4)\]</span> where <span class="math inline">\(t\)</span> runs from <span class="math inline">\(0\)</span> to <span class="math inline">\(1\)</span>.<br />
+<p><span class="math display">\[ x(t)=e^{-d_1t}\sin(tf_1+p_1)+e^{-d_2t}\sin(tf_2+p_2)\]</span>
+<span class="math display">\[y(t)=e^{-d_3t}\sin(tf_3+p_3)+e^{-d_4t}\sin(tf_4+p_4)\]</span>
+where <span class="math inline">\(t\)</span> runs from <span class="math inline">\(0\)</span> to <span class="math inline">\(1\)</span>.<br />
 In his post, the author implemented the harmonograph in R, but since my plotter works from Python, I ported his code to Python.</p>
 <pre class="python"><code>import numpy as np
 
@@ -163,7 +166,7 @@ s = wake_up_serial(&#39;/dev/tty.wchusbserial1410&#39;, 115200)
 objs_to_plotter(objs, s)</code></pre>
 <p>Note that I started with a <code>Point</code> because the pen needs to move to the initial position before it can start drawing. If you look carefully, you can see that the figure was built up using small line segments. Increasing the number of steps in the <code>np.linspace</code> command above will make the result smoother. Nevertheless, I think the result looks very nice!</p>
 <div class="figure">
-<img src="/post/2018-06-28-pen-plotter_files/harmonograph.jpg" alt="Harmonograph, pen on paper" width="600" />
+<img src="/post/2018-06-28-pen-plotter_files/harmonograph.jpg" width="600" alt="" />
 <p class="caption">Harmonograph, pen on paper</p>
 </div>
 </div>

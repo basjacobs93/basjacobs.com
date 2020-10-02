@@ -6,12 +6,13 @@ slug: trees-and-tents
 math: true
 ---
 
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 
 <p>Trees and Tents is a logic game in which tents need to be placed in a grid. Every tent must be next to a tree, and tents cannot touch horizontally, vertically or diagonally. For every row and column, the number of tents is given.</p>
 <p>The website <a href="https://brainbashers.com/tents.asp" class="uri">https://brainbashers.com/tents.asp</a> posts a new puzzle every day, of which a 12x12 example is the following:</p>
 <div class="figure">
-<img src="/post/2019-04-21-trees-and-tents_files/example.png" alt="A 12x12 Trees and Tents puzzle from https://brainbashers.com/tents.asp" style="width:70.0%" />
+<img src="/post/2019-04-21-trees-and-tents_files/example.png" style="width:70.0%" alt="" />
 <p class="caption">A 12x12 Trees and Tents puzzle from <a href="https://brainbashers.com/tents.asp" class="uri">https://brainbashers.com/tents.asp</a></p>
 </div>
 <p>In this post, I will implement a solver for this puzzle in Julia using the <a href="https://github.com/JuliaOpt/JuMP.jl">JuMP</a> package for mathematical optimization.<br />

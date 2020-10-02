@@ -6,6 +6,7 @@ slug: image-approximation-with-keras-in-r
 math: true
 ---
 
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 
 <p>An image can be viewed as a function mapping pixel locations <span class="math inline">\(x,y\)</span> to color values <span class="math inline">\(R,G,B\)</span>. Since neural networks are function approximators, we can train such a network to approximate an image. The network is then a representation of the image as a function and its contents can be displayed by evaluating the network for all pixel pairs <span class="math inline">\(x,y\)</span>.</p>
@@ -24,7 +25,7 @@ dim(im)</code></pre>
 Plotting the image is easy. We choose to show the image without axes and make the margins small for aestetic reasons.</p>
 <pre class="r"><code>plot(im, axes = FALSE)</code></pre>
 <div class="figure">
-<img src="/post/2018-09-20-image-approximation-with-keras-in-r_files/image.png" alt="A godwit. Source: pixabay.com" width="600" />
+<img src="/post/2018-09-20-image-approximation-with-keras-in-r_files/image.png" width="600" alt="" />
 <p class="caption">A godwit. Source: pixabay.com</p>
 </div>
 <p>We convert the image to a data frame by calling <code>as.data.frame</code> on the image object. This data frame by default has 4 columns: an <em>x</em> and <em>y</em> column to identify each pixel’s location, a color channel column <em>cc</em>, and the <em>value</em> this channel takes at this pixel. We spread the key-value pairs in the <em>cc</em> and <em>value</em> columns into columns <em>cc_1</em>, <em>cc_2</em>, <em>cc_3</em> representing the three color values.</p>
@@ -68,7 +69,7 @@ summary(model)</code></pre>
   epochs = 20
 )</code></pre>
 <div class="figure">
-<img src="/post/2018-09-20-image-approximation-with-keras-in-r_files/trainplot.png" alt="Training progress" />
+<img src="/post/2018-09-20-image-approximation-with-keras-in-r_files/trainplot.png" alt="" />
 <p class="caption">Training progress</p>
 </div>
 <p>Training takes about 1 minute, and as can be seen from the training plot, it seems that both the loss and the accuracy have saturated. An accuracy of 0.9 sounds good, but let’s take a look at the output image before we get too happy.<br />
@@ -81,7 +82,7 @@ df_out &lt;- df_out %&gt;%
 <pre class="r"><code>as.cimg(df_out) %&gt;% list(im, .) %&gt;%
   imappend(&quot;x&quot;) %&gt;% plot(axes = F)</code></pre>
 <div class="figure">
-<img src="/post/2018-09-20-image-approximation-with-keras-in-r_files/model1.png" alt="The network learned a gradient" width="600" />
+<img src="/post/2018-09-20-image-approximation-with-keras-in-r_files/model1.png" width="600" alt="" />
 <p class="caption">The network learned a gradient</p>
 </div>
 <p>The result is a vertical gradient, which can also be seen when looking at the model weights.</p>
@@ -123,7 +124,7 @@ df_out &lt;- df_out %&gt;%
 as.cimg(df_out) %&gt;% list(im, .) %&gt;%
   imappend(&quot;x&quot;) %&gt;% plot(axes = F)</code></pre>
 <div class="figure">
-<img src="/post/2018-09-20-image-approximation-with-keras-in-r_files/model2.png" alt="Some features of the bird appear" width="600" />
+<img src="/post/2018-09-20-image-approximation-with-keras-in-r_files/model2.png" width="600" alt="" />
 <p class="caption">Some features of the bird appear</p>
 </div>
 <p>As can be seen, the image is already picking up some countours of the bird, together with some ‘rays’ coming from the top-left corner. If we go for an even deeper network, more of the bird’s features can be recognized from the image.</p>
@@ -157,7 +158,7 @@ df_out &lt;- df_out %&gt;%
 as.cimg(df_out) %&gt;% list(im, .) %&gt;%
   imappend(&quot;x&quot;) %&gt;% plot(axes=F)</code></pre>
 <div class="figure">
-<img src="/post/2018-09-20-image-approximation-with-keras-in-r_files/model3.png" alt="The image is nicely recovered" width="600" />
+<img src="/post/2018-09-20-image-approximation-with-keras-in-r_files/model3.png" width="600" alt="" />
 <p class="caption">The image is nicely recovered</p>
 </div>
 <p>Ways to improve this might include more layers, more epochs, different activation functions, different loss function. For now, I’m really happy with the result!</p>

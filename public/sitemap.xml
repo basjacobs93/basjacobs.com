@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/post/riddler-can-you-eat-all-the-chocolates/</loc>
+    <lastmod>2020-10-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/post/trees-and-tents/</loc>
     <lastmod>2019-04-21T00:00:00+00:00</lastmod>
   </url>
@@ -34,7 +39,7 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2019-04-21T00:00:00+00:00</lastmod>
+    <lastmod>2020-10-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -45,7 +50,7 @@
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2019-04-21T00:00:00+00:00</lastmod>
+    <lastmod>2020-10-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
