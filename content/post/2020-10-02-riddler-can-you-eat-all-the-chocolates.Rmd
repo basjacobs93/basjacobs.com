@@ -147,3 +147,74 @@ P(2,8)
 ```
 
 within a second. This agrees with the outcome of our simulation: the probability of ending with a milk chocolate is about 46.15%.
+
+## Other starting points
+
+Now that we have code that runs quickly, we can explore the probabilities for other mixes of chocolates.
+
+Say we start with 2 milk chocolates, but vary the number of dark chocolates.
+
+```{r message=FALSE}
+library(tidyverse)
+theme_set(theme_light())
+
+simulations <- tibble(m = 2, d = 1:100) %>% 
+  rowwise() %>% 
+  mutate(p = P(m, d))
+
+ggplot(simulations, aes(d, p)) + 
+  geom_line() +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(title = "Probability of ending with a milk chocolate",
+       subtitle = "Given 2 milk and a varying number of dark chocolates",
+       x = "Number of dark chocolates",
+       y = "Probability")
+```
+
+At first, the probability of success drops quickly, but at some point the streaks of dark chocolates will be so common that adding more dark chocolates does not decrease this probability significantly.
+
+We can do the same thing in two dimensions by also varying the number of milk chocolates. Now, memoization comes in handy, since otherwise we calculate the same probability many times. The function `P_mem` calculates `P` but checks whether a certain probability has already been calculated in the list of matrices `mem`.
+
+```{r}
+n_max <- 20
+mem <- list(milk = matrix(nrow = n_max, ncol = n_max),
+            dark = matrix(nrow = n_max, ncol = n_max))
+
+P_mem <- function(m, d, previous = "") {
+  if (m == 0) {
+    return(0)
+  } else if (d == 0) {
+    return(1)
+  }
+  
+  if (previous != "" && !is.na(mem[[previous]][m, d])) {
+    return(mem[[previous]][m, d])
+  }
+  
+  if (previous == "") {
+    res <- m/(m+d)*P_mem(m-1, d, "milk") + d/(m+d)*P_mem(m, d-1, "dark")
+  } else if (previous == "milk") {
+    res <- (m^2+m*d)/(m^2+d^2+m*d)*P_mem(m-1, d, "milk") + (d^2)/(m^2+d^2+m*d)*P_mem(m, d-1, "dark")
+    mem[[previous]][m, d] <<- res
+  } else if (previous == "dark") {
+    res <- 1 - P_mem(d, m, "milk")
+    mem[[previous]][m, d] <<- res
+  }
+  
+  res
+}
+
+simulations <- crossing(m = 1:n_max, d = 1:n_max) %>% 
+  rowwise() %>% 
+  mutate(p = P_mem(m, d))
+
+ggplot(simulations, aes(m, d, fill = p)) + 
+  geom_raster() +
+  scale_fill_continuous(labels = scales::percent_format()) +
+  labs(title = "Probability of ending with a milk chocolate",
+       x = "Number of milk chocolates",
+       y = "Number of dark chocolates",
+       fill = "Probability")
+```
+
+This graph shows that the more chocolates there are in the bag, the smaller the differences between different mixes become.
