@@ -96,7 +96,7 @@ eat_chocolates &lt;- function() {
 <p>We can now easily run, for example, 100,000 simulations and calculate the percentage in which the last chocolate was milk:</p>
 <pre class="r"><code>simulations &lt;- replicate(1e5, eat_chocolates())
 mean(simulations == &quot;m&quot;)</code></pre>
-<pre><code>## [1] 0.46233</code></pre>
+<pre><code>## [1] 0.46285</code></pre>
 <p>In a couple of seconds, this gives an estimate of a 46% probability of ending with a piece of milk chocolate. This is closer to 50% than I initially expected. Intuitively though, it does make sense, given the nature of the problem that the majority chocolate type will be eaten relatively quickly, since it is easier to get a ‘streak’ of those.</p>
 <p>Running this (admittedly naive) simulation for more than, say, 1 million replications quickly becomes intractable. For a more accurate result that does run quickly, we can resort to recursion.</p>
 </div>
@@ -161,6 +161,69 @@ P(m,d)=\frac{m}{m+d}\cdot P(m-1,d,\text{milk})\,+\,\frac{d}{m+d}\cdot P(m,d-1,\t
 <pre class="r"><code>P(2,8)</code></pre>
 <pre><code>## [1] 0.4615372</code></pre>
 <p>within a second. This agrees with the outcome of our simulation: the probability of ending with a milk chocolate is about 46.15%.</p>
+</div>
+<div id="other-starting-points" class="section level2">
+<h2>Other starting points</h2>
+<p>Now that we have code that runs quickly, we can explore the probabilities for other mixes of chocolates.</p>
+<p>Say we start with 2 milk chocolates, but vary the number of dark chocolates.</p>
+<pre class="r"><code>library(tidyverse)
+theme_set(theme_light())
+
+simulations &lt;- tibble(m = 2, d = 1:100) %&gt;% 
+  rowwise() %&gt;% 
+  mutate(p = P(m, d))
+
+ggplot(simulations, aes(d, p)) + 
+  geom_line() +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(title = &quot;Probability of ending with a milk chocolate&quot;,
+       subtitle = &quot;Given 2 milk and a varying number of dark chocolates&quot;,
+       x = &quot;Number of dark chocolates&quot;,
+       y = &quot;Probability&quot;)</code></pre>
+<p><img src="/post/2020-10-02-riddler-can-you-eat-all-the-chocolates_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>At first, the probability of success drops quickly, but at some point the streaks of dark chocolates will be so common that adding more dark chocolates does not decrease this probability significantly.</p>
+<p>We can do the same thing in two dimensions by also varying the number of milk chocolates. Now, memoization comes in handy, since otherwise we calculate the same probability many times. The function <code>P_mem</code> calculates <code>P</code> but checks whether a certain probability has already been calculated in the list of matrices <code>mem</code>.</p>
+<pre class="r"><code>n_max &lt;- 20
+mem &lt;- list(milk = matrix(nrow = n_max, ncol = n_max),
+            dark = matrix(nrow = n_max, ncol = n_max))
+
+P_mem &lt;- function(m, d, previous = &quot;&quot;) {
+  if (m == 0) {
+    return(0)
+  } else if (d == 0) {
+    return(1)
+  }
+  
+  if (previous != &quot;&quot; &amp;&amp; !is.na(mem[[previous]][m, d])) {
+    return(mem[[previous]][m, d])
+  }
+  
+  if (previous == &quot;&quot;) {
+    res &lt;- m/(m+d)*P_mem(m-1, d, &quot;milk&quot;) + d/(m+d)*P_mem(m, d-1, &quot;dark&quot;)
+  } else if (previous == &quot;milk&quot;) {
+    res &lt;- (m^2+m*d)/(m^2+d^2+m*d)*P_mem(m-1, d, &quot;milk&quot;) + (d^2)/(m^2+d^2+m*d)*P_mem(m, d-1, &quot;dark&quot;)
+    mem[[previous]][m, d] &lt;&lt;- res
+  } else if (previous == &quot;dark&quot;) {
+    res &lt;- 1 - P_mem(d, m, &quot;milk&quot;)
+    mem[[previous]][m, d] &lt;&lt;- res
+  }
+  
+  res
+}
+
+simulations &lt;- crossing(m = 1:n_max, d = 1:n_max) %&gt;% 
+  rowwise() %&gt;% 
+  mutate(p = P_mem(m, d))
+
+ggplot(simulations, aes(m, d, fill = p)) + 
+  geom_raster() +
+  scale_fill_continuous(labels = scales::percent_format()) +
+  labs(title = &quot;Probability of ending with a milk chocolate&quot;,
+       x = &quot;Number of milk chocolates&quot;,
+       y = &quot;Number of dark chocolates&quot;,
+       fill = &quot;Probability&quot;)</code></pre>
+<p><img src="/post/2020-10-02-riddler-can-you-eat-all-the-chocolates_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>This graph shows that the more chocolates there are in the bag, the smaller the differences between different mixes become.</p>
 </div>
 
     </section>
