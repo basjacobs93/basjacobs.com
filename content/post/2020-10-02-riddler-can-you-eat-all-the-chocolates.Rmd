@@ -16,6 +16,8 @@ math: true
 
 Our first approach will be a simple simulation to gauge what the answer should approximately be, before going to an analytical approach.
 
+*Added later: it turns out I misread the question. I assumed that after taking a chocolate that I could not eat, I would put it back and only eat the next one if it is of the same type. That is, however, not what's asked: you always eat the following chocolate after you put one back, regardless of its type. I will keep my answer to the (wrong) question below for those who are interested.*
+
 ## Simulation in R
 
 The following R function simulates eating one bag of chocolates and outputs what the last chocolate was.
