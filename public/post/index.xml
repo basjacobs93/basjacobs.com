@@ -6,10 +6,19 @@
     <description>Recent content in Posts on Bas Jacobs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 02 Oct 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 18 Nov 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Image Triangulation with Julia</title>
+      <link>/post/image-triangulation-with-julia/</link>
+      <pubDate>Wed, 18 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/image-triangulation-with-julia/</guid>
+      <description>I have always been fascinated by computer generated art. Recently, I came across the paper Stylized Image Triangulation by Kai Lawonn and Tobias Günther. In this paper, the authors perform image triangulation (approximating an image by tessellation with triangles) by coming up with an initial grid and performing gradient descent. They achieve beautiful triangulations that capture the original images very well. Their code is a combination of MatLab and C++, and is available on github.</description>
+    </item>
     
     <item>
       <title>Riddler: Can You Eat All The Chocolates?</title>

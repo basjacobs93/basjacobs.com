@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Bas Jacobs">
+<meta name="description" content="My blog about math, programming and data science">
+<meta name="generator" content="Hugo 0.45.1" />
+<title>Image Triangulation with Julia</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather:400,500|Open+Sans:400|Source+Code+Pro:400,700"> 
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-128252699-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </head>
+<body>
+    <nav class="main-nav">
+  <a href='/'>
+  <img id="logo" src="/images/logo.svg" width="50"/>
+  </a>
+  
+	<a href='/'> Posts</a>
+
+	
+ 		<a href='/about/'>About</a>
+  
+  
+	
+		<a href="/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Image Triangulation with Julia</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        2020-18-11
+        </h2>
+    </header>
+    <section id="post-body">
+        
+
+<p>I have always been fascinated by computer generated art. Recently, I came across the paper <a href="https://cgl.ethz.ch/Downloads/Publications/Papers/2018/Law18a/Law18a.pdf">Stylized Image Triangulation</a> by Kai Lawonn and Tobias Günther. In this paper, the authors perform image triangulation (approximating an image by tessellation with triangles) by coming up with an initial grid and performing gradient descent. They achieve beautiful triangulations that capture the original images very well. Their code is a combination of MatLab and C++, and is <a href="https://github.com/tobguent/image-triangulation">available on github</a>.</p>
+
+<p>As a fun exercise in Julia, I implemented part of their method in a Pluto notebook (like a Jupyter notebook but especially for Julia, see <a href="https://github.com/fonsp/Pluto.jl">here</a>). My notebook is <a href="https://github.com/basjacobs93/image_triangulation">available on Github</a>.</p>
+
+<h2 id="summary-of-method">Summary of method</h2>
+
+<p>In the paper, the authors start with an initial grid of points that defines a triangulation. This grid can either be a <em>regular layout</em>, in which the points are spaced evenly across the width and height of an image, or it can be made via <em>importance sampling</em>, in which &lsquo;important&rsquo; regions of the image are found and points are sampled, weighted by this importance. Every triangle gets a constant color, calculated as the mean of the colors of its interior points in the original image.</p>
+
+<p>As an example, consider this image of a beautiful bird called a <em>Bearded reedling (Panurus biarmicus)</em>, taken from <a href="https://www.youtube.com/watch?v=i8YPjJSuse0">this YouTube video</a>.</p>
+
+<p><img src="/post/2020-11-18-image-triangulation-with-julia_files/baardman_2.png" alt="Bearded Reedling" /></p>
+
+<p>The two types of initial triangulation are the regular layout (in this case with 50 triangles),</p>
+
+<p><img src="/post/2020-11-18-image-triangulation-with-julia_files/baardman_2_regular_layout.png" alt="Bearded Reedling (Regular Layout)" />
+and the triangulation based on importance sampling (in this case by sampling 50 points).
+<img src="/post/2020-11-18-image-triangulation-with-julia_files/baardman_2_importance_sampling.png" alt="Bearded Reedling (Importance Sampling)" /></p>
+
+<p>Starting with such a triangulation, the triangles are improved iteratively by gradient descent. For every point, a small change in the horizontal and vertical direction is tried, and a gradient is calculated by calculating the errors of the point&rsquo;s adjacent triangles for each such configuration. The error of a triangle is defined as the mean of the differences of its interior points&rsquo; colors, compared to the original image. This way, the initial triangulation gets better every step, but it may converge to a local optimum, depending on the initial triangulation.</p>
+
+<p>On top of gradient descent, every couple of steps, every triangle can be split into three by placing an additional point at its centroid. This way, large triangles that have a big error can be split up into smaller triangles with different colors and smaller errors. The triangles eligible for this splitting have to be large enough, should not be too narrow, and should have a large error. These thresholds, together with the number of steps, step size, and other parameters can be tweaked in the code, yielding different results.</p>
+
+<p>An example output is the below, in which the initial grid was a regular layout, and which resulted in an image of 700 triangles.
+<img src="/post/2020-11-18-image-triangulation-with-julia_files/baardman_2_700.png" alt="Bearded reedling after optimization (700 triangles)" /></p>
+
+<p>For a more mathematically thorough explanation, I refer to the original paper.</p>
+
+<p>Coding this in Julia was straightforward, but the performance is not as good as I hoped it would be. Generating the above image took a couple of minutes. The authors of the paper wrote parts of their code in C++ because of performance, and parallelized and optimized the code such that it was faster. Although Julia is fast, my naive implementation still requires lots of loops (over the triangles, points, pixels), so it makes sense for it to be slow.</p>
+
+<h2 id="more-results">More results</h2>
+
+<p>Another beautiful picture of the same species of bird is the following (<a href="https://commons.wikimedia.org/wiki/File:Bartmeise(Cropped)_by_Wolfram_Riech.jpg">source</a> by <em>Kaeptn chemnitz, <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>, via Wikimedia Commons</em>).</p>
+
+<p><img src="/post/2020-11-18-image-triangulation-with-julia_files/baardman.png" alt="Bearded reedling (source: wikimedia)" /></p>
+
+<p>The resulting triangulations are more abstract than the above, but I think they are beautiful. The results with 100, 500 and 1000 triangles are below.</p>
+
+<p><img src="/post/2020-11-18-image-triangulation-with-julia_files/baardman_100.png" alt="Bearded reedling (100 triangles) "/>
+<img src="/post/2020-11-18-image-triangulation-with-julia_files/baardman_500.png" alt="Bearded reedling (500 triangles)"/>
+<img src="/post/2020-11-18-image-triangulation-with-julia_files/baardman_imp_1000.png" alt="Bearded reedling (1000 triangles)"/></p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Implementing part of the methodology of the paper was fairly straightforward in Julia, even though my experience with the language is limited. However, the resulting code was not as fast as I would&rsquo;ve liked. This makes it hard to fiddle around with the parameters, since a lot of time is spent waiting for the results. Some more focus on efficiency is needed to speed things up. That said, even though my implementation is naive, a pretty triangulation is only a key-press away and can be generated in a couple of minutes.</p>
+
+<p>As stated, the notebook is available <a href="https://github.com/tobguent/image-triangulation">on GitHub</a>, so feel free to try it out!</p>
+
+    </section>
+</article>
+
+
+
+        
+        <footer id="footer">
+
+</footer>
+    </section>
+    <script src="/js/main.js"></script>
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+</body>
+</html>
