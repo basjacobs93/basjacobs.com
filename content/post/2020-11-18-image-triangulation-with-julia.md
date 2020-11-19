@@ -31,7 +31,6 @@ An example output is the below, in which the initial grid was a regular layout, 
 
 For a more mathematically thorough explanation, I refer to the original paper.  
 
-Coding this in Julia was straightforward, but the performance is not as good as I hoped it would be. Generating the above image took a couple of minutes. The authors of the paper wrote parts of their code in C++ because of performance, and parallelized and optimized the code such that it was faster. Although Julia is fast, my naive implementation still requires lots of loops (over the triangles, points, pixels), so it makes sense for it to be slow.
 
 ## More results
 
@@ -39,7 +38,7 @@ Another beautiful picture of the same species of bird is the following ([source]
 
 ![Bearded reedling (source: wikimedia)](/post/2020-11-18-image-triangulation-with-julia_files/baardman.png)
 
-The resulting triangulations are more abstract than the above, but I think they are beautiful. The results with 100, 500 and 1000 triangles are below.
+The resulting triangulations are more abstract than the above, but I think they are beautiful. The results with 100, 500, 1000 and 2000 triangles are below.
 
 <img src="/post/2020-11-18-image-triangulation-with-julia_files/baardman_100.png" alt="Bearded reedling (100 triangles) "/>
 <img src="/post/2020-11-18-image-triangulation-with-julia_files/baardman_500.png" alt="Bearded reedling (500 triangles)"/>
@@ -48,6 +47,6 @@ The resulting triangulations are more abstract than the above, but I think they 
 
 ## Conclusion
 
-Implementing part of the methodology of the paper was fairly straightforward in Julia, even though my experience with the language is limited. However, the resulting code was not as fast as I would've liked. This makes it hard to fiddle around with the parameters, since a lot of time is spent waiting for the results. Some more focus on efficiency is needed to speed things up. That said, even though my implementation is naive, a pretty triangulation is only a key-press away and can be generated in a couple of minutes.  
+Implementing part of the methodology of the paper in Julia was fairly straightforward, even though my experience with the language is limited. However, the performance is not as good as I hoped it would be. Generating the above images took a couple of minutes upto half an hour each. This makes it hard to fiddle around with the parameters, since a lot of time is spent waiting for the results. The authors of the paper wrote parts of their code in C++ because of performance, and parallelized and optimized the code such that it was faster. Although Julia code can be fast, my naive implementation still requires lots of loops (over the triangles, points, pixels), so it makes sense for it to be slow. That said, even though my implementation is naive, a pretty triangulation is only a key-press away and can be generated in a couple of minutes.  
 
 As stated, the notebook is available [on GitHub](https://github.com/tobguent/image-triangulation), so feel free to try it out!
