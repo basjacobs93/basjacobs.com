@@ -44,6 +44,7 @@ The resulting triangulations are more abstract than the above, but I think they 
 <img src="/post/2020-11-18-image-triangulation-with-julia_files/baardman_100.png" alt="Bearded reedling (100 triangles) "/>
 <img src="/post/2020-11-18-image-triangulation-with-julia_files/baardman_500.png" alt="Bearded reedling (500 triangles)"/>
 <img src="/post/2020-11-18-image-triangulation-with-julia_files/baardman_imp_1000.png" alt="Bearded reedling (1000 triangles)"/>
+<img src="/post/2020-11-18-image-triangulation-with-julia_files/baardman_2000.png" alt="Bearded reedling (2000 triangles)"/>
 
 ## Conclusion
 
