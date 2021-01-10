@@ -79,9 +79,12 @@ p <- ggplot(mtcars) +
   )
 ```
 
-![](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/facets_png.png){width=400px}
-![](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/facets_air.png){width=400px}
-![](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/facets_plot.png){width=400px}
+![mtcars, png](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/facets_png.png){width=400px}
+
+![mtcars, preview](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/facets_air.png){width=400px}
+
+![mtcars, pen on paper](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/facets_plot.png){width=400px}
+
 
 ### Harmonograph
 
@@ -105,9 +108,12 @@ p <- harmonograph %>%
 ```
 
 
-![](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/harmonograph_png.png){width=400px}
-![](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/harmonograph_air.png){width=400px}
-![](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/harmonograph_plot.png){width=400px}
+![Harmonograph, png](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/harmonograph_png.png){width=400px}
+
+![Harmonograph, preview](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/harmonograph_air.png){width=400px}
+
+![Harmonograph, pen on paper](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/harmonograph_plot.png){width=400px}
+
 
 ### Georg Nees - Schotter
 
@@ -140,9 +146,12 @@ p <- expand_grid(col = 0:(n_cols-1),
   theme_void()
 ```
 
-![](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/schotter_png.png){width=400px}
-![](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/schotter_air.png){width=400px}
-![](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/schotter_plot.png){width=400px}
+![Schotter, pen on paper](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/schotter_png.png){width=400px}
+
+![Schotter, preview](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/schotter_air.png){width=400px}
+
+![Schotter, pen on paper](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/schotter_plot.png){width=400px}
+
 
 # Provinces of The Netherlands
 
@@ -160,6 +169,9 @@ p <- nl_provincie %>%
   theme_void()
 ```
 
-![](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/nl_png.png){width=400px}
-![](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/nl_air.png){width=400px}
-![](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/nl_plot.png){width=400px}
+
+![Provinces of The Netherlands, png](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/nl_png.png){width=400px}
+
+![Provinces of The Netherlands, preview](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/nl_air.png){width=400px}
+
+![Provinces of The Netherlands, pen on paper](/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/nl_plot.png){width=400px}
