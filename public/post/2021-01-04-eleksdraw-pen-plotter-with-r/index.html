@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Bas Jacobs">
+<meta name="description" content="My blog about math, programming and data science">
+<meta name="generator" content="Hugo 0.45.1" />
+<title>EleksDraw pen plotter with R</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather:400,500|Open+Sans:400|Source+Code+Pro:400,700"> 
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-128252699-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </head>
+<body>
+    <nav class="main-nav">
+  <a href='/'>
+  <img id="logo" src="/images/logo.svg" width="50"/>
+  </a>
+  
+	<a href='/'> Posts</a>
+
+	
+ 		<a href='/about/'>About</a>
+  
+  
+	
+		<a href="/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>EleksDraw pen plotter with R</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        2021-04-01
+        </h2>
+    </header>
+    <section id="post-body">
+        <script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<p>The <a href="https://wiki.eleksmaker.com/doku.php?id=eleksdraw">EleksDraw pen plotter</a> is a relatively cheap pen plotter that works like the better-known AxiDraw plotter. Unlike the AxiDraw, it comes as a kit that needs to be assembled, and the only software available is a Windows program. Since I’m using macOS and I wanted more freedom, I decided to fiddle around with it in Python, which resulted in a <a href="/post/pen-plotter/">blog post</a> and <a href="https://github.com/basjacobs93/plotter">accompanying code</a>. In this post, I describe how I got to get it working with <code>ggplot2</code> in R.</p>
+<div class="figure">
+<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/eleksdraw.jpg" alt="" />
+<p class="caption">The EleksDraw pen plotter</p>
+</div>
+<div id="python" class="section level2">
+<h2>Python</h2>
+<p>My initial python code was very hacky and unstable, so I decided to take a more structured approach, now that I knew I would be able to get it working. I found a nicely structured <a href="https://github.com/fogleman/xy">project by Michael Fogleman</a> that does the same for the Makeblock XY Plotter. It defines an object that holds the connection to the plotter, and defines methods that send commands to it, like <code>move()</code>, <code>pen_up()</code> and <code>pen_down()</code>. It can render a drawing and store it as an image before sending it to the plotter, which makes it easy to assess an image virtually before physically drawing it. I forked the project, edited the device instructions and restructured it a bit, which resulted in <a href="https://github.com/basjacobs93/EleksDrawPy">EleksDrawPy</a>.</p>
+<p>This new code is a lot easier to use and more stable than my previous attempt. It also allows for usage from R via the <a href="https://rstudio.github.io/reticulate/"><code>reticulate</code> R interface to Python</a>.</p>
+</div>
+<div id="r" class="section level2">
+<h2>R</h2>
+<p>My pen plotter was collecting dust when I stumbled upon <a href="https://fawkes.data-imaginist.com">fawkes</a>, “an R interface to the AxiDraw plotter” by Thomas Lin Pedersen, who is part of RStudio’s <code>tidyverse</code> team. It uses <code>reticulate</code> to be able to use the AxiDraw python interface from R, and defines a <code>device</code> which one can write <code>ggplot2</code> plots to, similar to R’s built-in <code>png()</code> or <code>pdf()</code> device. How cool would it be to be able to plot ggplot2 graphs on my plotter?</p>
+<p>It turned out to be very straightforward to port his code to use my python code. The resulting code can be found <a href="https://github.com/basjacobs93/fawkes">on GitHub</a>. I kept the original code intact, but added the <code>eleks_dev()</code> and the <code>eleks_manual()</code> functions, which are the counterparts of the <code>axi_dev()</code> and <code>axi_manual()</code> functions already present. The former can be used as a device like <code>png()</code>, the latter for interactive mode (i.e. sending individual commands to the device). I did not create a version of the <code>axi_svg()</code> function (that uses the AxiDraw svg plotting capabilities), since my EleksDraw python code does not have this functionality (yet).</p>
+<p>The <code>fawkes::ghost_dev()</code> device that is also present in the package, makes it easy to get a feeling of what the resulting plot will look like. It shows not only the lines that will be drawn, but also the paths the device takes while the pen is in the air.</p>
+<p>Now, we can plot ggplot2 graphs from R right onto a piece of paper! Below are some examples. All credits go to Thomas Lin Pedersen and Michael Fogleman, whose code I merely adjusted for my specific goal.</p>
+</div>
+<div id="results" class="section level2">
+<h2>Results</h2>
+<p>The python module can be installed with <code>pip install -r requirements.txt</code> (after cloning the project), and the R package with <code>remotes::install_github('basjacobs93/fawkes')</code>. The packages we’ll use besides the aforementioned <code>fawkes</code> and <code>ggplot2</code> are <code>dplyr</code> (for data manipulation) and <code>sf</code> (for using spatial data).</p>
+<pre class="r"><code>library(dplyr)
+library(fawkes)
+library(ggplot2)
+library(sf)</code></pre>
+<p>Given a <code>ggplot2</code> plot <code>p</code>, the plot can be previewed with the following,</p>
+<pre class="r"><code>gd &lt;- ghost_dev(&#39;A6&#39;, portrait = FALSE, margins = 5, ignore_color = TRUE)
+p
+invisible(dev.off())
+gd$preview(plot_air = TRUE)</code></pre>
+<p>and plotted with the EleksDraw using the below.</p>
+<pre class="r"><code>gd &lt;- eleks_dev(&#39;A6&#39;, portrait = FALSE, margins = 5, ignore_color = TRUE)
+p
+invisible(dev.off())</code></pre>
+<p>For each of the below examples, we show the <code>ggplot2</code> graph as a png, the output of the <code>fawkes::ghost_dev()</code> preview, and finally a picture of the plot on paper.</p>
+<div id="facets-with-mtcars" class="section level3">
+<h3>Facets with mtcars</h3>
+<p>The first plot is copied straight from the <a href="https://fawkes.data-imaginist.com/#examples"><code>fawkes</code> examples</a>. It plots the famous <code>mtcars</code> dataset using facets and demonstrates the capabilities of the <code>fawkes</code> library.</p>
+<pre class="r"><code>p &lt;- ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  facet_wrap(~ gear) +
+  theme_bw(base_size = 6) +
+  theme(
+    plot.background = element_blank(),
+    panel.background = element_blank()
+  )</code></pre>
+<p><img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/facets_png.png" width="400" />
+<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/facets_air.png" width="400" />
+<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/facets_plot.png" width="400" /></p>
+</div>
+<div id="harmonograph" class="section level3">
+<h3>Harmonograph</h3>
+<p>The below code generates a random <a href="https://en.wikipedia.org/wiki/Harmonograph">harmonograph</a>, one instance of which I plotted.</p>
+<pre class="r"><code>f1=jitter(sample(c(2,3),1));f2=jitter(sample(c(2,3),1));f3=jitter(sample(c(2,3),1));f4=jitter(sample(c(2,3),1))
+d1=runif(1,0,1e-02);d2=runif(1,0,1e-02);d3=runif(1,0,1e-02);d4=runif(1,0,1e-02)
+p1=runif(1,0,pi);p2=runif(1,0,pi);p3=runif(1,0,pi);p4=runif(1,0,pi)
+harmonograph &lt;- data.frame(t = seq(0, 80*pi, 80*pi/10000)) %&gt;%
+  transmute(
+    x = exp(-d1*t)*sin(t*f1+p1) + exp(-d2*t)*sin(t*f2+p2),
+    y = exp(-d3*t)*sin(t*f3+p3) + exp(-d4*t)*sin(t*f4+p4)
+  )
+
+p &lt;- harmonograph %&gt;%
+  ggplot(aes(x, y)) +
+  geom_path() +
+  theme_bw(base_size = 6) +
+  theme_void()</code></pre>
+<p><img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/harmonograph_png.png" width="400" />
+<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/harmonograph_air.png" width="400" />
+<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/harmonograph_plot.png" width="400" /></p>
+</div>
+<div id="georg-nees---schotter" class="section level3">
+<h3>Georg Nees - Schotter</h3>
+<p>The below generates falling squares like <a href="https://collections.vam.ac.uk/item/O221321/schotter-print-nees-georg/">Schotter</a>, by generative art pioneer Georg Nees. It can be seen that there was some slippage at the belt which resulted in incomplete squares. After this plot I tightened the belt, which made the subsequent plots a lot more accurate.</p>
+<pre class="r"><code>n_cols &lt;- 12
+n_rows &lt;- 22
+
+p &lt;- expand_grid(col = 0:(n_cols-1),
+            row = 0:(n_rows-1),
+            tibble(x = c(-0.5, 0.5,  0.5, -0.5),
+                   y = c( 0.5, 0.5, -0.5, -0.5))) %&gt;%
+  group_by(col, row) %&gt;%
+  mutate(angle = rnorm(1, sd = row/60),
+         xn = x*cos(angle) - y*sin(angle),
+         y = x*sin(angle) + y*cos(angle),
+         x = xn) %&gt;%
+  select(-xn) %&gt;%
+  mutate(x = x + 1 + col,
+         y = y + 1 - row,
+         x = x + rnorm(1)*row/80, # jitter
+         y = y + rnorm(1)*row/60) %&gt;%
+  mutate(xend = lag(x, default = last(x)),
+         yend = lag(y, default = last(y))) %&gt;%
+  ungroup() %&gt;%
+  ggplot(aes(x = x, y = y, xend = xend, yend = yend)) +
+  geom_segment() +
+  coord_fixed() +
+  theme_void()</code></pre>
+<p><img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/schotter_png.png" width="400" />
+<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/schotter_air.png" width="400" />
+<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/schotter_plot.png" width="400" /></p>
+</div>
+</div>
+<div id="provinces-of-the-netherlands" class="section level1">
+<h1>Provinces of The Netherlands</h1>
+<p>We can use the excellent <a href="https://r-spatial.github.io/sf/"><code>sf</code> package</a> to load and plot spatial data with <code>ggplot2</code>, like a map of the province boundaries of the Netherlands. Below, we load <a href="https://www.pdok.nl/introductie/-/article/cbs-provincies">provinces data from CBS</a> with <code>sf::st_read()</code>, simplify it to decrease the complexity of the plot, and plot it with <code>ggplot2::geom_sf()</code>.</p>
+<pre class="r"><code>provinces &lt;- st_read(&quot;https://geodata.nationaalgeoregister.nl/bestuurlijkegrenzen/wfs?request=GetFeature&amp;service=WFS&amp;version=1.1.0&amp;typeName=bestuurlijkegrenzen:provincies&amp;outputFormat=application=json&quot;)
+
+p &lt;- nl_provincie %&gt;%
+  st_transform(54032) %&gt;% # Azimuthal equidistant
+  st_simplify(dTolerance = 400) %&gt;% # simplify
+  st_transform(4326)  %&gt;% # WGS84
+  ggplot() +
+  geom_sf(fill = NA) +
+  theme_void()</code></pre>
+<p><img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/nl_png.png" width="400" />
+<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/nl_air.png" width="400" />
+<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/nl_plot.png" width="400" /></p>
+</div>
+
+    </section>
+</article>
+
+
+
+        
+        <footer id="footer">
+
+</footer>
+    </section>
+    <script src="/js/main.js"></script>
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+</body>
+</html>

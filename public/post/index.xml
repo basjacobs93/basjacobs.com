@@ -6,10 +6,19 @@
     <description>Recent content in Posts on Bas Jacobs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 18 Nov 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 04 Jan 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>EleksDraw pen plotter with R</title>
+      <link>/post/2021-01-04-eleksdraw-pen-plotter-with-r/</link>
+      <pubDate>Mon, 04 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2021-01-04-eleksdraw-pen-plotter-with-r/</guid>
+      <description>The EleksDraw pen plotter is a relatively cheap pen plotter that works like the better-known AxiDraw plotter. Unlike the AxiDraw, it comes as a kit that needs to be assembled, and the only software available is a Windows program. Since I’m using macOS and I wanted more freedom, I decided to fiddle around with it in Python, which resulted in a blog post and accompanying code. In this post, I describe how I got to get it working with ggplot2 in R.</description>
+    </item>
     
     <item>
       <title>Image Triangulation with Julia</title>
