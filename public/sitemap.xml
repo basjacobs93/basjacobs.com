@@ -1,6 +1,11 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2021-01-04T00:00:00+00:00</lastmod>
+  </url>
   
   <url>
     <loc>/post/2021-01-04-eleksdraw-pen-plotter-with-r/</loc>
@@ -8,32 +13,37 @@
   </url>
   
   <url>
-    <loc>/post/image-triangulation-with-julia/</loc>
+    <loc>/post/</loc>
+    <lastmod>2021-01-04T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/2020-11-18-image-triangulation-with-julia/</loc>
     <lastmod>2020-11-18T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/riddler-can-you-eat-all-the-chocolates/</loc>
+    <loc>/post/2020-10-02-riddler-can-you-eat-all-the-chocolates/</loc>
     <lastmod>2020-10-02T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/trees-and-tents/</loc>
+    <loc>/post/2019-04-21-trees-and-tents/</loc>
     <lastmod>2019-04-21T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/showing-images-on-hover-in-plotly-with-r/</loc>
+    <loc>/post/2018-10-28-showing-images-on-hover-in-plotly-with-r/</loc>
     <lastmod>2018-10-28T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/image-approximation-with-keras-in-r/</loc>
+    <loc>/post/2018-09-20-image-approximation-with-keras-in-r/</loc>
     <lastmod>2018-09-20T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/generating-logo/</loc>
+    <loc>/post/2018-07-15-generating-the-logo-for-this-site/</loc>
     <lastmod>2018-07-15T00:00:00+00:00</lastmod>
   </url>
   
@@ -43,30 +53,16 @@
   </url>
   
   <url>
-    <loc>/post/pen-plotter/</loc>
+    <loc>/post/2018-06-28-pen-plotter/</loc>
     <lastmod>2018-06-28T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/</loc>
-    <lastmod>2021-01-04T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>/categories/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/post/</loc>
-    <lastmod>2021-01-04T00:00:00+00:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
     <loc>/tags/</loc>
-    <priority>0</priority>
   </url>
   
 </urlset>

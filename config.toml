@@ -4,7 +4,7 @@ languageCode = "en-us"
 title = "Bas Jacobs"
 theme = "basjacobs-theme"
 
-ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$"]
 
 googleAnalytics = "UA-128252699-1"
 

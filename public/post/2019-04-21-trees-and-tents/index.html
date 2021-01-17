@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Bas Jacobs">
+<meta name="description" content="My blog about math, programming and data science">
+<meta name="generator" content="Hugo 0.80.0" />
+<title>Trees and Tents</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather:400,500|Open+Sans:400|Source+Code+Pro:400,700"> 
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-128252699-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </head>
+<body>
+    <nav class="main-nav">
+  <a href='/'>
+  <img id="logo" src="/images/logo.svg" width="50"/>
+  </a>
+  
+	<a href='/'> Posts</a>
+
+	
+ 		<a href='/about/'>About</a>
+  
+  
+	
+		<a href="/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Trees and Tents</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        2019-21-04
+        </h2>
+    </header>
+    <section id="post-body">
+        
+<script src="/post/2019-04-21-trees-and-tents/index_files/header-attrs/header-attrs.js"></script>
+
+
+<p>Trees and Tents is a logic game in which tents need to be placed in a grid. Every tent must be next to a tree, and tents cannot touch horizontally, vertically or diagonally. For every row and column, the number of tents is given.</p>
+<p>The website <a href="https://brainbashers.com/tents.asp" class="uri">https://brainbashers.com/tents.asp</a> posts a new puzzle every day, of which a 12x12 example is the following:</p>
+<div class="figure">
+<img src="/post/2019-04-21-trees-and-tents/example.png" style="width:70.0%" alt="" />
+<p class="caption">A 12x12 Trees and Tents puzzle from <a href="https://brainbashers.com/tents.asp" class="uri">https://brainbashers.com/tents.asp</a></p>
+</div>
+<p>In this post, I will implement a solver for this puzzle in Julia using the <a href="https://github.com/JuliaOpt/JuMP.jl">JuMP</a> package for mathematical optimization.<br />
+The complete code as a jupyter notebook can be found <a href="https://github.com/basjacobs93/trees_and_tents">here</a>.</p>
+<div id="problem-definition" class="section level2">
+<h2>Problem definition</h2>
+<p>The puzzle can be formulated as a linear programming problem. There are three types of constraints:</p>
+<ul>
+<li>every tent must be next to a tree,</li>
+<li>the number of tents for every row and column is given,</li>
+<li>tents are not allowed to touch.</li>
+</ul>
+<p>Even though we treat this puzzle as an optimization problem, there is no objective to be maximized or minimized in this case; any placements of tents satisfying the constraints is a valid solution. This is similar to the <a href="https://github.com/JuliaOpt/JuMP.jl/blob/master/examples/sudoku.jl">sudoku</a> <a href="https://pythonhosted.org/PuLP/CaseStudies/a_sudoku_problem.html">solutions</a> in which the objective is also unimportant.</p>
+<p>Julia’s JuMP package provides a clean interface to defining such a problem, and solving it with various solvers. In this case, we use <a href="https://www.gnu.org/software/glpk/">GLPK</a> since it’s free and works great for this problem. Solving the problem is a matter of writing down the constraints and calling <code>JuMP.optimize</code>.</p>
+<pre class="julia"><code>using JuMP, GLPK</code></pre>
+<p>After loading the necessary packages, we need to define the puzzle displayed above. In the website’s html code, the puzzle is represented by three strings.</p>
+<ul>
+<li><code>lcpuzzle</code> is a string of numbers, denoting the cells from left to right, top to bottom. The values represent whether the corresponding cell is blank (0), or contains a tree (1) or a tent (2). Note that this string contains the solution to the problem as well, so this allows us to check the solution that JuMP found afterwards.</li>
+<li><code>lcrownumbers</code> is a string of numbers which denote the number of tents per row.</li>
+<li><code>lcrolnumbers</code> is a string of numbers which denote the number of tents per column.</li>
+</ul>
+<pre class="julia"><code># from html, 0=blank, 1=tree, 2=tent
+lcpuzzle = &quot;001202011200021001020012000120001200020100100000010200200000201000001212102020000000000010021012201000000200102002020102000001010001001201201212&quot;
+lcrownumbers = &quot;332123222404&quot;
+lccolnumbers = &quot;222322230505&quot;</code></pre>
+<p>We rewrite the above representation into something that is more easy to work with:</p>
+<ul>
+<li><code>trees</code> is a list of <code>(i,j)</code> tuples corresponding to the locations of the trees.</li>
+<li><code>row_sums</code> and <code>col_sums</code> are lists of integers denoting the totals per row and column.</li>
+<li><code>n</code> is the size of the game, which is in this case 12.</li>
+</ul>
+<pre class="julia"><code>puzzle = [parse(Int, i) for i in lcpuzzle]
+n = Int(sqrt(length(puzzle)))
+
+trees = [(i, j) for i in 1:n, j in 1:n if puzzle[(i-1)*n + j] == 1]
+row_sums = [parse(Int, i) for i in lcrownumbers]
+col_sums = [parse(Int, i) for i in lccolnumbers]</code></pre>
+<p>We initialize the solver, telling JuMP that we want to use GLPK. The variable that JuMP optimizes over is an <span class="math inline">\(n\times n\)</span> matrix <code>x</code>, consisting of binary values, where a 0 means no tent for that cell, and a 1 means that the cell contains a tent.</p>
+<pre class="julia"><code>model = Model(with_optimizer(GLPK.Optimizer))
+
+@variable(model, x[1:n, 1:n], Bin)</code></pre>
+</div>
+<div id="constraints" class="section level2">
+<h2>Constraints</h2>
+<p>We are now ready to define the constraints. We start with the requirement that a tent be next to a tree.</p>
+<p>First, a tent cannot be on top of a tree. Hence, if a tree is on position <code>(row, col)</code>, then <code>x[row, col]</code> must be <span class="math inline">\(0\)</span>.</p>
+<p>Next, for every cell <code>(row, col)</code> we check whether there is a tree next to this cell. If not, then this cell cannot contain a tent, hence <code>x[row, col]</code> should be <span class="math inline">\(0\)</span>.</p>
+<pre class="julia"><code>for row in 1:n, col in 1:n
+    # is not on a tree
+    if (row, col) in trees
+        @constraint(model, x[row, col] == 0)
+    end
+    
+    # should be next to a tree 
+    found = false
+    for tree in trees
+        if abs(tree[1] - row) + abs(tree[2] - col) &lt;= 1
+            found = true
+        end
+    end
+    if !found
+        @constraint(model, x[row, col] == 0)
+    end
+end</code></pre>
+<p>The next constraint makes sure that the number of tents in the rows and columns add up to the right values. This can be done simply by summing the columns and rows of the matrix <code>x</code>, since this equals counting the number of ones.</p>
+<pre class="julia"><code>for i in 1:n
+    @constraint(model, sum(x[i, :]) == row_sums[i])
+    @constraint(model, sum(x[:, i]) == col_sums[i])
+end</code></pre>
+<p>Lastly, we need to encode the fact that the tents may not touch horizontally, vertically or diagonally. In other words, every <span class="math inline">\(2\times2\)</span> square contains at most one tree, which is also easy to establish using the representation we chose.</p>
+<pre class="julia"><code>for row in 1:(n-1), col in 1:(n-1)
+    @constraint(model, sum(x[row:row+1, col:col+1]) &lt;= 1)
+end</code></pre>
+</div>
+<div id="solution" class="section level2">
+<h2>Solution</h2>
+<p>Now that we have represented the puzzle as a Linear Program, we can simply tel JuMP to optimize this. Within a second, it spits out a solution. Since Julia supports Unicode characters, we can visualize the solution as a grid of emoji.</p>
+<pre class="julia"><code>JuMP.optimize!(model)
+
+solution = JuMP.value.(x)
+
+for row in 1:n
+    for col in 1:n
+        if solution[row, col] == 1
+            print(&quot;⛺&quot;)
+        elseif (row, col) in trees
+            print(&quot;🌲&quot;)
+        else
+            print(&quot;◽&quot;)
+        end
+        print(&quot; &quot;)
+    end
+    println(&quot;&quot;)
+end</code></pre>
+<pre><code>◽ ◽ 🌲 ⛺ ◽ ⛺ ◽ 🌲 🌲 ⛺ ◽ ◽ 
+◽ ⛺ 🌲 ◽ ◽ 🌲 ◽ ⛺ ◽ ◽ 🌲 ⛺ 
+◽ ◽ ◽ 🌲 ⛺ ◽ ◽ ◽ 🌲 ⛺ ◽ ◽ 
+◽ ⛺ ◽ 🌲 ◽ ◽ 🌲 ◽ ◽ ◽ ◽ ◽ 
+◽ 🌲 ◽ ⛺ ◽ ◽ ⛺ ◽ ◽ ◽ ◽ ◽ 
+⛺ ◽ 🌲 ◽ ◽ ◽ ◽ ◽ 🌲 ⛺ 🌲 ⛺ 
+🌲 ◽ ⛺ ◽ ⛺ ◽ ◽ ◽ ◽ ◽ ◽ ◽ 
+◽ ◽ ◽ ◽ 🌲 ◽ ◽ ⛺ 🌲 ◽ 🌲 ⛺ 
+⛺ ◽ 🌲 ◽ ◽ ◽ ◽ ◽ ◽ ⛺ ◽ ◽ 
+🌲 ◽ ⛺ ◽ ◽ ⛺ ◽ ⛺ ◽ 🌲 ◽ ⛺ 
+◽ ◽ ◽ ◽ ◽ 🌲 ◽ 🌲 ◽ ◽ ◽ 🌲 
+◽ ◽ 🌲 ⛺ ◽ 🌲 ⛺ ◽ 🌲 ⛺ 🌲 ⛺ </code></pre>
+<p>That’s it! I like the JuMP syntax a lot and will definitely use it to solve more puzzles!</p>
+</div>
+
+    </section>
+</article>
+
+
+
+        
+        <footer id="footer">
+
+</footer>
+    </section>
+    <script src="/js/main.js"></script>
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-beta/dist/katex.min.css" integrity="sha384-9tPv11A+glH/on/wEu99NVwDPwkMQESOocs/ZGXPoIiLE8MU/qkqUcZ3zzL+6DuH" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-beta/dist/katex.min.js" integrity="sha384-U8Vrjwb8fuHMt6ewaCy8uqeUXv4oitYACKdB0VziCerzt011iQ/0TqlSlv8MReCm" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-beta/dist/contrib/auto-render.min.js" integrity="sha384-aGfk5kvhIq5x1x5YdvCp4upKZYnA8ckafviDpmWEKp4afOZEqOli7gqSnh8I6enH" crossorigin="anonymous"></script>
+<script>
+  renderMathInElement(document.body,
+    {
+        delimiters: [
+              {left: "$", right: "$", display: false},
+              {left: "$$", right: "$$", display: true},
+              {left: "\\(", right: "\\)", display: false},
+              {left: "\\[", right: "\\]", display: true}
+              ]
+    }
+  );
+
+  var inlineMathArray = document.querySelectorAll("script[type='math/tex']");
+  for (var i = 0; i < inlineMathArray.length; i++) {
+    var inlineMath = inlineMathArray[i];
+    var tex = inlineMath.innerText || inlineMath.textContent;
+    var replaced = document.createElement("span");
+    replaced.innerHTML = katex.renderToString(tex, {displayMode: false});
+    inlineMath.parentNode.replaceChild(replaced, inlineMath);
+  }
+
+  var displayMathArray = document.querySelectorAll("script[type='math/tex; mode=display']");
+  for (var i = 0; i < displayMathArray.length; i++) {
+    console.log(i);
+    var displayMath = displayMathArray[i];
+    var tex = displayMath.innerHTML;
+    var replaced = document.createElement("span");
+    replaced.innerHTML = katex.renderToString(tex.replace(/%.*/g, ''), {displayMode: true});
+    displayMath.parentNode.replaceChild(replaced, displayMath);
+  }
+</script>
+
+
+</body>
+</html>

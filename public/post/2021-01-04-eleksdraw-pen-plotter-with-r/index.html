@@ -7,13 +7,13 @@
 
 <meta name="author" content="Bas Jacobs">
 <meta name="description" content="My blog about math, programming and data science">
-<meta name="generator" content="Hugo 0.45.1" />
+<meta name="generator" content="Hugo 0.80.0" />
 <title>EleksDraw pen plotter with R</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather:400,500|Open+Sans:400|Source+Code+Pro:400,700"> 
 <link rel="stylesheet" href="/css/style.css">
 
 
-<script>
+<script type="application/javascript">
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
@@ -54,12 +54,13 @@ if (!doNotTrack) {
         </h2>
     </header>
     <section id="post-body">
-        <script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+        
+<script src="/post/2021-01-04-eleksdraw-pen-plotter-with-r/index_files/header-attrs/header-attrs.js"></script>
 
 
 <p>The <a href="https://wiki.eleksmaker.com/doku.php?id=eleksdraw">EleksDraw pen plotter</a> is a relatively cheap pen plotter that works like the better-known AxiDraw plotter. Unlike the AxiDraw, it comes as a kit that needs to be assembled, and the only software available is a Windows program. Since I’m using macOS and I wanted more freedom, I decided to fiddle around with it in Python, which resulted in a <a href="/post/pen-plotter/">blog post</a> and <a href="https://github.com/basjacobs93/plotter">accompanying code</a>. In this post, I describe how I got to get it working with <code>ggplot2</code> in R.</p>
 <div class="figure">
-<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/eleksdraw.jpg" alt="" />
+<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r/eleksdraw.jpg" alt="" />
 <p class="caption">The EleksDraw pen plotter</p>
 </div>
 <div id="python" class="section level2">
@@ -102,9 +103,18 @@ invisible(dev.off())</code></pre>
     plot.background = element_blank(),
     panel.background = element_blank()
   )</code></pre>
-<p><img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/facets_png.png" width="400" />
-<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/facets_air.png" width="400" />
-<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/facets_plot.png" width="400" /></p>
+<div class="figure">
+<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r/facets_png.png" width="400" alt="" />
+<p class="caption">mtcars, png</p>
+</div>
+<div class="figure">
+<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r/facets_air.png" width="400" alt="" />
+<p class="caption">mtcars, preview</p>
+</div>
+<div class="figure">
+<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r/facets_plot.png" width="400" alt="" />
+<p class="caption">mtcars, pen on paper</p>
+</div>
 </div>
 <div id="harmonograph" class="section level3">
 <h3>Harmonograph</h3>
@@ -123,9 +133,18 @@ p &lt;- harmonograph %&gt;%
   geom_path() +
   theme_bw(base_size = 6) +
   theme_void()</code></pre>
-<p><img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/harmonograph_png.png" width="400" />
-<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/harmonograph_air.png" width="400" />
-<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/harmonograph_plot.png" width="400" /></p>
+<div class="figure">
+<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r/harmonograph_png.png" width="400" alt="" />
+<p class="caption">Harmonograph, png</p>
+</div>
+<div class="figure">
+<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r/harmonograph_air.png" width="400" alt="" />
+<p class="caption">Harmonograph, preview</p>
+</div>
+<div class="figure">
+<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r/harmonograph_plot.png" width="400" alt="" />
+<p class="caption">Harmonograph, pen on paper</p>
+</div>
 </div>
 <div id="georg-nees---schotter" class="section level3">
 <h3>Georg Nees - Schotter</h3>
@@ -154,9 +173,18 @@ p &lt;- expand_grid(col = 0:(n_cols-1),
   geom_segment() +
   coord_fixed() +
   theme_void()</code></pre>
-<p><img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/schotter_png.png" width="400" alt="Schotter, png" />
-<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/schotter_air.png" width="400" alt="Schotter, preview" />
-<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/schotter_plot.png" width="400" alt="Schotter, pen on paper" /></p>
+<div class="figure">
+<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r/schotter_png.png" width="400" alt="" />
+<p class="caption">Schotter, pen on paper</p>
+</div>
+<div class="figure">
+<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r/schotter_air.png" width="400" alt="" />
+<p class="caption">Schotter, preview</p>
+</div>
+<div class="figure">
+<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r/schotter_plot.png" width="400" alt="" />
+<p class="caption">Schotter, pen on paper</p>
+</div>
 </div>
 </div>
 <div id="provinces-of-the-netherlands" class="section level1">
@@ -171,9 +199,18 @@ p &lt;- nl_provincie %&gt;%
   ggplot() +
   geom_sf(fill = NA) +
   theme_void()</code></pre>
-<p><img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/nl_png.png" width="400" alt="Provinces of The Netherlands, png" />
-<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/nl_air.png" width="400" alt="Provinces of The Netherlands, preview" />
-<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r_files/nl_plot.png" width="400" alt="Provinces of The Netherlands, pen on paper" /></p>
+<div class="figure">
+<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r/nl_png.png" width="400" alt="" />
+<p class="caption">Provinces of The Netherlands, png</p>
+</div>
+<div class="figure">
+<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r/nl_air.png" width="400" alt="" />
+<p class="caption">Provinces of The Netherlands, preview</p>
+</div>
+<div class="figure">
+<img src="/post/2021-01-04-eleksdraw-pen-plotter-with-r/nl_plot.png" width="400" alt="" />
+<p class="caption">Provinces of The Netherlands, pen on paper</p>
+</div>
 </div>
 
     </section>
