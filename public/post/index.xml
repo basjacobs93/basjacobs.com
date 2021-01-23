@@ -6,7 +6,17 @@
     <description>Recent content in Posts on Bas Jacobs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 04 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 22 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Riddler: Can You Hunt For The Mysterious Numbers?</title>
+      <link>/post/2021-01-22-riddler-can-you-hunt-for-the-mysterious-numbers/</link>
+      <pubDate>Fri, 22 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2021-01-22-riddler-can-you-hunt-for-the-mysterious-numbers/</guid>
+      <description>This week’s FiveThirtyEight Riddler Classic offers a sudoku-like puzzle:
+ There are eight three-digit numbers — each belongs in a row of the table below, with one digit per cell. The products of the three digits of each number are shown in the rightmost column. Meanwhile, the products of the digits in the hundreds, tens, and ones places, respectively, are shown in the bottom row. Can you find all eight three-digit numbers and complete the table?</description>
+    </item>
+    
     <item>
       <title>EleksDraw pen plotter with R</title>
       <link>/post/2021-01-04-eleksdraw-pen-plotter-with-r/</link>
