@@ -48,7 +48,7 @@ eat_chocolates &lt;- function() {
 <p>We can now easily run, for example, 100,000 simulations and calculate the percentage in which the last chocolate was milk:</p>
 <pre class="r"><code>simulations &lt;- replicate(1e5, eat_chocolates())
 mean(simulations == &quot;m&quot;)</code></pre>
-<pre><code>## [1] 0.45958</code></pre>
+<pre><code>## [1] 0.46348</code></pre>
 <p>In a couple of seconds, this gives an estimate of a 46% probability of ending with a piece of milk chocolate. This is closer to 50% than I initially expected. Intuitively though, it does make sense, given the nature of the problem that the majority chocolate type will be eaten relatively quickly, since it is easier to get a ‘streak’ of those.</p>
 <p>Running this (admittedly naive) simulation for more than, say, 1 million replications quickly becomes intractable. For a more accurate result that does run quickly, we can resort to recursion.</p>
 </div>
