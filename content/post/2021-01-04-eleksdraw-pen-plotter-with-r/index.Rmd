@@ -155,9 +155,9 @@ p <- expand_grid(col = 0:(n_cols-1),
 We can use the excellent [`sf` package](https://r-spatial.github.io/sf/) to load and plot spatial data with `ggplot2`, like a map of the province boundaries of the Netherlands. Below, we load [provinces data from CBS](https://www.pdok.nl/introductie/-/article/cbs-provincies) with `sf::st_read()`, simplify it to decrease the complexity of the plot, and plot it with `ggplot2::geom_sf()`.
 
 ```{r}
-provinces <- st_read("https://geodata.nationaalgeoregister.nl/bestuurlijkegrenzen/wfs?request=GetFeature&service=WFS&version=1.1.0&typeName=bestuurlijkegrenzen:provincies&outputFormat=application=json")
+provinces <- st_read("https://geodata.nationaalgeoregister.nl/bestuurlijkegrenzen/wfs?request=GetFeature&service=WFS&version=1.1.0&typeName=bestuurlijkegrenzen:provincies")
 
-p <- nl_provincie %>%
+p <- provinces %>% 
   st_transform(54032) %>% # Azimuthal equidistant
   st_simplify(dTolerance = 400) %>% # simplify
   st_transform(4326)  %>% # WGS84
