@@ -6,7 +6,17 @@
     <description>Recent content in Posts on Bas Jacobs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 22 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 06 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Riddler: Another Hunt For Mysterious Numbers</title>
+      <link>/post/2021-02-06-riddler-another-hunt-for-mysterious-numbers/</link>
+      <pubDate>Sat, 06 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2021-02-06-riddler-another-hunt-for-mysterious-numbers/</guid>
+      <description>This week’s FiveThirtyEight Riddler Express is similar to the Riddler Classic of two weeks ago:
+ By all accounts, Riddler Nation had a lot of fun hunting for the mysterious numbers a few weeks back. So here’s what we’re going to do: For the next four weeks, the Riddler Express will feature a similar puzzle that combines multiplication and logic. We’ll be calling these CrossProducts. For your first weekly CrossProduct, there are five three-digit numbers — each belongs in a row of the table below, with one digit per cell.</description>
+    </item>
+    
     <item>
       <title>Riddler: Can You Hunt For The Mysterious Numbers?</title>
       <link>/post/2021-01-22-riddler-can-you-hunt-for-the-mysterious-numbers/</link>

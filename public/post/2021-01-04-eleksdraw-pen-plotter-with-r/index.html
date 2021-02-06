@@ -193,9 +193,9 @@ p &lt;- expand_grid(col = 0:(n_cols-1),
 <div id="provinces-of-the-netherlands" class="section level1">
 <h1>Provinces of The Netherlands</h1>
 <p>We can use the excellent <a href="https://r-spatial.github.io/sf/"><code>sf</code> package</a> to load and plot spatial data with <code>ggplot2</code>, like a map of the province boundaries of the Netherlands. Below, we load <a href="https://www.pdok.nl/introductie/-/article/cbs-provincies">provinces data from CBS</a> with <code>sf::st_read()</code>, simplify it to decrease the complexity of the plot, and plot it with <code>ggplot2::geom_sf()</code>.</p>
-<pre class="r"><code>provinces &lt;- st_read(&quot;https://geodata.nationaalgeoregister.nl/bestuurlijkegrenzen/wfs?request=GetFeature&amp;service=WFS&amp;version=1.1.0&amp;typeName=bestuurlijkegrenzen:provincies&amp;outputFormat=application=json&quot;)
+<pre class="r"><code>provinces &lt;- st_read(&quot;https://geodata.nationaalgeoregister.nl/bestuurlijkegrenzen/wfs?request=GetFeature&amp;service=WFS&amp;version=1.1.0&amp;typeName=bestuurlijkegrenzen:provincies&quot;)
 
-p &lt;- nl_provincie %&gt;%
+p &lt;- provinces %&gt;% 
   st_transform(54032) %&gt;% # Azimuthal equidistant
   st_simplify(dTolerance = 400) %&gt;% # simplify
   st_transform(4326)  %&gt;% # WGS84
