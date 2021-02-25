@@ -13,7 +13,7 @@
       <pubDate>Tue, 16 Feb 2021 00:00:00 +0000</pubDate>
       
       <guid>/post/2021-02-16-closest-eredivisie-football-club/</guid>
-      <description>A couple of months back, I saw a map of England that showed the closest Premier League football club at any location. I can’t find the exact same map anymore, but this map on Reddit conveys the same information.
+      <description>A couple of months back, I saw a map of England that showed the closest Premier League football club at any location. I can’t find the exact same map anymore, but this map on Reddit is similar.
 I figured it would be a nice exercise in spatial visualization in R to try and create a similar map for the Netherlands. The Dutch highest football league is called the Eredivisie and consists of 18 clubs.</description>
     </item>
     

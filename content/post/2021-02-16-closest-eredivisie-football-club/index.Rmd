@@ -13,7 +13,7 @@ library(kableExtra)
 options(kableExtra.html.bsTable = TRUE)
 ```
 
-A couple of months back, I saw a map of England that showed the closest Premier League football club at any location. I can't find the exact same map anymore, but [this map on Reddit](https://www.reddit.com/r/soccer/comments/2310nq/premier_league_football_map_shows_the_closest_pl/) conveys the same information.
+A couple of months back, I saw a map of England that showed the closest Premier League football club at any location. I can't find the exact same map anymore, but [this map on Reddit](https://www.reddit.com/r/soccer/comments/2310nq/premier_league_football_map_shows_the_closest_pl/) is similar.
 
 I figured it would be a nice exercise in spatial visualization in R to try and create a similar map for the Netherlands. The Dutch highest football league is called the _Eredivisie_ and consists of 18 clubs. In this post, I will create a map conveying the closest Eredivisie club given a location. I will use the `tidyverse` for data wrangling and `sf` for spatial data transformations.  
 
@@ -138,7 +138,7 @@ stadiums_voronoi <- stadiums %>%
 ## Plotting
 
 Finally, we can plot the map of the Netherlands together with the club logos and the Voronoi edges.  
-We do some manual work to move the club logos away from the points, to make the plot look nicer. The result is 
+We do some manual work to move the club logos away from the points, to make the plot look nicer. The result is a map of the closest Eredivisie football club!
 
 ```{r message=FALSE, warning=FALSE}
 offsets <- tribble(~ teamname, ~ dlng, ~dlat,
@@ -173,7 +173,7 @@ stadiums_voronoi %>%
   theme_void()
 ```
 
-## Bonus: Interactive map
+## Bonus: interactive map
 
 Using the `leaflet` library, it is easy to create an interactive map in R. Below, we show the Netherlands with OpenStreetMap, and draw the Voronoi boundaries and markers for the stadiums on top of it. Adding images to leaflet is not straightforward, so we will not add these. 
 

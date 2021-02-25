@@ -53,12 +53,16 @@ if (!doNotTrack) {
         <h1>Closest Eredivisie football club</h1>
         <h2 class="subtitle"></h2>
         <h2 class="headline">
-        2021-16-02
+        2021-02-16
         </h2>
     </header>
     <section id="post-body">
         
 <script src="/post/2021-02-16-closest-eredivisie-football-club/index_files/header-attrs/header-attrs.js"></script>
+<script src="/post/2021-02-16-closest-eredivisie-football-club/index_files/kePrint/kePrint.js"></script>
+<link href="/post/2021-02-16-closest-eredivisie-football-club/index_files/lightable/lightable.css" rel="stylesheet" />
+<link href="/post/2021-02-16-closest-eredivisie-football-club/index_files/bsTable/bootstrapTable.min.css" rel="stylesheet" />
+<script src="/post/2021-02-16-closest-eredivisie-football-club/index_files/bsTable/bootstrapTable.js"></script>
 <script src="/post/2021-02-16-closest-eredivisie-football-club/index_files/htmlwidgets/htmlwidgets.js"></script>
 <script src="/post/2021-02-16-closest-eredivisie-football-club/index_files/jquery/jquery.min.js"></script>
 <link href="/post/2021-02-16-closest-eredivisie-football-club/index_files/leaflet/leaflet.css" rel="stylesheet" />
@@ -70,7 +74,7 @@ if (!doNotTrack) {
 <script src="/post/2021-02-16-closest-eredivisie-football-club/index_files/leaflet-binding/leaflet.js"></script>
 
 
-<p>A couple of months back, I saw a map of England that showed the closest Premier League football club at any location. I can’t find the exact same map anymore, but <a href="https://www.reddit.com/r/soccer/comments/2310nq/premier_league_football_map_shows_the_closest_pl/">this map on Reddit</a> conveys the same information.</p>
+<p>A couple of months back, I saw a map of England that showed the closest Premier League football club at any location. I can’t find the exact same map anymore, but <a href="https://www.reddit.com/r/soccer/comments/2310nq/premier_league_football_map_shows_the_closest_pl/">this map on Reddit</a> is similar.</p>
 <p>I figured it would be a nice exercise in spatial visualization in R to try and create a similar map for the Netherlands. The Dutch highest football league is called the <em>Eredivisie</em> and consists of 18 clubs. In this post, I will create a map conveying the closest Eredivisie club given a location. I will use the <code>tidyverse</code> for data wrangling and <code>sf</code> for spatial data transformations.</p>
 <pre class="r"><code>library(tidyverse)
 library(sf)</code></pre>
@@ -102,60 +106,113 @@ stadiums &lt;- map_dfr(club_names, get_address) %&gt;%
   mutate(img = str_glue(img_src))
 
 stadiums %&gt;% 
-  select(teamname, adres, city, img) %&gt;% 
+  transmute(teamname, adres, city,
+            img = cell_spec(stringr::str_trunc(img, 40, side = &quot;left&quot;),
+                            &quot;html&quot;, link = img)) %&gt;% 
   head() %&gt;% 
-  knitr::kable()</code></pre>
-<table>
-<colgroup>
-<col width="9%" />
-<col width="14%" />
-<col width="6%" />
-<col width="69%" />
-</colgroup>
+  knitr::kable(escape = FALSE) %&gt;% 
+  kable_styling(bootstrap_options = c(&quot;condensed&quot;, &quot;hover&quot;), font_size = 12) </code></pre>
+<table class="table table-condensed table-hover" style="font-size: 12px; margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th align="left">teamname</th>
-<th align="left">adres</th>
-<th align="left">city</th>
-<th align="left">img</th>
+<tr>
+<th style="text-align:left;">
+teamname
+</th>
+<th style="text-align:left;">
+adres
+</th>
+<th style="text-align:left;">
+city
+</th>
+<th style="text-align:left;">
+img
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">Ajax</td>
-<td align="left">ArenA Boulevard 29</td>
-<td align="left">Amsterdam</td>
-<td align="left"><a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/215/150x150.png" class="uri">https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/215/150x150.png</a></td>
+<tr>
+<td style="text-align:left;">
+Ajax
+</td>
+<td style="text-align:left;">
+ArenA Boulevard 29
+</td>
+<td style="text-align:left;">
+Amsterdam
+</td>
+<td style="text-align:left;">
+<a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/215/150x150.png" style="     ">…s/Eredivisie%20Badges/215/150x150.png</a>
+</td>
 </tr>
-<tr class="even">
-<td align="left">PSV</td>
-<td align="left">Frederiklaan 8</td>
-<td align="left">Eindhoven</td>
-<td align="left"><a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/204/150x150.png" class="uri">https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/204/150x150.png</a></td>
+<tr>
+<td style="text-align:left;">
+PSV
+</td>
+<td style="text-align:left;">
+Frederiklaan 8
+</td>
+<td style="text-align:left;">
+Eindhoven
+</td>
+<td style="text-align:left;">
+<a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/204/150x150.png" style="     ">…s/Eredivisie%20Badges/204/150x150.png</a>
+</td>
 </tr>
-<tr class="odd">
-<td align="left">AZ</td>
-<td align="left">Stadionweg 1</td>
-<td align="left">Alkmaar</td>
-<td align="left"><a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/313/150x150.png" class="uri">https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/313/150x150.png</a></td>
+<tr>
+<td style="text-align:left;">
+AZ
+</td>
+<td style="text-align:left;">
+Stadionweg 1
+</td>
+<td style="text-align:left;">
+Alkmaar
+</td>
+<td style="text-align:left;">
+<a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/313/150x150.png" style="     ">…s/Eredivisie%20Badges/313/150x150.png</a>
+</td>
 </tr>
-<tr class="even">
-<td align="left">Feyenoord</td>
-<td align="left">Van Zandvlietplein 1</td>
-<td align="left">Rotterdam</td>
-<td align="left"><a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/198/150x150.png" class="uri">https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/198/150x150.png</a></td>
+<tr>
+<td style="text-align:left;">
+Feyenoord
+</td>
+<td style="text-align:left;">
+Van Zandvlietplein 1
+</td>
+<td style="text-align:left;">
+Rotterdam
+</td>
+<td style="text-align:left;">
+<a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/198/150x150.png" style="     ">…s/Eredivisie%20Badges/198/150x150.png</a>
+</td>
 </tr>
-<tr class="odd">
-<td align="left">Vitesse</td>
-<td align="left">Batavierenweg 25</td>
-<td align="left">Arnhem</td>
-<td align="left"><a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/232/150x150.png" class="uri">https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/232/150x150.png</a></td>
+<tr>
+<td style="text-align:left;">
+Vitesse
+</td>
+<td style="text-align:left;">
+Batavierenweg 25
+</td>
+<td style="text-align:left;">
+Arnhem
+</td>
+<td style="text-align:left;">
+<a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/232/150x150.png" style="     ">…s/Eredivisie%20Badges/232/150x150.png</a>
+</td>
 </tr>
-<tr class="even">
-<td align="left">FC Groningen</td>
-<td align="left">Boumaboulevard 41</td>
-<td align="left">Groningen</td>
-<td align="left"><a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/425/150x150.png" class="uri">https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/425/150x150.png</a></td>
+<tr>
+<td style="text-align:left;">
+FC Groningen
+</td>
+<td style="text-align:left;">
+Boumaboulevard 41
+</td>
+<td style="text-align:left;">
+Groningen
+</td>
+<td style="text-align:left;">
+<a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/425/150x150.png" style="     ">…s/Eredivisie%20Badges/425/150x150.png</a>
+</td>
 </tr>
 </tbody>
 </table>
@@ -174,72 +231,134 @@ stadiums &lt;- stadiums %&gt;%
   unnest_wider(latlon)
 
 stadiums %&gt;% 
-  select(teamname, lat, lng, img) %&gt;% 
+  transmute(teamname, lat, lng,
+            img = cell_spec(stringr::str_trunc(img, 40, side = &quot;left&quot;),
+                            &quot;html&quot;, link = img)) %&gt;% 
   head() %&gt;% 
-  knitr::kable()</code></pre>
-<table>
-<colgroup>
-<col width="10%" />
-<col width="6%" />
-<col width="6%" />
-<col width="76%" />
-</colgroup>
+  knitr::kable(escape = FALSE) %&gt;% 
+  kable_styling(bootstrap_options = c(&quot;condensed&quot;, &quot;hover&quot;), font_size = 12) </code></pre>
+<table class="table table-condensed table-hover" style="font-size: 12px; margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th align="left">teamname</th>
-<th align="right">lat</th>
-<th align="right">lng</th>
-<th align="left">img</th>
+<tr>
+<th style="text-align:left;">
+teamname
+</th>
+<th style="text-align:right;">
+lat
+</th>
+<th style="text-align:right;">
+lng
+</th>
+<th style="text-align:left;">
+img
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">Ajax</td>
-<td align="right">52.31435</td>
-<td align="right">4.942843</td>
-<td align="left"><a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/215/150x150.png" class="uri">https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/215/150x150.png</a></td>
+<tr>
+<td style="text-align:left;">
+Ajax
+</td>
+<td style="text-align:right;">
+52.31435
+</td>
+<td style="text-align:right;">
+4.942843
+</td>
+<td style="text-align:left;">
+<a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/215/150x150.png" style="     ">…s/Eredivisie%20Badges/215/150x150.png</a>
+</td>
 </tr>
-<tr class="even">
-<td align="left">PSV</td>
-<td align="right">51.44083</td>
-<td align="right">5.477780</td>
-<td align="left"><a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/204/150x150.png" class="uri">https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/204/150x150.png</a></td>
+<tr>
+<td style="text-align:left;">
+PSV
+</td>
+<td style="text-align:right;">
+51.44083
+</td>
+<td style="text-align:right;">
+5.477780
+</td>
+<td style="text-align:left;">
+<a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/204/150x150.png" style="     ">…s/Eredivisie%20Badges/204/150x150.png</a>
+</td>
 </tr>
-<tr class="odd">
-<td align="left">AZ</td>
-<td align="right">52.61295</td>
-<td align="right">4.740751</td>
-<td align="left"><a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/313/150x150.png" class="uri">https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/313/150x150.png</a></td>
+<tr>
+<td style="text-align:left;">
+AZ
+</td>
+<td style="text-align:right;">
+52.61295
+</td>
+<td style="text-align:right;">
+4.740751
+</td>
+<td style="text-align:left;">
+<a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/313/150x150.png" style="     ">…s/Eredivisie%20Badges/313/150x150.png</a>
+</td>
 </tr>
-<tr class="even">
-<td align="left">Feyenoord</td>
-<td align="right">51.89434</td>
-<td align="right">4.524698</td>
-<td align="left"><a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/198/150x150.png" class="uri">https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/198/150x150.png</a></td>
+<tr>
+<td style="text-align:left;">
+Feyenoord
+</td>
+<td style="text-align:right;">
+51.89434
+</td>
+<td style="text-align:right;">
+4.524698
+</td>
+<td style="text-align:left;">
+<a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/198/150x150.png" style="     ">…s/Eredivisie%20Badges/198/150x150.png</a>
+</td>
 </tr>
-<tr class="odd">
-<td align="left">Vitesse</td>
-<td align="right">51.96366</td>
-<td align="right">5.893330</td>
-<td align="left"><a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/232/150x150.png" class="uri">https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/232/150x150.png</a></td>
+<tr>
+<td style="text-align:left;">
+Vitesse
+</td>
+<td style="text-align:right;">
+51.96366
+</td>
+<td style="text-align:right;">
+5.893330
+</td>
+<td style="text-align:left;">
+<a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/232/150x150.png" style="     ">…s/Eredivisie%20Badges/232/150x150.png</a>
+</td>
 </tr>
-<tr class="even">
-<td align="left">FC Groningen</td>
-<td align="right">53.20702</td>
-<td align="right">6.591678</td>
-<td align="left"><a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/425/150x150.png" class="uri">https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/425/150x150.png</a></td>
+<tr>
+<td style="text-align:left;">
+FC Groningen
+</td>
+<td style="text-align:right;">
+53.20702
+</td>
+<td style="text-align:right;">
+6.591678
+</td>
+<td style="text-align:left;">
+<a href="https://eredivisie-images.s3.amazonaws.com/Eredivisie%20images/Eredivisie%20Badges/425/150x150.png" style="     ">…s/Eredivisie%20Badges/425/150x150.png</a>
+</td>
 </tr>
 </tbody>
 </table>
 <p>Now that we have the clubs’ locations, we can do some data wrangling in order to create the map.</p>
 </div>
-<div id="voronoi" class="section level2">
-<h2>Voronoi</h2>
-<p><a href="https://en.wikipedia.org/wiki/Voronoi_diagram" class="uri">https://en.wikipedia.org/wiki/Voronoi_diagram</a></p>
+<div id="map-of-the-netherlands" class="section level2">
+<h2>Map of the Netherlands</h2>
+<p>In order to plot a map of the Netherlands, we need the geometry of its boundaries. Below, we obtain municipality boundaries from the CBS (the Dutch national statistics bureau). From this, the country boundaries can be obtained with <code>sf::st_union()</code>. Since the CBS data is in a Dutch coordinate system called <em>Rijksdriehoekscoördinaten</em>, we first convert this to <em>WGS84</em> via <code>st_transform()</code>.</p>
 <pre class="r"><code>municipalities &lt;- st_read(&quot;https://geodata.nationaalgeoregister.nl/cbsgebiedsindelingen/wfs?request=GetFeature&amp;service=WFS&amp;version=2.0.0&amp;typeName=cbs_gemeente_2021_gegeneraliseerd&amp;outputFormat=json&quot;, quiet = TRUE) %&gt;% 
   st_transform(4326) # WGS84
 
-nl &lt;- st_union(municipalities)</code></pre>
+nl &lt;- st_union(municipalities)
+
+ggplot(nl) +
+  geom_sf() +
+  theme_void()</code></pre>
+<p><img src="/post/2021-02-16-closest-eredivisie-football-club/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<div id="voronoi" class="section level2">
+<h2>Voronoi</h2>
+<p>The type of map we want to generate is called a <a href="https://en.wikipedia.org/wiki/Voronoi_diagram">Voronoi diagram</a>. We can create a Voronoi diagram from a set of points using <code>sf::st_voronoi()</code>. Since that function operates on a <code>multipoint</code> and we want the result to be of type <code>sf</code>, we do some pre- and post-processing.</p>
 <pre class="r"><code>voronoi &lt;- stadiums %&gt;% 
   select(lng, lat) %&gt;% 
   as.matrix() %&gt;% 
@@ -247,15 +366,26 @@ nl &lt;- st_union(municipalities)</code></pre>
   st_voronoi(envelope = nl) %&gt;%
   st_collection_extract() %&gt;% 
   st_set_crs(4326) %&gt;% # WGS84
-  st_sf()</code></pre>
-<p>Join to stadiums</p>
+  st_sf()
+
+plot(voronoi)
+stadiums %&gt;% 
+  select(lng, lat) %&gt;% 
+  as.matrix() %&gt;% 
+  points()</code></pre>
+<p><img src="/post/2021-02-16-closest-eredivisie-football-club/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Now that we have the Voronoi diagram, we can join it to the stadium data. We intersect it with the boundaries of the Netherlands to make sure the Voronoi lines do not extend to outside the country borders.</p>
 <pre class="r"><code>stadiums_voronoi &lt;- stadiums %&gt;%
   st_as_sf(coords = c(&quot;lng&quot;, &quot;lat&quot;),
            crs = 4326, remove = FALSE) %&gt;% 
   st_join(voronoi, .) %&gt;% # join makes sure we map each tile to the correct centroid
   st_cast(&quot;MULTILINESTRING&quot;) %&gt;% # turn polygons into lines
   st_intersection(nl) # within NL</code></pre>
-<p>Plotting</p>
+</div>
+<div id="plotting" class="section level2">
+<h2>Plotting</h2>
+<p>Finally, we can plot the map of the Netherlands together with the club logos and the Voronoi edges.<br />
+We do some manual work to move the club logos away from the points, to make the plot look nicer. The result is a map of the closest Eredivisie football club!</p>
 <pre class="r"><code>offsets &lt;- tribble(~ teamname, ~ dlng, ~dlat,
                    &quot;Feyenoord&quot;, 0.12, -0.12,
                    &quot;Sparta Rotterdam&quot;, -0.15, -0.13,
@@ -287,6 +417,10 @@ stadiums_voronoi %&gt;%
   geom_point(aes(x = lng, y = lat)) +
   theme_void()</code></pre>
 <p><img src="/post/2021-02-16-closest-eredivisie-football-club/index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+<div id="bonus-interactive-map" class="section level2">
+<h2>Bonus: interactive map</h2>
+<p>Using the <code>leaflet</code> library, it is easy to create an interactive map in R. Below, we show the Netherlands with OpenStreetMap, and draw the Voronoi boundaries and markers for the stadiums on top of it. Adding images to leaflet is not straightforward, so we will not add these.</p>
 <pre class="r"><code>library(leaflet)
 
 stadiums %&gt;%
@@ -295,11 +429,12 @@ stadiums %&gt;%
   st_join(voronoi, .) %&gt;% # join makes sure we map each tile to the correct centroid
   st_cast(&quot;MULTILINESTRING&quot;) %&gt;% # turn polygons into lines
   leaflet() %&gt;% 
+  setView(lng = 5.6, lat = 52.2, zoom = 7) %&gt;%
   addTiles() %&gt;% 
   addMarkers(lng = ~lng, lat = ~lat, label = ~teamname) %&gt;% 
   addPolylines()</code></pre>
 <div id="htmlwidget-1" style="width:672px;height:480px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addMarkers","args":[[52.0627205,51.8943364,51.9225,51.542135,52.6129508,50.9915481,52.314353,52.0790701,52.9583044,51.686427,51.44083,51.9636602,51.3521085,53.2070188,52.517052,52.35667,52.7746125,52.2371195],[4.3820431,4.5246984,4.47917,5.0661685,4.7407507,5.843039,4.9428431,5.1463054,5.9352256,5.0897687,5.47778,5.8933304,6.1807206,6.5916781,6.1198816,6.6625,6.945034,6.8380502],null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},null,null,null,null,["ADO Den Haag","Feyenoord","Sparta Rotterdam","Willem II","AZ","Fortuna Sittard","Ajax","FC Utrecht","sc Heerenveen","RKC Waalwijk","PSV","Vitesse","VVV-Venlo","FC Groningen","PEC Zwolle","Heracles Almelo","FC Emmen","FC Twente"],{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addPolylines","args":[[[[{"lng":[1.8190522,1.8190522,4.60953302949636,4.67313343233969,4.64653783216684,1.8190522],"lat":[50.1836580768369,54.1256322975305,52.3064546164856,52.1647117735916,52.142179935245,50.1836580768369]}]],[[{"lng":[2.65564886494185,2.34931268772202,4.64653783216684,4.67313343233969,4.82859546161696,4.85514629080179,4.76148549938942,2.65564886494185],"lat":[48.4285572,48.4285572,52.142179935245,52.1647117735916,52.0099425963887,51.9206022038285,51.6660445383183,48.4285572]}]],[[{"lng":[2.34931268772202,1.8190522,1.8190522,4.64653783216684,2.34931268772202],"lat":[48.4285572,48.4285572,50.1836580768369,52.142179935245,48.4285572]}]],[[{"lng":[3.44304303095479,2.65564886494185,4.76148549938942,5.29352020206727,5.09010793630711,3.44304303095479],"lat":[48.4285572,48.4285572,51.6660445383183,51.5790256780202,50.7525429987059,48.4285572]}]],[[{"lng":[1.8190522,1.8190522,4.4751260655723,5.33463937485643,4.60953302949636,1.8190522],"lat":[54.1256322975305,55.7700097,55.7700097,52.7972100125034,52.3064546164856,54.1256322975305]}]],[[{"lng":[8.94101459776343,3.44304303095479,5.09010793630711,5.823200339062,8.94101459776343],"lat":[48.4285572,48.4285572,50.7525429987059,51.3485353988846,48.4285572]}]],[[{"lng":[4.67313343233969,4.60953302949636,5.33463937485643,5.47997865853785,4.82859546161696,4.67313343233969],"lat":[52.1647117735916,52.3064546164856,52.7972100125034,52.5732301256859,52.0099425963887,52.1647117735916]}]],[[{"lng":[5.47997865853785,5.52915314746017,5.58059445472572,5.49403355950858,5.45505017377243,4.85514629080179,4.82859546161696,5.47997865853785],"lat":[52.5732301256859,52.5291067928775,52.4147595277265,51.8544683157111,51.834222013115,51.9206022038285,52.0099425963887,52.5732301256859]}]],[[{"lng":[4.4751260655723,5.24527891245672,6.34398659620928,5.52915314746017,5.47997865853785,5.33463937485643,4.4751260655723],"lat":[55.7700097,55.7700097,52.87009957912,52.5291067928775,52.5732301256859,52.7972100125034,55.7700097]}]],[[{"lng":[4.76148549938942,4.85514629080179,5.45505017377243,5.29352020206727,4.76148549938942],"lat":[51.6660445383183,51.9206022038285,51.834222013115,51.5790256780202,51.6660445383183]}]],[[{"lng":[5.09010793630711,5.29352020206727,5.45505017377243,5.49403355950858,5.85122435025005,5.823200339062,5.09010793630711],"lat":[50.7525429987059,51.5790256780202,51.834222013115,51.8544683157111,51.5705696886445,51.3485353988846,50.7525429987059]}]],[[{"lng":[5.85122435025005,5.49403355950858,5.58059445472572,6.29786646731165,6.43822343333051,5.85122435025005],"lat":[51.5705696886445,51.8544683157111,52.4147595277265,52.121117960978,51.8464217284415,51.5705696886445]}]],[[{"lng":[9.5080249,9.5080249,8.94101459776343,5.823200339062,5.85122435025005,6.43822343333051,6.44220159857863,9.5080249],"lat":[49.5674162554757,48.4285572,48.4285572,51.3485353988846,51.5705696886445,51.8464217284415,51.8445138332391,49.5674162554757]}]],[[{"lng":[5.24527891245672,9.5080249,9.5080249,6.49964649267433,6.48977755169469,6.34398659620928,5.24527891245672],"lat":[55.7700097,55.7700097,55.2296316713987,52.7712302566618,52.7704083149466,52.87009957912,55.7700097]}]],[[{"lng":[5.58059445472572,5.52915314746017,6.34398659620928,6.48977755169469,6.29786646731165,5.58059445472572],"lat":[52.4147595277265,52.5291067928775,52.87009957912,52.7704083149466,52.121117960978,52.4147595277265]}]],[[{"lng":[6.29786646731165,6.48977755169469,6.49964649267433,6.89246094214538,6.44220159857863,6.43822343333051,6.29786646731165],"lat":[52.121117960978,52.7704083149466,52.7712302566618,52.5056831116195,51.8445138332391,51.8464217284415,52.121117960978]}]],[[{"lng":[9.5080249,9.5080249,6.89246094214538,6.49964649267433,9.5080249],"lat":[55.2296316713987,51.9850754546744,52.5056831116195,52.7712302566618,55.2296316713987]}]],[[{"lng":[9.5080249,9.5080249,6.44220159857863,6.89246094214538,9.5080249],"lat":[51.9850754546744,49.5674162554757,51.8445138332391,52.5056831116195,51.9850754546744]}]]],null,null,{"interactive":true,"className":"","stroke":true,"color":"#03F","weight":5,"opacity":0.5,"fill":false,"fillColor":"#03F","fillOpacity":0.2,"smoothFactor":1,"noClip":false},null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[48.4285572,55.7700097],"lng":[1.8190522,9.5080249]}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"setView":[[52.2,5.6],7,[]],"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addMarkers","args":[[52.0627205,51.8943364,51.9225,51.542135,52.6129508,50.9915481,52.314353,52.0790701,52.9583044,51.686427,51.44083,51.9636602,51.3521085,53.2070188,52.517052,52.35667,52.7746125,52.2371195],[4.3820431,4.5246984,4.47917,5.0661685,4.7407507,5.843039,4.9428431,5.1463054,5.9352256,5.0897687,5.47778,5.8933304,6.1807206,6.5916781,6.1198816,6.6625,6.945034,6.8380502],null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},null,null,null,null,["ADO Den Haag","Feyenoord","Sparta Rotterdam","Willem II","AZ","Fortuna Sittard","Ajax","FC Utrecht","sc Heerenveen","RKC Waalwijk","PSV","Vitesse","VVV-Venlo","FC Groningen","PEC Zwolle","Heracles Almelo","FC Emmen","FC Twente"],{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addPolylines","args":[[[[{"lng":[1.8190522,1.8190522,4.60953302949636,4.67313343233969,4.64653783216684,1.8190522],"lat":[50.1836580768369,54.1256322975305,52.3064546164856,52.1647117735916,52.142179935245,50.1836580768369]}]],[[{"lng":[2.65564886494185,2.34931268772202,4.64653783216684,4.67313343233969,4.82859546161696,4.85514629080179,4.76148549938942,2.65564886494185],"lat":[48.4285572,48.4285572,52.142179935245,52.1647117735916,52.0099425963887,51.9206022038285,51.6660445383183,48.4285572]}]],[[{"lng":[2.34931268772202,1.8190522,1.8190522,4.64653783216684,2.34931268772202],"lat":[48.4285572,48.4285572,50.1836580768369,52.142179935245,48.4285572]}]],[[{"lng":[3.44304303095479,2.65564886494185,4.76148549938942,5.29352020206727,5.09010793630711,3.44304303095479],"lat":[48.4285572,48.4285572,51.6660445383183,51.5790256780202,50.7525429987059,48.4285572]}]],[[{"lng":[1.8190522,1.8190522,4.4751260655723,5.33463937485643,4.60953302949636,1.8190522],"lat":[54.1256322975305,55.7700097,55.7700097,52.7972100125034,52.3064546164856,54.1256322975305]}]],[[{"lng":[8.94101459776343,3.44304303095479,5.09010793630711,5.823200339062,8.94101459776343],"lat":[48.4285572,48.4285572,50.7525429987059,51.3485353988846,48.4285572]}]],[[{"lng":[4.67313343233969,4.60953302949636,5.33463937485643,5.47997865853785,4.82859546161696,4.67313343233969],"lat":[52.1647117735916,52.3064546164856,52.7972100125034,52.5732301256859,52.0099425963887,52.1647117735916]}]],[[{"lng":[5.47997865853785,5.52915314746017,5.58059445472572,5.49403355950858,5.45505017377243,4.85514629080179,4.82859546161696,5.47997865853785],"lat":[52.5732301256859,52.5291067928775,52.4147595277265,51.8544683157111,51.834222013115,51.9206022038285,52.0099425963887,52.5732301256859]}]],[[{"lng":[4.4751260655723,5.24527891245672,6.34398659620928,5.52915314746017,5.47997865853785,5.33463937485643,4.4751260655723],"lat":[55.7700097,55.7700097,52.87009957912,52.5291067928775,52.5732301256859,52.7972100125034,55.7700097]}]],[[{"lng":[4.76148549938942,4.85514629080179,5.45505017377243,5.29352020206727,4.76148549938942],"lat":[51.6660445383183,51.9206022038285,51.834222013115,51.5790256780202,51.6660445383183]}]],[[{"lng":[5.09010793630711,5.29352020206727,5.45505017377243,5.49403355950858,5.85122435025005,5.823200339062,5.09010793630711],"lat":[50.7525429987059,51.5790256780202,51.834222013115,51.8544683157111,51.5705696886445,51.3485353988846,50.7525429987059]}]],[[{"lng":[5.85122435025005,5.49403355950858,5.58059445472572,6.29786646731165,6.43822343333051,5.85122435025005],"lat":[51.5705696886445,51.8544683157111,52.4147595277265,52.121117960978,51.8464217284415,51.5705696886445]}]],[[{"lng":[9.5080249,9.5080249,8.94101459776343,5.823200339062,5.85122435025005,6.43822343333051,6.44220159857863,9.5080249],"lat":[49.5674162554757,48.4285572,48.4285572,51.3485353988846,51.5705696886445,51.8464217284415,51.8445138332391,49.5674162554757]}]],[[{"lng":[5.24527891245672,9.5080249,9.5080249,6.49964649267433,6.48977755169469,6.34398659620928,5.24527891245672],"lat":[55.7700097,55.7700097,55.2296316713987,52.7712302566618,52.7704083149466,52.87009957912,55.7700097]}]],[[{"lng":[5.58059445472572,5.52915314746017,6.34398659620928,6.48977755169469,6.29786646731165,5.58059445472572],"lat":[52.4147595277265,52.5291067928775,52.87009957912,52.7704083149466,52.121117960978,52.4147595277265]}]],[[{"lng":[6.29786646731165,6.48977755169469,6.49964649267433,6.89246094214538,6.44220159857863,6.43822343333051,6.29786646731165],"lat":[52.121117960978,52.7704083149466,52.7712302566618,52.5056831116195,51.8445138332391,51.8464217284415,52.121117960978]}]],[[{"lng":[9.5080249,9.5080249,6.89246094214538,6.49964649267433,9.5080249],"lat":[55.2296316713987,51.9850754546744,52.5056831116195,52.7712302566618,55.2296316713987]}]],[[{"lng":[9.5080249,9.5080249,6.44220159857863,6.89246094214538,9.5080249],"lat":[51.9850754546744,49.5674162554757,51.8445138332391,52.5056831116195,51.9850754546744]}]]],null,null,{"interactive":true,"className":"","stroke":true,"color":"#03F","weight":5,"opacity":0.5,"fill":false,"fillColor":"#03F","fillOpacity":0.2,"smoothFactor":1,"noClip":false},null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[48.4285572,55.7700097],"lng":[1.8190522,9.5080249]}},"evals":[],"jsHooks":[]}</script>
 </div>
 
     </section>

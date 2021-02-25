@@ -20,7 +20,7 @@ date: '2021-02-16'
 <script src="{{< blogdown/postref >}}index_files/leaflet-binding/leaflet.js"></script>
 
 
-<p>A couple of months back, I saw a map of England that showed the closest Premier League football club at any location. I can’t find the exact same map anymore, but <a href="https://www.reddit.com/r/soccer/comments/2310nq/premier_league_football_map_shows_the_closest_pl/">this map on Reddit</a> conveys the same information.</p>
+<p>A couple of months back, I saw a map of England that showed the closest Premier League football club at any location. I can’t find the exact same map anymore, but <a href="https://www.reddit.com/r/soccer/comments/2310nq/premier_league_football_map_shows_the_closest_pl/">this map on Reddit</a> is similar.</p>
 <p>I figured it would be a nice exercise in spatial visualization in R to try and create a similar map for the Netherlands. The Dutch highest football league is called the <em>Eredivisie</em> and consists of 18 clubs. In this post, I will create a map conveying the closest Eredivisie club given a location. I will use the <code>tidyverse</code> for data wrangling and <code>sf</code> for spatial data transformations.</p>
 <pre class="r"><code>library(tidyverse)
 library(sf)</code></pre>
@@ -331,7 +331,7 @@ stadiums %&gt;%
 <div id="plotting" class="section level2">
 <h2>Plotting</h2>
 <p>Finally, we can plot the map of the Netherlands together with the club logos and the Voronoi edges.<br />
-We do some manual work to move the club logos away from the points, to make the plot look nicer. The result is</p>
+We do some manual work to move the club logos away from the points, to make the plot look nicer. The result is a map of the closest Eredivisie football club!</p>
 <pre class="r"><code>offsets &lt;- tribble(~ teamname, ~ dlng, ~dlat,
                    &quot;Feyenoord&quot;, 0.12, -0.12,
                    &quot;Sparta Rotterdam&quot;, -0.15, -0.13,
@@ -365,7 +365,7 @@ stadiums_voronoi %&gt;%
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 </div>
 <div id="bonus-interactive-map" class="section level2">
-<h2>Bonus: Interactive map</h2>
+<h2>Bonus: interactive map</h2>
 <p>Using the <code>leaflet</code> library, it is easy to create an interactive map in R. Below, we show the Netherlands with OpenStreetMap, and draw the Voronoi boundaries and markers for the stadiums on top of it. Adding images to leaflet is not straightforward, so we will not add these.</p>
 <pre class="r"><code>library(leaflet)
 
