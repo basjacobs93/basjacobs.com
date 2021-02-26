@@ -351,7 +351,7 @@ FC Groningen
 
 nl &lt;- st_union(municipalities)
 
-ggplot(nl) +
+ggplot(municipalities) +
   geom_sf() +
   theme_void()</code></pre>
 <p><img src="/post/2021-02-16-closest-eredivisie-football-club/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
@@ -373,8 +373,8 @@ stadiums %&gt;%
   select(lng, lat) %&gt;% 
   as.matrix() %&gt;% 
   points()</code></pre>
-<p><img src="/post/2021-02-16-closest-eredivisie-football-club/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<p>Now that we have the Voronoi diagram, we can join it to the stadium data. We intersect it with the boundaries of the Netherlands to make sure the Voronoi lines do not extend to outside the country borders.</p>
+<p><img src="/post/2021-02-16-closest-eredivisie-football-club/index_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+Now that we have the Voronoi diagram, we can join it to the stadium data. We intersect it with the boundaries of the Netherlands to make sure the Voronoi lines do not extend to outside the country borders.</p>
 <pre class="r"><code>stadiums_voronoi &lt;- stadiums %&gt;%
   st_as_sf(coords = c(&quot;lng&quot;, &quot;lat&quot;),
            crs = 4326, remove = FALSE) %&gt;% 

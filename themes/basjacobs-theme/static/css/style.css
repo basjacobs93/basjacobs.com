@@ -105,6 +105,24 @@ a {
   color: #BBB;
 }
 
+.pagination {
+  display: flex;
+  float: right;
+  list-style: none;
+  text-align: center;
+}
+
+.pagination a {
+  color: #888;
+}
+
+.pagination .disabled a {
+  color: #BBB;
+}
+
+.pagination .active a {
+  border-bottom: 0.1em solid #DDD;
+}
 
 pre {
 	padding: 0.5em 0.5em 0 0;

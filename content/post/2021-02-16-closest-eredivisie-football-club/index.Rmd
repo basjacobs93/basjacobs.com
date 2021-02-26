@@ -98,7 +98,7 @@ municipalities <- st_read("https://geodata.nationaalgeoregister.nl/cbsgebiedsind
 
 nl <- st_union(municipalities)
 
-ggplot(nl) +
+ggplot(municipalities) +
   geom_sf() +
   theme_void()
 ```
@@ -123,7 +123,6 @@ stadiums %>%
   as.matrix() %>% 
   points()
 ```
-
 Now that we have the Voronoi diagram, we can join it to the stadium data. We intersect it with the boundaries of the Netherlands to make sure the Voronoi lines do not extend to outside the country borders.
 
 ```{r message=FALSE, warning=FALSE}
