@@ -58,7 +58,7 @@ stadiums %>%
                             "html", link = img)) %>% 
   head() %>% 
   knitr::kable(escape = FALSE) %>% 
-  kable_styling(bootstrap_options = c("condensed", "hover"), font_size = 12) 
+  kable_styling(bootstrap_options = c("condensed", "hover"), font_size = 13) 
 ```
 
 The addresses do not yet allow for plotting on a map — for that, we need coordinates. Converting a human-readable address into coordinates (such as latitude and longitude) is called _geocoding_. There are various APIs that do this. Most of these are paid, but I've found a free one that does the job. We provide it with an address as a string, and it gives us back the latitude and longitude. We have to be as specific as possible, to prevent it from finding a location with the same address in another country for example.
@@ -83,7 +83,7 @@ stadiums %>%
                             "html", link = img)) %>% 
   head() %>% 
   knitr::kable(escape = FALSE) %>% 
-  kable_styling(bootstrap_options = c("condensed", "hover"), font_size = 12) 
+  kable_styling(bootstrap_options = c("condensed", "hover"), font_size = 13) 
 ```
 
 Now that we have the clubs' locations, we can do some data wrangling in order to create the map.  
