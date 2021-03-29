@@ -16,7 +16,7 @@ h1 {
 
 p, li {
   line-height: 1.8;
-	font-size: 1em;
+	font-size: 1.1em;
 }
 
 img {
@@ -148,7 +148,7 @@ blockquote {
  padding:0.5em;
  color:#333;
  background:#f8f8f8;
- font-size: 0.9em;
+ font-size: 1em;
 }
 .hljs-comment,.hljs-quote {
  color:#998;
