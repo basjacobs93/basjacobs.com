@@ -14,6 +14,10 @@ h1 {
   margin-bottom: 0;
 }
 
+.section h2 {
+  margin-top: 2em;
+}
+
 p, li {
   line-height: 1.8;
 	font-size: 1.1em;
