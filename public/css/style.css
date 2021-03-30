@@ -20,7 +20,7 @@ h1 {
 }
 
 p, li {
-  line-height: 1.3em;
+  line-height: 1.8em;
 	font-size: 1.1em;
 }
 
@@ -108,6 +108,10 @@ a {
   float: right;
   position: relative;
   color: #BBB;
+}
+
+#post-list li {
+  line-height: 1.3em;
 }
 
 .pagination {
