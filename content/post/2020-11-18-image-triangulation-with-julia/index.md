@@ -44,6 +44,11 @@ The resulting triangulations are more abstract than the above, but I think they 
 ![Bearded reedling (1000 triangles)](/post/2020-11-18-image-triangulation-with-julia/baardman_imp_1000.png)
 ![Bearded reedling (2000 triangles)](/post/2020-11-18-image-triangulation-with-julia/baardman_2000.png)
 
+Two more examples of triangulations with 2000 triangles are below. They represent a bluethroat and a red-backed shrike.
+
+![Bluethroat (2000 triangles)](/post/2020-11-18-image-triangulation-with-julia/blauwborst_2000.png)
+![Red-backed shrike (2000 triangles)](/post/2020-11-18-image-triangulation-with-julia/klauwier_2000.png)
+
 ## Conclusion
 
 Implementing part of the methodology of the paper in Julia was fairly straightforward, even though my experience with the language is limited. However, the performance is not as good as I hoped it would be. Generating the above images took a couple of minutes upto half an hour each. This makes it hard to fiddle around with the parameters, since a lot of time is spent waiting for the results. The authors of the paper wrote parts of their code in C++ because of performance, and parallelized and optimized the code such that it was faster. Although Julia code can be fast, my naive implementation still requires lots of loops (over the triangles, points, pixels), so it makes sense for it to be slow. That said, even though my implementation is naive, a pretty triangulation is only a key-press away and can be generated in a couple of minutes.  
