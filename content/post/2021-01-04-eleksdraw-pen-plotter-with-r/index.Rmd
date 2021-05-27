@@ -143,7 +143,7 @@ p <- expand_grid(col = 0:(n_cols-1),
   theme_void()
 ```
 
-![Schotter, pen on paper](/post/2021-01-04-eleksdraw-pen-plotter-with-r/schotter_png.png){width=400px}
+![Schotter, png](/post/2021-01-04-eleksdraw-pen-plotter-with-r/schotter_png.png){width=400px}
 
 ![Schotter, preview](/post/2021-01-04-eleksdraw-pen-plotter-with-r/schotter_air.png){width=400px}
 
