@@ -1,0 +1,124 @@
+---
+title: 'Riddler: Nonconformist Dice'
+author: Bas
+date: '2022-05-18'
+---
+
+```{r warning=FALSE, include=FALSE}
+reticulate::use_condaenv("basjacobs")
+```
+
+
+Last week's [Riddler Classic](https://fivethirtyeight.com/features/its-elementary-my-dear-riddler/) is a question about rolling tetrahedral dice:
+
+> You have four fair tetrahedral dice whose four sides are numbered 1 through 4.  
+You play a game in which you roll them all and divide them into two groups: those whose values are unique, and those which are duplicates. For example, if you roll a 1, 2, 2 and 4, then the 1 and 4 will go into the “unique” group, while the 2s will go into the “duplicate” group.  
+Next, you reroll all the dice in the duplicate pool and sort all the dice again. Continuing the previous example, that would mean you reroll the 2s. If the result happens to be 1 and 3, then the “unique” group will now consist of 3 and 4, while the “duplicate” group will have two 1s.  
+You continue rerolling the duplicate pool and sorting all the dice until all the dice are members of the same group. If all four dice are in the “unique” group, you win. If all four are in the “duplicate” group, you lose.
+What is your probability of winning the game?
+
+We will answer this question using a Markov Chain in python. For that, we will use `numpy` (for matrix multiplication), `collections.Counter` (for easy counting) and `itertools.product` (for throwing dice).
+
+```{python}
+from collections import Counter
+from itertools import product
+import numpy as np
+```
+
+First, let's calculate the probability of every possible throw with four tetrahedral dice. We will represent a dice throw as an ordered string.
+
+```{python}
+# all possible throws
+throws = ["".join(str(i) for i in state) for state in product([1,2,3,4], repeat=4)]
+# aggregate identical throws and calculate probabilities
+all_states = ["".join(sorted(throw)) for throw in throws]
+freqs = Counter(all_states).items()
+throw = {k: v/(4**4) for k, v in freqs}
+print("\n".join([f"{k}: {v}" for k, v in throw.items()][:12]) + "\n...")
+```
+
+In addition to these throw results, we have two states the chain can be in: `"loss"` and `"win"`.
+
+```{python}
+states = list(throw.keys()) + ["loss", "win"]
+states
+```
+
+Next, we calculate the probability of going from one state to another. The following function will calculate all transition probabilities starting from state `from_state`. Remember we can roll every die in the "unique" group, but cannot change the die in the "duplicate" group. The states for `"loss"` and `"win"` are absorbing states.
+
+```{python}
+def transition_probs(from_state):
+  # Return all transition probabilities from state `from_state`
+  
+  # initially fill all probabilities with zero
+  probs = {state: 0 for state in states}
+  
+  counts = Counter(from_state)
+  uniques = [k for k, v in counts.items() if v == 1]
+  
+  if len(uniques) == 0 or from_state == "loss":
+    probs["loss"] = 1
+    return probs
+  elif len(uniques) == 4 or from_state == "win":
+    probs["win"] = 1
+    return probs
+  
+  # number of dice to throw again
+  n_dice = 4 - len(uniques) 
+  # calculate possible new states
+  draws = ["".join(str(i) for i in state) for state in product([1,2,3,4], repeat=n_dice)]
+  new_states = ["".join(sorted(draw + "".join(uniques))) for draw in draws]
+  # calculate new states' probabilities
+  freqs = Counter(new_states).items()
+  throw_probs = {k: v/(4**n_dice) for k, v in freqs}
+  
+  probs.update(throw_probs)
+  
+  return probs
+```
+
+For example, if we start with `"1112"`, we throw the three `"1"` dice again, but keep the die with a `"2"`. Therefore the probability mass is distributed over throws containing a `"2"`.
+
+```{python}
+transition_probs("1112")
+```
+
+Next, we can generate a Markov matrix containing these transition probabilities for every starting state.
+
+```{python}
+markov_mat = [[v for k, v in transition_probs(state).items()] for state in states]
+markov_mat = np.asarray(markov_mat) # turn into numpy array for matrix multiplication
+markov_mat.shape
+```
+
+Together with an initial throw, we can then simulate a round of the game by multiplying the vector corresponding to the initial throw with the Markov matrix..
+
+```{python}
+first_throw = np.array([v for k, v in throw.items()] + [0, 0])
+
+res = first_throw @ markov_mat
+dict(zip(states, res))
+```
+
+We can just as easily simulate multiple rounds of the game by taking the matrix to a certain power.  
+After 20 rounds, it becomes apparent that the probability of winning seems to be 45%.
+
+```{python}
+res = first_throw @ np.linalg.matrix_power(markov_mat, 20)
+dict(zip(states, res))
+```
+
+Simulating the game for 1000 rounds confirms this.
+
+```{python}
+res = first_throw @ np.linalg.matrix_power(markov_mat, 1000)
+dict(zip(states, res))
+```
+
+What's interesting is that you have a higher probability of winning (48.3%) if you start with a pair.
+
+```{python}
+dict(zip(states, np.linalg.matrix_power(markov_mat, 1000)[:,-1]))
+```
+
+And that is how easy and elegant it can be to answer such a question using a Markov chain. Until next time!

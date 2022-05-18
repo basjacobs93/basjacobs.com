@@ -6,7 +6,18 @@
     <description>Recent content in Posts on Bas Jacobs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 16 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 18 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Riddler: Nonconformist Dice</title>
+      <link>/post/2022-05-18-riddler-nonconformist-dice/</link>
+      <pubDate>Wed, 18 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2022-05-18-riddler-nonconformist-dice/</guid>
+      <description>Last week’s Riddler Classic is a question about rolling tetrahedral dice:
+ You have four fair tetrahedral dice whose four sides are numbered 1 through 4.
+You play a game in which you roll them all and divide them into two groups: those whose values are unique, and those which are duplicates. For example, if you roll a 1, 2, 2 and 4, then the 1 and 4 will go into the “unique” group, while the 2s will go into the “duplicate” group.</description>
+    </item>
+    
     <item>
       <title>Closest Eredivisie football club</title>
       <link>/post/2021-02-16-closest-eredivisie-football-club/</link>
