@@ -73,9 +73,11 @@ What is your probability of winning the game?</p>
 from itertools import product
 import numpy as np</code></pre>
 <p>First, let’s calculate the probability of every possible throw with four tetrahedral dice. We will represent a dice throw as an ordered string.</p>
-<pre class="python"><code>draws = [&quot;&quot;.join(str(i) for i in state) for state in product([1,2,3,4], repeat=4)]
-new_states = [&quot;&quot;.join(sorted(draw)) for draw in draws]
-freqs = Counter(new_states).items()
+<pre class="python"><code># all possible throws
+throws = [&quot;&quot;.join(str(i) for i in state) for state in product([1,2,3,4], repeat=4)]
+# aggregate identical throws and calculate probabilities
+all_states = [&quot;&quot;.join(sorted(throw)) for throw in throws]
+freqs = Counter(all_states).items()
 throw = {k: v/(4**4) for k, v in freqs}
 print(&quot;\n&quot;.join([f&quot;{k}: {v}&quot; for k, v in throw.items()][:12]) + &quot;\n...&quot;)</code></pre>
 <pre><code>## 1111: 0.00390625
@@ -150,7 +152,7 @@ dict(zip(states, res))</code></pre>
 <p>What’s interesting is that you have a higher probability of winning (48.3%) if you start with a pair.</p>
 <pre class="python"><code>dict(zip(states, np.linalg.matrix_power(markov_mat, 1000)[:,-1]))</code></pre>
 <pre><code>## {&#39;1111&#39;: 0.0, &#39;1112&#39;: 0.44999999999999996, &#39;1113&#39;: 0.44999999999999996, &#39;1114&#39;: 0.44999999999999996, &#39;1122&#39;: 0.0, &#39;1123&#39;: 0.48333333333333334, &#39;1124&#39;: 0.48333333333333334, &#39;1133&#39;: 0.0, &#39;1134&#39;: 0.48333333333333334, &#39;1144&#39;: 0.0, &#39;1222&#39;: 0.44999999999999996, &#39;1223&#39;: 0.48333333333333334, &#39;1224&#39;: 0.48333333333333334, &#39;1233&#39;: 0.48333333333333334, &#39;1234&#39;: 1.0, &#39;1244&#39;: 0.48333333333333334, &#39;1333&#39;: 0.44999999999999996, &#39;1334&#39;: 0.48333333333333334, &#39;1344&#39;: 0.48333333333333334, &#39;1444&#39;: 0.44999999999999996, &#39;2222&#39;: 0.0, &#39;2223&#39;: 0.44999999999999996, &#39;2224&#39;: 0.44999999999999996, &#39;2233&#39;: 0.0, &#39;2234&#39;: 0.48333333333333334, &#39;2244&#39;: 0.0, &#39;2333&#39;: 0.44999999999999996, &#39;2334&#39;: 0.48333333333333334, &#39;2344&#39;: 0.48333333333333334, &#39;2444&#39;: 0.44999999999999996, &#39;3333&#39;: 0.0, &#39;3334&#39;: 0.44999999999999996, &#39;3344&#39;: 0.0, &#39;3444&#39;: 0.44999999999999996, &#39;4444&#39;: 0.0, &#39;loss&#39;: 0.0, &#39;win&#39;: 1.0}</code></pre>
-<p>And that is how easy and elegant it can be to answer such a question using a Markov chain.</p>
+<p>And that is how easy and elegant it can be to answer such a question using a Markov chain. Until next time!</p>
 
     </section>
 </article>

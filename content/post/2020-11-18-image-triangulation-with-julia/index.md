@@ -49,6 +49,17 @@ Two more examples of triangulations with 2000 triangles are below. They represen
 ![Bluethroat (2000 triangles)](/post/2020-11-18-image-triangulation-with-julia/blauwborst_2000.png)
 ![Red-backed shrike (2000 triangles)](/post/2020-11-18-image-triangulation-with-julia/klauwier_2000.png)
 
+## More results (June 2022)
+
+I have updated the code to make the drawing faster and to include more techniques from the paper (edge flips and node collapse).  
+Below is the new code demonstrated on the Lee Morgan album cover 'Leeway' after 50, 100, 120 and 250 steps.
+
+![Leeway Blue Note album cover](/post/2020-11-18-image-triangulation-with-julia/leeway.jpg)
+![Leeway Blue Note album cover (50 steps)](/post/2020-11-18-image-triangulation-with-julia/leeway_58.png)
+![Leeway Blue Note album cover (100 steps)](/post/2020-11-18-image-triangulation-with-julia/leeway_96.png)
+![Leeway Blue Note album cover (120 steps)](/post/2020-11-18-image-triangulation-with-julia/leeway_119.png)
+![Leeway Blue Note album cover (250 steps)](/post/2020-11-18-image-triangulation-with-julia/leeway_249.png)
+
 ## Conclusion
 
 Implementing part of the methodology of the paper in Julia was fairly straightforward, even though my experience with the language is limited. However, the performance is not as good as I hoped it would be. Generating the above images took a couple of minutes upto half an hour each. This makes it hard to fiddle around with the parameters, since a lot of time is spent waiting for the results. The authors of the paper wrote parts of their code in C++ because of performance, and parallelized and optimized the code such that it was faster. Although Julia code can be fast, my naive implementation still requires lots of loops (over the triangles, points, pixels), so it makes sense for it to be slow. That said, even though my implementation is naive, a pretty triangulation is only a key-press away and can be generated in a couple of minutes.  
