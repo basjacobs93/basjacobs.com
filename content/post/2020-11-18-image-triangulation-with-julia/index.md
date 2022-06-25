@@ -52,13 +52,24 @@ Two more examples of triangulations with 2000 triangles are below. They represen
 ## More results (June 2022)
 
 I have updated the code to make the drawing faster and to include more techniques from the paper (edge flips and node collapse).  
-Below is the new code demonstrated on the Lee Morgan album cover 'Leeway' after 50, 100, 120 and 250 steps.
+Below is the new code demonstrated on the Lee Morgan album cover _Lee-way_ after 50, 100, 120 and 250 steps.
 
-![Leeway Blue Note album cover](/post/2020-11-18-image-triangulation-with-julia/leeway.jpg)
-![Leeway Blue Note album cover (50 steps)](/post/2020-11-18-image-triangulation-with-julia/leeway_58.png)
-![Leeway Blue Note album cover (100 steps)](/post/2020-11-18-image-triangulation-with-julia/leeway_96.png)
-![Leeway Blue Note album cover (120 steps)](/post/2020-11-18-image-triangulation-with-julia/leeway_119.png)
-![Leeway Blue Note album cover (250 steps)](/post/2020-11-18-image-triangulation-with-julia/leeway_249.png)
+![Lee-way Blue Note album cover](/post/2020-11-18-image-triangulation-with-julia/leeway.jpg)
+![Lee-way Blue Note album cover (50 steps)](/post/2020-11-18-image-triangulation-with-julia/leeway_58.png)
+![Lee-way Blue Note album cover (100 steps)](/post/2020-11-18-image-triangulation-with-julia/leeway_96.png)
+![Lee-way Blue Note album cover (120 steps)](/post/2020-11-18-image-triangulation-with-julia/leeway_119.png)
+![Lee-way Blue Note album cover (250 steps)](/post/2020-11-18-image-triangulation-with-julia/leeway_249.png)
+
+And the same on Cannonball Adderley's album _Somethin' Else_.
+![Somethin' Else Blue Note album cover](/post/2020-11-18-image-triangulation-with-julia/somethinelse.jpg)
+![Somethin' Else Blue Note album cover (20 steps)](/post/2020-11-18-image-triangulation-with-julia/somethinelse_20.png)
+![Somethin' Else Blue Note album cover (40 steps)](/post/2020-11-18-image-triangulation-with-julia/somethinelse_40.png)
+![Somethin' Else Blue Note album cover (60 steps)](/post/2020-11-18-image-triangulation-with-julia/somethinelse_60.png)
+![Somethin' Else Blue Note album cover (80 steps)](/post/2020-11-18-image-triangulation-with-julia/somethinelse_80.png)
+![Somethin' Else Blue Note album cover (100 steps)](/post/2020-11-18-image-triangulation-with-julia/somethinelse_100.png)
+![Somethin' Else Blue Note album cover (120 steps)](/post/2020-11-18-image-triangulation-with-julia/somethinelse_120.png)
+![Somethin' Else Blue Note album cover (140 steps)](/post/2020-11-18-image-triangulation-with-julia/somethinelse_140.png)
+
 
 ## Conclusion
 
