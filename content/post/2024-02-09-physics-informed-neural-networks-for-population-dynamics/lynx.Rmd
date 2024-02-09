@@ -185,7 +185,7 @@ The data follow a cyclical pattern in which increases in the population of hares
 ```python
 df[["Hare", "Lynx"]].plot(figsize=(10,6), grid=True, xticks = df.index.astype(int)[::2], title="Hudson Bay Lynx-Hare Dataset", ylabel="Number of pelts (thousands)")
 ```   
-![](/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx_5_1.png){width=600px}
+![](images/lynx_5_1.png){width=600px}
 
 ## The Lotka-Volterra model
 
@@ -312,31 +312,31 @@ for i in range(50000):
 
 
     
-![](/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx_14_0.png)
+![](images/lynx_14_0.png)
     
 
 
 
     
-![](/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx_14_1.png)
+![](images/lynx_14_1.png)
     
 
 
 
     
-![](/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx_14_2.png)
+![](images/lynx_14_2.png)
     
 
 
 
     
-![](/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx_14_3.png)
+![](images/lynx_14_3.png)
     
 
 
 
     
-![](/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx_14_4.png)
+![](images/lynx_14_4.png)
     
 
 
@@ -410,31 +410,30 @@ for i in range(50000):
 
 
     
-![](/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx_20_0.png)
+![](images/lynx_20_0.png)
+    
+
+
+    
+![](images/lynx_20_1.png)
     
 
 
 
     
-![](/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx_20_1.png)
+![](images/lynx_20_2.png)
     
 
 
 
     
-![](/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx_20_2.png)
+![](images/lynx_20_3.png)
     
 
 
 
     
-![](/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx_20_3.png)
-    
-
-
-
-    
-![](/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx_20_4.png)
+![](images/lynx_20_4.png)
     
 
 

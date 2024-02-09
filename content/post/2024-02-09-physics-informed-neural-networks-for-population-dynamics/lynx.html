@@ -305,7 +305,7 @@ Year
 </div>
 <p>The data follow a cyclical pattern in which increases in the population of hares are followed by increases in the lynx populations in the subsequent years.</p>
 <pre class="python"><code>df[[&quot;Hare&quot;, &quot;Lynx&quot;]].plot(figsize=(10,6), grid=True, xticks = df.index.astype(int)[::2], title=&quot;Hudson Bay Lynx-Hare Dataset&quot;, ylabel=&quot;Number of pelts (thousands)&quot;)</code></pre>
-<p><img src="/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx_5_1.png" width="600" /></p>
+<p><img src="images/lynx_5_1.png" width="600" /></p>
 </div>
 <div id="the-lotka-volterra-model" class="section level2">
 <h2>The Lotka-Volterra model</h2>
@@ -402,11 +402,11 @@ for i in range(50000):
         yh = model(t).detach()
         
         plot_result(i, t, y, yh, loss, None)</code></pre>
-<p><img src="/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx_14_0.png" /></p>
-<p><img src="/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx_14_1.png" /></p>
-<p><img src="/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx_14_2.png" /></p>
-<p><img src="/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx_14_3.png" /></p>
-<p><img src="/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx_14_4.png" /></p>
+<p><img src="images/lynx_14_0.png" /></p>
+<p><img src="images/lynx_14_1.png" /></p>
+<p><img src="images/lynx_14_2.png" /></p>
+<p><img src="images/lynx_14_3.png" /></p>
+<p><img src="images/lynx_14_4.png" /></p>
 <p>Next, we use exactly the same architecture but add parameters <code>alpha</code>, <code>beta</code>, <code>gamma</code> and <code>delta</code> reflecting the parameters in the Lotka-Volterra equations. We initialize them randomly between 0 and 1, and add them to the list of model paramters so that they are updated in the backpropagation steps.</p>
 <pre class="python"><code>torch.manual_seed(123)
 model = NN(1, 2, 8, 2)
@@ -460,11 +460,11 @@ for i in range(50000):
         a, b, c, d = [round(param.item(), 3) for param in extra_parameters]
         params = rf&quot;$\alpha={a}, \beta={b}, \gamma={c}, \delta={d}$&quot;
         plot_result(i, t, y, yh, loss, tp, physics_loss, params)</code></pre>
-<p><img src="/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx_20_0.png" /></p>
-<p><img src="/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx_20_1.png" /></p>
-<p><img src="/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx_20_2.png" /></p>
-<p><img src="/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx_20_3.png" /></p>
-<p><img src="/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx_20_4.png" /></p>
+<p><img src="images/lynx_20_0.png" /></p>
+<p><img src="images/lynx_20_1.png" /></p>
+<p><img src="images/lynx_20_2.png" /></p>
+<p><img src="images/lynx_20_3.png" /></p>
+<p><img src="images/lynx_20_4.png" /></p>
 <p>We see that the model is still able to fit well (albeit a little bit worse), and is able to estimate values for the parameters. Specifically, it estimates</p>
 <p><span class="math display">\[
 \hat{\alpha} = 0.57,\quad
