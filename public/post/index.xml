@@ -9,10 +9,10 @@
     <lastBuildDate>Fri, 09 Feb 2024 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Physics-informed neural network for population dynamics</title>
-      <link>/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx/</link>
+      <link>/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/</link>
       <pubDate>Fri, 09 Feb 2024 00:00:00 +0000</pubDate>
       
-      <guid>/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/lynx/</guid>
+      <guid>/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/</guid>
       <description>A Physics-Informed Neural Network (PINN) is a neural network that incorporates knowledge about physical laws alongside data. These physical (or chemical, or biological) laws can be incorporated into the network in the form of differential equations. Among other things, PINNs can be used to estimate parameters of a differential equation based on observational data.
 Last week, Dr. Riccardo Taormina gave a guest lecture in my organization in which he explained the workings and advantages of PINNs.</description>
     </item>
