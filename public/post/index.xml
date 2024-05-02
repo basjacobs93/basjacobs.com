@@ -6,7 +6,18 @@
     <description>Recent content in Posts on Bas Jacobs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 09 Feb 2024 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 28 Apr 2024 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Dutch placename mapper</title>
+      <link>/post/2024-04-28-dutch-placename-mapper/</link>
+      <pubDate>Sun, 28 Apr 2024 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2024-04-28-dutch-placename-mapper/</guid>
+      <description>Inspired by https://placenames.rtwilson.com, I thought I’d try to make such place name visualizations of the Netherlands myself.
+The Dutch platform PDOK provides open geo-information datasets through webservices and downloads. Here, we use the location API to search for residence locations using Solr-syntax. We also use the gray background map from PDOK, and use leaflet to create interactive maps.
+library(tidyverse) library(leaflet) library(sf) pdok_query_url &amp;lt;- &amp;quot;https://api.</description>
+    </item>
+    
     <item>
       <title>Physics-informed neural network for population dynamics</title>
       <link>/post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/</link>
