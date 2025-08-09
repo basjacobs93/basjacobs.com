@@ -1,0 +1,28 @@
+project:
+  type: website
+
+website:
+  title: "Bas Jacobs"
+  site-url: https://www.basjacobs.com
+  description: "My blog about math, programming and data science"
+  favicon: logo.png
+  navbar:
+    logo: logo.png
+    right:
+      - href: index.qmd
+        text: Posts
+      - about.qmd
+      - icon: github
+        href: https://github.com/basjacobs93
+      - icon: linkedin
+        href: https://www.linkedin.com/in/basjacobs93/
+      - icon: rss
+        href: index.xml
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+    css: styles.css
+    toc: true

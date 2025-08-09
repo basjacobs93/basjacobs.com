@@ -1,0 +1,78 @@
+---
+title: Showing images on hover in Plotly with R
+author: Bas
+date: '2018-10-28'
+---
+
+For a project I was working on recently, I wanted to turn a `ggplot` scatterplot into an interactive visualisation: when hovering over a point, a corresponding image needed to be shown. I did not want to use Shiny, since I required the visualisation to be portable. This is possible by [manually tinkering with html](
+https://github.com/etpinard/plotly-dashboards/tree/master/hover-images), but using the `plotly` and `htmlwidgets` packages, I was able to achieve what I wanted without the need to leave the comfy RStudio environment, and without needing to host the plot on the plot.ly website.  
+
+The [plotly](https://plot.ly/r/) library provides the useful `ggplotly` function to make static plots interactive with just one line of code. If we apply it to a `ggplot` of the famous `iris` dataset, it looks like this.
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(plotly)
+
+g <- ggplot(iris, aes(x = Sepal.Length,
+                      y = Petal.Length,
+                      color = Species)) + geom_point()
+p <- ggplotly(g) %>% partial_bundle()
+
+p
+```
+
+Among other things, we can now hover over a point on the graph and in the tooltip receive information about the corresponding data point. By default, the information displayed is exactly the information we define in the `aes` mapping. If we want other information, we can add it in the `text` aesthetic, which plotly can read. If we provide `ggplotly` with the `tooltip = "text"` option, this aesthetic is the only thing that is shown.
+
+```{r}
+g <- ggplot(iris, aes(x = Sepal.Length,
+                      y = Petal.Length,
+                      color = Species,
+                      text = Species)) + geom_point()
+p <- ggplotly(g, tooltip = "text") %>% partial_bundle() 
+
+p
+```
+
+This already looks nice and clean. As can be seen [in the plotly documentation](https://plot.ly/r/hover-events/), a custom JavaScript function can be called when hovering over a point, and the tooltip text can be retrieved in this function. However, other than in the documentation, we do not need to change any html code or write long JavaScript code; using the `htmltools::onRender` function we can inject a custom JavaScript function into the generated plot.  
+In this example, I chose to store the images locally, but one can also use base64 objects like in the documentation to make it even more portable.  
+
+We define a function that takes a plotly element and calls another function when hovering over this element. The point's tooltip can be retrieved with `d.points[0].data.text`. Since we made this nice and clean, this is the corresponding plant's species as a string. Locally, I have stored the images in the folder corresponding to this blogpost, with filenames `setosa.jpg`, `virginica.jpg` and `versicolor.jpg`. The path to the correct image is constructed and assigned to the `image_location` variable.  
+Next, we define an object which points to the correct image and defines the position and the size we want the image to take.  
+Finally, by calling `Plotly.relayout` the new layout is applied in which we attach this image object in the layout's `images` attribute.
+
+```{r}
+p %>% htmlwidgets::onRender("
+    function(el, x) {
+      // when hovering over an element, do something
+      el.on('plotly_hover', function(d) {
+
+        // extract tooltip text
+        txt = d.points[0].data.text;
+        // image is stored locally
+        image_location = '../2018-10-28-showing-images-on-hover-in-plotly-with-r/' + txt + '.jpg';
+
+        // define image to be shown
+        var img = {
+          // location of image
+          source: image_location,
+          // top-left corner
+          x: 0,
+          y: 1,
+          sizex: 0.2,
+          sizey: 0.2,
+          xref: 'paper',
+          yref: 'paper'
+        };
+
+        // show image and annotation 
+        Plotly.relayout(el.id, {
+            images: [img] 
+        });
+      })
+    }
+    ")
+```
+
+Tada! Hovering over a point now shows an image of the corresponding species in the top-left corner. Instead of an image, text can also be shown by adding a `text` attribute to the `var img` definition and adding `annotations: [img]` to the `Plotly.relayout` function.  
+
+This visualisation can now be exported to html with `htmltools::saveWidget()` and shared with anyone, the recipient does not need not have `R` installed. Do make sure to also share the folder with the images though, since these are not embedded.

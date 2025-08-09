@@ -1,0 +1,9 @@
+---
+title: "About"
+---
+
+My name is Bas Jacobs. I am working as a data scientist in The Netherlands. Before that, I did both my bachelor and master in mathematics. I like solving puzzles, writing code and working on data analysis and machine learning projects.
+
+***
+
+This blog was made using [quarto](https://quarto.org).

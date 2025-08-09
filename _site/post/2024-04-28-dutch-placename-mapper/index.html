@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.33">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Bas">
+<meta name="dcterms.date" content="2024-04-28">
+
+<title>Dutch placename mapper – Bas Jacobs</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../logo.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="../../site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="../../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="../../site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="../../site_libs/leaflet-1.3.1/leaflet.css" rel="stylesheet">
+<script src="../../site_libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="../../site_libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
+<script src="../../site_libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="../../site_libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="../../site_libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
+<script src="../../site_libs/leaflet-binding-2.2.2/leaflet.js"></script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../logo.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Bas Jacobs</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/basjacobs93"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/basjacobs93/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Dutch placename mapper</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Bas </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 28, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Inspired by https://placenames.rtwilson.com, I thought I’d try to make such place name visualizations of the Netherlands myself.</p>
+<p>The Dutch platform <a href="https://www.pdok.nl">PDOK</a> provides open geo-information datasets through webservices and downloads. Here, we use the <a href="https://api.pdok.nl/bzk/locatieserver/search/v3_1/ui/">location API</a> to search for residence locations using <a href="https://solr.apache.org/guide/6_6/the-standard-query-parser.html#the-standard-query-parser">Solr-syntax</a>. We also use the gray background map from PDOK, and use leaflet to create interactive maps.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(leaflet)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>pdok_query_url <span class="ot">&lt;-</span> <span class="st">"https://api.pdok.nl/bzk/locatieserver/search/v3_1/free?q={location}&amp;fq=type:woonplaats&amp;fq=bron:BAG&amp;fl=id woonplaatsnaam weergavenaam centroide_ll&amp;df=woonplaatsnaam&amp;rows=100"</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>pdok_map_url <span class="ot">&lt;-</span> <span class="st">"https://service.pdok.nl/brt/achtergrondkaart/wmts/v2_0/grijs/EPSG:3857/{z}/{x}/{y}.png"</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>addLocationMarkers <span class="ot">&lt;-</span> <span class="cf">function</span>(map, location, fillColor) {</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  url <span class="ot">&lt;-</span> <span class="fu">URLencode</span>(<span class="fu">str_glue</span>(pdok_query_url))</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> jsonlite<span class="sc">::</span><span class="fu">read_json</span>(url, <span class="at">simplifyVector =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(res<span class="sc">$</span>response<span class="sc">$</span>docs) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">lng =</span> <span class="fu">as.numeric</span>(<span class="fu">str_extract</span>(centroide_ll, <span class="st">"[</span><span class="sc">\\</span><span class="st">d</span><span class="sc">\\</span><span class="st">.]+</span><span class="sc">\\</span><span class="st">s"</span>)),</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">lat =</span> <span class="fu">as.numeric</span>(<span class="fu">str_extract</span>(centroide_ll, <span class="st">"</span><span class="sc">\\</span><span class="st">s[</span><span class="sc">\\</span><span class="st">d</span><span class="sc">\\</span><span class="st">.]+"</span>)))</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  map <span class="ot">&lt;-</span> <span class="fu">addCircleMarkers</span>(map, <span class="at">lng=</span>df<span class="sc">$</span>lng, <span class="at">lat=</span>df<span class="sc">$</span>lat, <span class="at">popup =</span> df<span class="sc">$</span>woonplaatsnaam,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                          <span class="at">stroke =</span> F, <span class="at">radius =</span> <span class="dv">5</span>, <span class="at">fillOpacity =</span> <span class="dv">1</span>, <span class="at">fillColor =</span> fillColor, <span class="at">color =</span> fillColor)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(map)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>create_map <span class="ot">&lt;-</span> <span class="cf">function</span>(markers) {</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  map <span class="ot">&lt;-</span> <span class="fu">leaflet</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">setView</span>(<span class="at">zoom=</span><span class="dv">7</span>, <span class="at">lng=</span><span class="fl">5.4</span>, <span class="at">lat=</span><span class="fl">52.2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">addTiles</span>(<span class="at">urlTemplate =</span> pdok_map_url,</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>             <span class="at">attribution =</span> <span class="st">"&lt;a href='https://www.pdok.nl/'&gt;PDOK&lt;/a&gt;"</span>,</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>             <span class="at">options =</span> <span class="fu">tileOptions</span>(<span class="at">minZoom =</span> <span class="dv">6</span>, <span class="at">maxZoom =</span> <span class="dv">18</span>)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (location <span class="cf">in</span> <span class="fu">names</span>(markers)) {</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    map <span class="ot">&lt;-</span> <span class="fu">addLocationMarkers</span>(map, location, markers[[location]])</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  map <span class="ot">&lt;-</span> <span class="fu">addLegend</span>(map, <span class="at">position =</span> <span class="st">"bottomright"</span>,</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>                   <span class="at">colors =</span> <span class="fu">unname</span>(<span class="fu">unlist</span>(markers)),</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>                   <span class="at">labels =</span> <span class="fu">names</span>(markers),</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>                   <span class="at">opacity =</span> <span class="dv">1</span>)</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(map)</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This allows us to create maps of common <a href="https://nl.wikipedia.org/wiki/Toponiem">Dutch toponym patterns</a>, such as “loo” (Germanic), “recht” (Roman) or “ga” (Frisian).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">create_map</span>(<span class="fu">list</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"*loo OR *lo OR *le"</span> <span class="ot">=</span> <span class="st">"blue"</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"*recht OR *richt"</span> <span class="ot">=</span> <span class="st">"green"</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"*ga"</span> <span class="ot">=</span> <span class="st">"red"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"*wolde"</span> <span class="ot">=</span> <span class="st">"orange"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"*schot"</span> <span class="ot">=</span> <span class="st">"black"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"*wijk"</span> <span class="ot">=</span> <span class="st">"magenta"</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-f4c1bf6c0f74b2c53bdb" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-f4c1bf6c0f74b2c53bdb">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"setView":[[52.2,5.4],7,[]],"calls":[{"method":"addTiles","args":["https://service.pdok.nl/brt/achtergrondkaart/wmts/v2_0/grijs/EPSG:3857/{z}/{x}/{y}.png",null,null,{"minZoom":6,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"<a href='https://www.pdok.nl/'>PDOK<\/a>"}]},{"method":"addCircleMarkers","args":[[52.43181299,51.51385272,52.38772556,52.35771367,51.98354752,53.04257485,51.43583268,51.33202606,52.73914231,53.35738676,53.00140342,52.21794138,53.2382153,52.10612921,51.41975911,51.90665514,51.934929,52.4277221,51.86511076,52.83458183,52.96276485,52.94138792,50.94914909,52.28824931,52.88437871,52.99382948,50.92311772,51.50888838,52.03806534,52.93051319,52.35296921,52.40673026,52.10773155,51.99994952,53.03958759,51.51684551,52.59985335,52.05399571,52.25490615,52.12550259,52.11272996,52.00572484,51.47872656,53.22085508,52.84077782,53.09515481,52.45774423,52.27752426,51.93006302,51.9332714,52.2353596,52.41471656,51.51131653,51.46384215,51.53160925,51.43923072,52.04923557,52.63870126,51.72164632,51.50921389,51.57363309,51.59490591,52.07916737,52.93960972,52.81029273,52.91897543,53.14485095,52.06557218,52.89475673,52.48711385,52.48834455,53.10276015,51.68868184,53.03613503,51.31169521,53.01639884,52.93784607,52.23959591,53.07904732,51.37905246,53.07767633,52.34437561,51.53129315,51.96633181,52.80908384,52.51868565],[5.96008498,5.64940863,6.89089503,6.65988219,6.11851032,6.70006602,4.92216568,6.08543934,5.95193733,6.50847594,6.62796226,6.68746277,5.71577641,6.51348302,3.75119036,4.16678789,4.58013769,6.53791752,6.48617146,6.38794776,6.61532724,6.24310638,5.75866486,5.66616511,6.8655502,6.35563226,5.74680109,5.0528502,6.63879682,6.66992726,6.3861551,6.83651722,6.57057763,6.42927301,6.30827026,4.36513749,4.70857318,6.33429763,6.77819416,5.90857642,5.85679117,6.24760908,3.95907702,6.09306122,5.84383179,6.45062301,6.41370511,6.27670797,5.98610562,5.96668531,6.51336678,6.12351423,6.08763315,6.08989398,5.92118054,5.61066415,4.58623075,5.71517383,3.79323062,6.0369467,3.55001548,5.84135852,5.79425079,5.81258845,6.00227407,5.85535862,6.09627846,6.46485551,6.70722315,6.62666463,6.65599933,6.00373659,5.00136906,6.62589097,4.04596701,5.78962163,5.70281875,6.10040614,6.61879175,6.1488133,7.14020608,6.86661838,3.4552999,6.65850533,6.74703116,6.11836361],5,null,null,{"interactive":true,"className":"","stroke":false,"color":"blue","weight":5,"opacity":0.5,"fill":true,"fillColor":"blue","fillOpacity":1},null,null,["'t Loo Oldebroek","Aarle-Rixtel","Agelo","Almelo","Angerlo","Anloo","Baarle-Nassau","Baarlo","Baarlo","Baflo","Balloo","Bentelo","Bitgummole","Borculo","Borssele","Brielle","Capelle aan den IJssel","Daarle","Dinxperlo","Dwingeloo","Eldersloo","Elsloo","Elsloo","Ermelo","Exloo","Fochteloo","Geulle","Goirle","Groenlo","Grolloo","Haarle","Haarle","Haarlo","Halle","Haule","Heerle","Heiloo","Hengelo (Gld)","Hengelo","Hoenderloo","Hoenderloo","Hummelo","Kapelle","Kootstertille","Langelille","Langelo","Lemele","Lettele","Loo Gld","Loo Gld","Markelo","Marle","Meerlo","Melderslo","Merselo","Mierlo","Moerkapelle","Nagele","Noordwelle","Oirlo","Oostkapelle","Oploo","Otterlo","Ouwsterhaule","Paasloo","Rotsterhaule","Rottevalle","Ruurlo","Schoonloo","Sibculo","Sibculo","Smalle Ee","Sprang-Capelle","Taarlo","Terhole","Terkaple","Teroele","Twello","Tynaarlo","Venlo","Vriescheloo","Weerselo","Westkapelle","Winterswijk Corle","Zweeloo","Zwolle"],null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addCircleMarkers","args":[[52.32295314,51.85106556,51.7815073,52.33035118,52.00362477,51.01821032,52.20051406,50.85296715,50.91571411,52.21200875,51.99808618,52.74334497,51.39506366,51.83323777,51.83068699,51.90769571,52.0886922,51.41908999,51.81852255],[4.92651544,4.52543794,4.7088743,4.93992756,4.79144484,5.84019739,5.085112,5.6995303,5.77754563,4.85391385,4.65236823,6.96212001,4.33529985,4.703344,4.7729476,5.25906477,5.09520363,4.28590253,4.61841496],5,null,null,{"interactive":true,"className":"","stroke":false,"color":"green","weight":5,"opacity":0.5,"fill":true,"fillColor":"green","fillOpacity":1},null,null,["Amsterdam-Duivendrecht","Barendrecht","Dordrecht","Duivendrecht","Haastrecht","Limbricht","Loosdrecht","Maastricht","Maastricht-Airport","Mijdrecht","Moordrecht","Nieuw-Dordrecht","Ossendrecht","Papendrecht","Sliedrecht","Tricht","Utrecht","Woensdrecht","Zwijndrecht"],null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addCircleMarkers","args":[[53.0185602,53.21972537,52.83522118,52.90253184,52.86782737,52.8839775,53.05352768,52.97759137,52.97927833,53.05297973,52.97714206,53.24806907,53.12789508,52.90950223,53.11701305,52.99243797,52.93094711,53.01359948,52.85404652,52.92322883,52.93273321,52.86449509,52.81478907,53.00119258,52.87223004,52.87225741,52.92910893],[5.57229823,6.16267197,5.7950242,5.74550791,5.71345635,5.72084212,5.70114044,5.56114739,6.11939682,5.66880984,6.22576268,5.59194555,6.02758544,5.5156008,5.9673522,5.55328026,5.80708562,5.46902385,6.04563859,5.75425151,5.8698856,5.97339755,5.87209326,5.71583367,6.12017707,6.00689309,5.61031964],5,null,null,{"interactive":true,"className":"","stroke":false,"color":"red","weight":5,"opacity":0.5,"fill":true,"fillColor":"red","fillOpacity":1},null,null,["Abbega","Augustinusga","Bantega","Doniaga","Eesterga","Follega","Goënga","Idzega","Jubbega","Loënga","Makkinga","Minnertsga","Nijega","Oudega","Oudega","Oudega","Ouwster-Nijega","Parrega","Peperga","Sint Nicolaasga","Sintjohannesga","Sonnega","Spanga","Uitwellingerga","Vinkega","Wolvega","Ypecolsga"],null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addCircleMarkers","args":[[53.11174223,53.17887364,53.23507588,53.1577844,53.25101337,52.89567764,53.14137027,53.16010084,53.18319174,53.19402675,52.90232539,53.27836058,52.88992416,52.91606981,52.47563968,53.00185836,53.15312292,53.17491524,52.77136781,53.23721436,52.27163988,52.34436139,52.66254184,53.2622713],[7.16055389,6.53558492,7.11207575,6.4587789,6.66001568,5.49782054,6.71359576,6.42760082,6.29687216,6.38732021,5.9696952,6.57849552,6.13885763,5.98713333,5.89408003,6.30548217,6.55910297,6.47104767,6.0176132,6.8061624,6.08120669,5.45524194,6.4192588,6.60082208],5,null,null,{"interactive":true,"className":"","stroke":false,"color":"orange","weight":5,"opacity":0.5,"fill":true,"fillColor":"orange","fillOpacity":1},null,null,["Bellingwolde","Eelderwolde","Finsterwolde","Foxwolde","Garmerwolde","Kolderwolde","Kropswolde","Leutingewolde","Lucaswolde","Midwolde","Nijeholtwolde","Noordwolde","Noordwolde","Oldeholtwolde","Oosterwolde Gld","Oosterwolde","Paterswolde","Roderwolde","Scheerwolde","Schildwolde","Terwolde","Zeewolde","Zuidwolde","Zuidwolde"],null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addCircleMarkers","args":[[51.57700949,51.56357172,51.51045603],[5.13891347,4.88510824,5.31456001],5,null,null,{"interactive":true,"className":"","stroke":false,"color":"black","weight":5,"opacity":0.5,"fill":true,"fillColor":"black","fillOpacity":1},null,null,["Berkel-Enschot","Molenschot","Oirschot"],null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addCircleMarkers","args":[[52.482063,52.02250063,51.88972341,52.67043765,51.86169467,52.3374905,53.05823063,51.65794566,51.75099321,52.19780288,51.77981919,52.17254252,51.99348498,52.27100002,53.16666025,51.56651612,51.87902256,52.5693275,52.17466539,51.94722014,52.04599159,51.95086901,51.80045173,52.03619628,51.98564209,51.814926,51.88812223,52.78903877,51.96904484,51.78819007,51.69429969,52.4531131,52.49161771,51.97430523,51.75811739,51.95360108,51.96633181,51.98172442,52.00277936,51.93883163,52.0134912,51.94098722,51.97912843,51.92612776,51.97191709],[4.66794877,4.53452193,4.8122003,6.31507953,5.72631479,5.63588418,6.33946212,5.48787568,5.86097789,4.40210035,5.2098652,5.75967774,4.20932923,4.462659,6.25775685,5.21633567,5.06956862,6.71474858,5.83417867,5.69436068,4.73688151,5.35998391,5.01085722,4.32603246,5.19534649,4.94103394,5.77895702,6.12631757,4.75462053,4.9990355,5.06886048,6.62670557,4.60226579,5.32422269,5.09870582,6.75037134,6.65850533,6.75972092,6.76192715,6.77155673,6.7033531,6.66543614,6.80431094,6.71490707,6.71168135],5,null,null,{"interactive":true,"className":"","stroke":false,"color":"magenta","weight":5,"opacity":0.5,"fill":true,"fillColor":"magenta","fillOpacity":1},null,null,["Beverwijk","Bleiswijk","Brandwijk","de Wijk","Ewijk","Harderwijk","Haulerwijk","Heeswijk-Dinther","Katwijk NB","Katwijk","Kerkwijk","Kootwijk","Naaldwijk","Noordwijk","Noordwijk","Oisterwijk","Oosterwijk","Radewijk","Radio Kootwijk","Randwijk","Reeuwijk","Rijswijk (GLD)","Rijswijk (NB)","Rijswijk","Schalkwijk","Sleeuwijk","Slijk-Ewijk","Steenwijk","Stolwijk","Uitwijk","Waalwijk","Westerhaar-Vriezenveensewijk","Wijk aan Zee","Wijk bij Duurstede","Wijk en Aalburg","Winterswijk Brinkheurne","Winterswijk Corle","Winterswijk Henxel","Winterswijk Huppel","Winterswijk Kotten","Winterswijk Meddo","Winterswijk Miste","Winterswijk Ratum","Winterswijk Woold","Winterswijk"],null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addLegend","args":[{"colors":["blue","green","red","orange","black","magenta"],"labels":["*loo OR *lo OR *le","*recht OR *richt","*ga","*wolde","*schot","*wijk"],"na_color":null,"na_label":"NA","opacity":1,"position":"bottomright","type":"unknown","title":null,"extra":null,"layerId":null,"className":"info legend","group":null}]}],"limits":{"lat":[50.85296715,53.35738676],"lng":[3.4552999,7.16055389]}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Or places which contain river names:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">create_map</span>(<span class="fu">list</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"*rijn*"</span> <span class="ot">=</span> <span class="st">"red"</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"*maas*"</span> <span class="ot">=</span> <span class="st">"green"</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"*lek*"</span> <span class="ot">=</span> <span class="st">"orange"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"*ijssel*"</span> <span class="ot">=</span> <span class="st">"blue"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"*zaan*"</span> <span class="ot">=</span> <span class="st">"black"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"*waal*"</span> <span class="ot">=</span> <span class="st">"magenta"</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-d51bd81d658dbe144639" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-d51bd81d658dbe144639">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"setView":[[52.2,5.4],7,[]],"calls":[{"method":"addTiles","args":["https://service.pdok.nl/brt/achtergrondkaart/wmts/v2_0/grijs/EPSG:3857/{z}/{x}/{y}.png",null,null,{"minZoom":6,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"<a href='https://www.pdok.nl/'>PDOK<\/a>"}]},{"method":"addCircleMarkers","args":[[52.13021386,52.12535594,52.14210004,51.86218518,51.84354448,52.08307453,52.83712851,52.85266972,52.19858648,52.19603136],[4.66520561,4.5941276,4.59543591,6.02883651,5.28285905,4.80623376,5.91148639,5.94638838,4.67182134,4.44834742],5,null,null,{"interactive":true,"className":"","stroke":false,"color":"red","weight":5,"opacity":0.5,"fill":true,"fillColor":"red","fillOpacity":1},null,null,["Alphen aan den Rijn","Hazerswoude-Rijndijk","Koudekerk aan den Rijn","Millingen aan de Rijn","Neerijnen","Nieuwerbrug aan den Rijn","Nijetrijne","Oldetrijne","Rijnsaterwoude","Rijnsburg"],null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addCircleMarkers","args":[[51.8354783,51.14769024,51.36521207,51.78711937,51.95697852,51.57146084,51.94486314,51.92519893,50.85296715,50.91571411,51.95631371,51.78807378],[5.52505953,5.89871792,6.04628136,4.54834708,4.21248681,6.02877381,4.28020682,4.24886654,5.6995303,5.77754563,4.013754,4.46570178],5,null,null,{"interactive":true,"className":"","stroke":false,"color":"green","weight":5,"opacity":0.5,"fill":true,"fillColor":"green","fillOpacity":1},null,null,["Maasbommel","Maasbracht","Maasbree","Maasdam","Maasdijk","Maashees","Maasland","Maassluis","Maastricht","Maastricht-Airport","Maasvlakte Rotterdam","Westmaas"],null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addCircleMarkers","args":[[51.88271921,51.89993725,51.9107317,53.22488872,51.88604518,51.95029293],[4.27745862,4.61812794,4.69499699,5.83091095,4.69738243,4.94255468],5,null,null,{"interactive":true,"className":"","stroke":false,"color":"orange","weight":5,"opacity":0.5,"fill":true,"fillColor":"orange","fillOpacity":1},null,null,["Botlek Rotterdam","Krimpen aan de Lek","Lekkerkerk","Lekkum","Nieuw-Lekkerland","Tienhoven aan de Lek"],null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addCircleMarkers","args":[[51.934929,52.80670656,52.5659651,52.02771247,51.91469695,51.96639864,51.94095205,51.48509954],[4.58013769,5.96268261,5.94844712,5.02879098,4.60210186,4.61844396,4.65499857,5.89425571],5,null,null,{"interactive":true,"className":"","stroke":false,"color":"blue","weight":5,"opacity":0.5,"fill":true,"fillColor":"blue","fillOpacity":1},null,null,["Capelle aan den IJssel","IJsselham","IJsselmuiden","IJsselstein","Krimpen aan den IJssel","Nieuwerkerk aan den IJssel","Ouderkerk aan den IJssel","Ysselsteyn"],null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addCircleMarkers","args":[[52.46190001,52.45196353,52.45122275,52.4454116,52.47407686],[4.79987222,4.87610965,4.77334703,4.82520183,4.79999744],5,null,null,{"interactive":true,"className":"","stroke":false,"color":"black","weight":5,"opacity":0.5,"fill":true,"fillColor":"black","fillOpacity":1},null,null,["Koog aan de Zaan","Oostzaan","Westzaan","Zaandam","Zaandijk"],null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addCircleMarkers","args":[[53.07675366,51.76834514,51.80874428,51.99918805,51.93823393,51.38729123,51.69429969,51.87280555],[4.82499749,4.45477655,5.1705763,5.1436267,4.89964502,5.46486947,5.06886048,4.20786322],5,null,null,{"interactive":true,"className":"","stroke":false,"color":"magenta","weight":5,"opacity":0.5,"fill":true,"fillColor":"magenta","fillOpacity":1},null,null,["De Waal","Klaaswaal","Nieuwaal","Tull en 't Waal","Waal","Waalre","Waalwijk","Zwartewaal"],null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addLegend","args":[{"colors":["red","green","orange","blue","black","magenta"],"labels":["*rijn*","*maas*","*lek*","*ijssel*","*zaan*","*waal*"],"na_color":null,"na_label":"NA","opacity":1,"position":"bottomright","type":"unknown","title":null,"extra":null,"layerId":null,"className":"info legend","group":null}]}],"limits":{"lat":[50.85296715,53.22488872],"lng":[4.013754,6.04628136]}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/www\.basjacobs\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,95 @@
+{
+  "index.qmd": {
+    "index.html": "d441d9b9"
+  },
+  "about.qmd": {
+    "about.html": "85731f69"
+  },
+  "post/2018-09-20-image-approximation-with-keras-in-r/index.Rmd": {
+    "index.html": "0e6b5286"
+  },
+  "post/2021-01-22-riddler-can-you-hunt-for-the-mysterious-numbers/index.qmd": {
+    "index.html": "97fefc84"
+  },
+  "post/2019-04-21-trees-and-tents/index.qmd": {
+    "index.html": "36fb0ea1"
+  },
+  "post/2018-07-15-generating-the-logo-for-this-site/index.qmd": {
+    "index.html": "8dec50fe"
+  },
+  "post/2021-01-04-eleksdraw-pen-plotter-with-r/index.qmd": {
+    "index.html": "38fa766f"
+  },
+  "post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/index.qmd": {
+    "index.html": "04139c93"
+  },
+  "post/2020-11-18-image-triangulation-with-julia/index.qmd": {
+    "index.html": "29528ce9"
+  },
+  "post/2018-09-20-image-approximation-with-keras-in-r/index.qmd": {
+    "index.html": "d1594a26"
+  },
+  "post/2018-06-28-pen-plotter/index.qmd": {
+    "index.html": "553b7cdc"
+  },
+  "post/2022-05-18-riddler-nonconformist-dice/index.qmd": {
+    "index.html": "b4a002cf"
+  },
+  "post/2018-10-28-showing-images-on-hover-in-plotly-with-r/index.qmd": {
+    "index.html": "9b265ac2"
+  },
+  "post/2021-02-06-riddler-another-hunt-for-mysterious-numbers/index.qmd": {
+    "index.html": "d409db6a"
+  },
+  "post/2020-10-02-riddler-can-you-eat-all-the-chocolates/index.qmd": {
+    "index.html": "1a7ae63d"
+  },
+  "post/2024-04-28-dutch-placename-mapper/index.qmd": {
+    "index.html": "15d99f8a"
+  },
+  "post/2021-02-16-closest-eredivisie-football-club/index.qmd": {
+    "index.html": "f345d8b0"
+  },
+  "posts/2018-09-20-image-approximation-with-keras-in-r/index.qmd": {
+    "index.html": "18ffd7fd"
+  },
+  "posts/2021-01-22-riddler-can-you-hunt-for-the-mysterious-numbers/index.qmd": {
+    "index.html": "31721a50"
+  },
+  "posts/2019-04-21-trees-and-tents/index.qmd": {
+    "index.html": "28763021"
+  },
+  "posts/2018-07-15-generating-the-logo-for-this-site/index.qmd": {
+    "index.html": "5c4095ec"
+  },
+  "posts/2021-01-04-eleksdraw-pen-plotter-with-r/index.qmd": {
+    "index.html": "e6a0edc8"
+  },
+  "posts/2024-02-09-physics-informed-neural-networks-for-population-dynamics/index.qmd": {
+    "index.html": "6c7e13b9"
+  },
+  "posts/2020-11-18-image-triangulation-with-julia/index.qmd": {
+    "index.html": "705cce87"
+  },
+  "posts/2021-02-16-closest-eredivisie-football-club/index.qmd": {
+    "index.html": "13c20e70"
+  },
+  "posts/2018-06-28-pen-plotter/index.qmd": {
+    "index.html": "15191882"
+  },
+  "posts/2022-05-18-riddler-nonconformist-dice/index.qmd": {
+    "index.html": "6a079c9e"
+  },
+  "posts/2018-10-28-showing-images-on-hover-in-plotly-with-r/index.qmd": {
+    "index.html": "031eabcd"
+  },
+  "posts/2021-02-06-riddler-another-hunt-for-mysterious-numbers/index.qmd": {
+    "index.html": "4b8284a7"
+  },
+  "posts/2020-10-02-riddler-can-you-eat-all-the-chocolates/index.qmd": {
+    "index.html": "e0dadd17"
+  },
+  "posts/2024-04-28-dutch-placename-mapper/index.qmd": {
+    "index.html": "b492ddd4"
+  }
+}
