@@ -18,6 +18,7 @@ website:
         href: https://www.linkedin.com/in/basjacobs93/
       - icon: rss
         href: index.xml
+  search: false
 
 format:
   html:
