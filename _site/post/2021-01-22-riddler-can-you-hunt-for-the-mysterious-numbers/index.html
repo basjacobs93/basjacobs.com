@@ -9,7 +9,7 @@
 <meta name="author" content="Bas">
 <meta name="dcterms.date" content="2021-01-22">
 
-<title>Riddler: Can You Hunt For The Mysterious Numbers? – basjacobs</title>
+<title>Riddler: Can You Hunt For The Mysterious Numbers? – Bas Jacobs</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -67,6 +67,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
+<link href="../../logo.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
@@ -105,8 +106,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  </head><body class="nav-fixed quarto-light">true
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -136,17 +151,20 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../../styles.css">
+</head>
 
-
-
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../logo.png" alt="" class="navbar-logo">
+    </a>
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">basjacobs</span>
+    <span class="navbar-title">Bas Jacobs</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -154,14 +172,29 @@ window.Quarto = {
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
     <a class="nav-link" href="../../index.html"> 
-<span class="menu-text">Home</span></a>
+<span class="menu-text">Posts</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/basjacobs93"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/basjacobs93/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
+</i> 
+<span class="menu-text"></span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -225,7 +258,7 @@ window.Quarto = {
 <section id="linear-programming" class="level2">
 <h2 class="anchored" data-anchor-id="linear-programming">Linear programming</h2>
 <p>A nice way to solve problems like this is by Integer Linear Programming. Like in my <a href="../../post/2019-04-21-trees-and-tents/">Trees and Tents post</a>, I like to do this in Julia using the JuMP package.</p>
-<p>The constraints we have are on the products of the numbers in the rows and the columns. Therefore the problem is not linear if we implement it naively (a variable for every cell denoting the number between 1 and 9 it should contain). We need to do something a little bit more clever. A natural way to look at this problem is via the prime factorizations of the row and the column products. There are four primes between 1 and 9, namely 2, 3, 5 and 7. Given the prime factorization of every row and column, we only need to distribute these primes over the cells. Since <span class="math inline">\(294 = 2^1\cdot 3^1\cdot 5^0 \cdot 7^2\)</span>, we know that in the first row there should be a 2, a 3, no 5 and two 7s. Note that a cell can contain multiple primes, or none at all (meaning it is a 1).</p>
+<p>The constraints we have are on the products of the numbers in the rows and the columns. Therefore the problem is not linear if we implement it naively (a variable for every cell denoting the number between 1 and 9 it should contain). We need to do something a little bit more clever. A natural way to look at this problem is via the prime factorizations of the row and the column products. There are four primes between 1 and 9, namely 2, 3, 5 and 7. Given the prime factorization of every row and column, we only need to distribute these primes over the cells. Since <span class="math inline">294 = 2^1\cdot 3^1\cdot 5^0 \cdot 7^2</span>, we know that in the first row there should be a 2, a 3, no 5 and two 7s. Note that a cell can contain multiple primes, or none at all (meaning it is a 1).</p>
 <p>We therefore need a variable for every cell and each of the 4 possible primes, the value of which denotes the multiplicity of this prime in this cell.</p>
 <p>In Julia, we first import the required packages, and define the row and column products.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">JuMP</span>, <span class="bu">GLPK</span></span>
@@ -270,12 +303,12 @@ window.Quarto = {
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>n_cols, p <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>n_prms</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@constraint</span>(model, <span class="fu">sum</span>(x[<span class="op">:</span>, j, p]) <span class="op">==</span> col_factors[j][p])</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Finally, we want every cell to be an integer between 1 and 9, which means <span class="math inline">\(2^{p_2}\cdot 3^{p_3}\cdot 5^{p_5}\cdot 7^{p_7} \le 9\)</span>, or <span class="math inline">\(p_2\log(2) + p_3\log(3) + p_5\log(5)+p_7\log(7) \le \log(9)\)</span>, a constraint which is linear in its variables.</p>
+<p>Finally, we want every cell to be an integer between 1 and 9, which means <span class="math inline">2^{p_2}\cdot 3^{p_3}\cdot 5^{p_5}\cdot 7^{p_7} \le 9</span>, or <span class="math inline">p_2\log(2) + p_3\log(3) + p_5\log(5)+p_7\log(7) \le \log(9)</span>, a constraint which is linear in its variables.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>n_rows, j <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>n_cols</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@constraint</span>(model, <span class="fu">sum</span>(x[i, j, <span class="op">:</span>] <span class="op">.*</span> <span class="fu">log</span>.(prms)) <span class="op">&lt;=</span> <span class="fu">log</span>(<span class="fl">9</span>))</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>And that is all! We let JuMP do the hard work and come up with a feasible solution. As an example, we print out the number of times a 2 (the first prime) appears in every cell.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>JuMP.<span class="fu">optimize!</span>(model) </span>
+<div class="sourceCode" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>JuMP.<span class="fu">optimize!</span>(model)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>solution <span class="op">=</span> JuMP.<span class="fu">value</span>.(x);</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -301,7 +334,6 @@ window.Quarto = {
  [5, 7, 7]
  [8, 5, 1]</code></pre>
 <p>And there’s the solution! I love how easy it is to have JuMP solve such a problem after coming up with a way to phrase it as a linear program.</p>
-
 
 
 </section>
@@ -379,7 +411,7 @@ window.Quarto = {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/www\.basjacobs\.com");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

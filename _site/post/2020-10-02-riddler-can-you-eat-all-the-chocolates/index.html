@@ -9,7 +9,7 @@
 <meta name="author" content="Bas">
 <meta name="dcterms.date" content="2020-10-02">
 
-<title>Riddler: Can You Eat All The Chocolates? – basjacobs</title>
+<title>Riddler: Can You Eat All The Chocolates? – Bas Jacobs</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -67,6 +67,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
+<link href="../../logo.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
@@ -105,8 +106,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  </head><body class="nav-fixed quarto-light">true
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -136,17 +151,20 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../../styles.css">
+</head>
 
-
-
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../logo.png" alt="" class="navbar-logo">
+    </a>
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">basjacobs</span>
+    <span class="navbar-title">Bas Jacobs</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -154,14 +172,29 @@ window.Quarto = {
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
     <a class="nav-link" href="../../index.html"> 
-<span class="menu-text">Home</span></a>
+<span class="menu-text">Posts</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/basjacobs93"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/basjacobs93/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
+</i> 
+<span class="menu-text"></span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -236,25 +269,25 @@ window.Quarto = {
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>eat_chocolates <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># shuffle the chocolates around</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  chocolates_left <span class="ot">&lt;-</span> <span class="fu">sample</span>(chocolates)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># eat the first chocolate</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  last_taken <span class="ot">&lt;-</span> chocolates_left[<span class="dv">1</span>]</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  chocolates_left <span class="ot">&lt;-</span> chocolates_left[<span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># eat the rest of the chocolates</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> (<span class="fu">length</span>(chocolates_left) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># take the first chocolate out of the bag</span></span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    to_eat <span class="ot">&lt;-</span> chocolates_left[<span class="dv">1</span>]</span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    chocolates_left <span class="ot">&lt;-</span> chocolates_left[<span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># put back and shuffle if differs from previous piece</span></span>
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (to_eat <span class="sc">!=</span> last_taken) {</span>
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>      chocolates_left <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(to_eat, chocolates_left))</span>
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    last_taken <span class="ot">&lt;-</span> to_eat</span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  last_taken</span>
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -263,7 +296,7 @@ window.Quarto = {
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>simulations <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="fl">1e5</span>, <span class="fu">eat_chocolates</span>())</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(simulations <span class="sc">==</span> <span class="st">"m"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.46128</code></pre>
+<pre><code>[1] 0.45907</code></pre>
 </div>
 </div>
 <p>In a couple of seconds, this gives an estimate of a 46% probability of ending with a piece of milk chocolate. This is closer to 50% than I initially expected. Intuitively though, it does make sense, given the nature of the problem that the majority chocolate type will be eaten relatively quickly, since it is easier to get a ‘streak’ of those.</p>
@@ -272,37 +305,37 @@ window.Quarto = {
 <section id="recursion" class="level2">
 <h2 class="anchored" data-anchor-id="recursion">Recursion</h2>
 <p>The problem ca be written in a recursive form: given a number of milk and dark chocolates, we can create a set of possible next states and attach probabilities to those states. We can repeat this until we arrive at a bag of only one type of chocolate.</p>
-<p>In order to do that, let’s first introduce some notation. Let <span class="math inline">\(P(m, d, x)\)</span> be the probability of ending with a milk chocolate given that we currently have a bag of <span class="math inline">\(m\)</span> milk and <span class="math inline">\(d\)</span> dark chocolates and that the last chocolate we ate was of type <span class="math inline">\(x\in\{\text{milk}, \text{dark}\}\)</span>. Denote by <span class="math inline">\(x^c\)</span> the chocolate type that is not <span class="math inline">\(x\)</span>. We then know the trivial cases <span class="math inline">\(P(m, 0, x) = 1\)</span> and <span class="math inline">\(P(0,d,x)=0\)</span>; you can’t “fail” if you only have milk left, and you can’t “succeed” if you only have dark chocolates left.</p>
-<p>Moreover, the probability of ending with a milk chocolate given a certain distribution of chocolates and a previous pick equals the probability of ending with a dark chocolate given that we have switched all dark and milk chocolates around. In mathematical terms, <span class="math inline">\(P(m,d|x) = 1-P(d,m|x^c)\)</span>.</p>
-<p>Now, given a state <span class="math inline">\((m,d, \text{milk})\)</span>, you will pick a milk chocolate with probability <span class="math inline">\(\frac{m}{m+d}\)</span>, resulting in a state of <span class="math inline">\((m-1, d, \text{milk})\)</span>, or you will pick dark with probability <span class="math inline">\(\frac{d}{m+d}\)</span>, resulting in <span class="math inline">\((m, d, \text{dark})\)</span>. In other words, given <span class="math inline">\(m,d&gt;0\)</span>,<span class="math display">\[
+<p>In order to do that, let’s first introduce some notation. Let <span class="math inline">P(m, d, x)</span> be the probability of ending with a milk chocolate given that we currently have a bag of <span class="math inline">m</span> milk and <span class="math inline">d</span> dark chocolates and that the last chocolate we ate was of type <span class="math inline">x\in\{\text{milk}, \text{dark}\}</span>. Denote by <span class="math inline">x^c</span> the chocolate type that is not <span class="math inline">x</span>. We then know the trivial cases <span class="math inline">P(m, 0, x) = 1</span> and <span class="math inline">P(0,d,x)=0</span>; you can’t “fail” if you only have milk left, and you can’t “succeed” if you only have dark chocolates left.</p>
+<p>Moreover, the probability of ending with a milk chocolate given a certain distribution of chocolates and a previous pick equals the probability of ending with a dark chocolate given that we have switched all dark and milk chocolates around. In mathematical terms, <span class="math inline">P(m,d|x) = 1-P(d,m|x^c)</span>.</p>
+<p>Now, given a state <span class="math inline">(m,d, \text{milk})</span>, you will pick a milk chocolate with probability <span class="math inline">\frac{m}{m+d}</span>, resulting in a state of <span class="math inline">(m-1, d, \text{milk})</span>, or you will pick dark with probability <span class="math inline">\frac{d}{m+d}</span>, resulting in <span class="math inline">(m, d, \text{dark})</span>. In other words, given <span class="math inline">m,d&gt;0</span>,<span class="math display">
 P(m, d, \text{milk}) = \frac{m}{m+d}\cdot P(m-1,d,\text{milk})\,+\,\frac{d}{m+d}\cdot P(m,d,\text{dark}).
-\]</span></p>
-<p>We can now immediately see a problem with programming this recursion as it is: the second term did not decrease the total number of chocolates. Were we to do another step, we could again arrive at the situation we started with, thus resulting in an endless loop. In other words, theoretically we could keep alternately picking <span class="math inline">\(\text{milk}\)</span> and <span class="math inline">\(\text{dark}\)</span> chocolates and never finish the whole bag.</p>
+</span></p>
+<p>We can now immediately see a problem with programming this recursion as it is: the second term did not decrease the total number of chocolates. Were we to do another step, we could again arrive at the situation we started with, thus resulting in an endless loop. In other words, theoretically we could keep alternately picking <span class="math inline">\text{milk}</span> and <span class="math inline">\text{dark}</span> chocolates and never finish the whole bag.</p>
 <p>We need to go deeper.</p>
 <p>Let’s do another recursion step by expanding the right-most term in the above equation:</p>
-<p><span class="math display">\[
+<p><span class="math display">
 P(m,d,\text{dark}) = \frac{m}{m+d}\cdot P(m,d,\text{milk})\,+\,\frac{d}{m+d}\cdot P(m,d-1,\text{dark}).
-\]</span></p>
+</span></p>
 <p>Filling this into the first equation,</p>
-<p><span class="math display">\[
+<p><span class="math display">
 P(m, d, \text{milk}) = \frac{m}{m+d}\cdot P(m-1,d,\text{milk})\,+\,\frac{d}{m+d}\cdot \left(\frac{m}{m+d}\cdot P(m,d,\text{milk})\,+\,\frac{d}{m+d}\cdot P(m,d-1,\text{dark})\right),
-\]</span></p>
+</span></p>
 <p>which we can rearrange into</p>
-<p><span class="math display">\[
+<p><span class="math display">
 P(m, d, \text{milk}) - \frac{md}{(m+d)^2}\cdot P(m,d,\text{milk}) = \frac{m}{m+d}\cdot P(m-1,d,\text{milk})\,+\,\frac{d^2}{(m+d)^2}\cdot P(m,d-1,\text{dark}),
-\]</span></p>
+</span></p>
 <p>or</p>
-<p><span class="math display">\[
+<p><span class="math display">
 \frac{(m+d)^2-md}{(m+d)^2}\cdot P(m,d,\text{milk}) = \frac{m}{m+d}\cdot P(m-1,d,\text{milk})\,+\,\frac{d^2}{(m+d)^2}\cdot P(m,d-1,\text{dark}),
-\]</span></p>
+</span></p>
 <p>which gives</p>
-<p><span class="math display">\[
+<p><span class="math display">
 P(m,d,\text{milk}) = \frac{m^2+md}{m^2+d^2+md}\cdot P(m-1,d,\text{milk})\,+\,\frac{d^2}{m^2+d^2+md}\cdot P(m,d-1,\text{dark}).
-\]</span></p>
-<p>Now, by magic, this recursion does strictly decrease the total number of chocolates in the bag, thus making a program feasible. Together with the relationship <span class="math inline">\(P(m,d,\text{dark})=1-P(d,m,\text{milk})\)</span>, we can calculate our quantity of interest, which is the probability of ending with a milk chocolate given a starting bag and no previous chocolates eaten:</p>
-<p><span class="math display">\[
+</span></p>
+<p>Now, by magic, this recursion does strictly decrease the total number of chocolates in the bag, thus making a program feasible. Together with the relationship <span class="math inline">P(m,d,\text{dark})=1-P(d,m,\text{milk})</span>, we can calculate our quantity of interest, which is the probability of ending with a milk chocolate given a starting bag and no previous chocolates eaten:</p>
+<p><span class="math display">
 P(m,d)=\frac{m}{m+d}\cdot P(m-1,d,\text{milk})\,+\,\frac{d}{m+d}\cdot P(m,d-1,\text{dark}).
-\]</span></p>
+</span></p>
 <p>In R code, this recursion can be programmed as follows.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="cf">function</span>(m, d, <span class="at">previous =</span> <span class="st">""</span>) {</span>
@@ -311,7 +344,7 @@ P(m,d)=\frac{m}{m+d}\cdot P(m-1,d,\text{milk})\,+\,\frac{d}{m+d}\cdot P(m,d-1,\t
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (d <span class="sc">==</span> <span class="dv">0</span>) {</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="dv">1</span>)</span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (previous <span class="sc">==</span> <span class="st">""</span>) {</span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    m<span class="sc">/</span>(m<span class="sc">+</span>d)<span class="sc">*</span><span class="fu">P</span>(m<span class="dv">-1</span>, d, <span class="st">"milk"</span>) <span class="sc">+</span> d<span class="sc">/</span>(m<span class="sc">+</span>d)<span class="sc">*</span><span class="fu">P</span>(m, d<span class="dv">-1</span>, <span class="st">"dark"</span>)</span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (previous <span class="sc">==</span> <span class="st">"milk"</span>) {</span>
@@ -356,11 +389,11 @@ P(m,d)=\frac{m}{m+d}\cdot P(m-1,d,\text{milk})\,+\,\frac{d}{m+d}\cdot P(m,d-1,\t
 </div>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_light</span>())</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>simulations <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">m =</span> <span class="dv">2</span>, <span class="at">d =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>simulations <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">m =</span> <span class="dv">2</span>, <span class="at">d =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">p =</span> <span class="fu">P</span>(m, d))</span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(simulations, <span class="fu">aes</span>(d, p)) <span class="sc">+</span> </span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(simulations, <span class="fu">aes</span>(d, p)) <span class="sc">+</span></span>
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">percent_format</span>()) <span class="sc">+</span></span>
 <span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Probability of ending with a milk chocolate"</span>,</span>
@@ -388,11 +421,11 @@ P(m,d)=\frac{m}{m+d}\cdot P(m-1,d,\text{milk})\,+\,\frac{d}{m+d}\cdot P(m,d-1,\t
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (d <span class="sc">==</span> <span class="dv">0</span>) {</span>
 <span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="dv">1</span>)</span>
 <span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (previous <span class="sc">!=</span> <span class="st">""</span> <span class="sc">&amp;&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(mem[[previous]][m, d])) {</span>
 <span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(mem[[previous]][m, d])</span>
 <span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (previous <span class="sc">==</span> <span class="st">""</span>) {</span>
 <span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">&lt;-</span> m<span class="sc">/</span>(m<span class="sc">+</span>d)<span class="sc">*</span><span class="fu">P_mem</span>(m<span class="dv">-1</span>, d, <span class="st">"milk"</span>) <span class="sc">+</span> d<span class="sc">/</span>(m<span class="sc">+</span>d)<span class="sc">*</span><span class="fu">P_mem</span>(m, d<span class="dv">-1</span>, <span class="st">"dark"</span>)</span>
 <span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (previous <span class="sc">==</span> <span class="st">"milk"</span>) {</span>
@@ -402,15 +435,15 @@ P(m,d)=\frac{m}{m+d}\cdot P(m-1,d,\text{milk})\,+\,\frac{d}{m+d}\cdot P(m,d-1,\t
 <span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">P_mem</span>(d, m, <span class="st">"milk"</span>)</span>
 <span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>    mem[[previous]][m, d] <span class="ot">&lt;&lt;-</span> res</span>
 <span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>  res</span>
 <span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>simulations <span class="ot">&lt;-</span> <span class="fu">crossing</span>(<span class="at">m =</span> <span class="dv">1</span><span class="sc">:</span>n_max, <span class="at">d =</span> <span class="dv">1</span><span class="sc">:</span>n_max) <span class="sc">%&gt;%</span> </span>
-<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>simulations <span class="ot">&lt;-</span> <span class="fu">crossing</span>(<span class="at">m =</span> <span class="dv">1</span><span class="sc">:</span>n_max, <span class="at">d =</span> <span class="dv">1</span><span class="sc">:</span>n_max) <span class="sc">%&gt;%</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">p =</span> <span class="fu">P_mem</span>(m, d))</span>
 <span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(simulations, <span class="fu">aes</span>(m, d, <span class="at">fill =</span> p)) <span class="sc">+</span> </span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(simulations, <span class="fu">aes</span>(m, d, <span class="at">fill =</span> p)) <span class="sc">+</span></span>
 <span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_raster</span>() <span class="sc">+</span></span>
 <span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">percent_format</span>()) <span class="sc">+</span></span>
 <span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Probability of ending with a milk chocolate"</span>,</span>
@@ -426,7 +459,6 @@ P(m,d)=\frac{m}{m+d}\cdot P(m-1,d,\text{milk})\,+\,\frac{d}{m+d}\cdot P(m,d-1,\t
 </div>
 </div>
 <p>This graph shows that the more chocolates there are in the bag, the smaller the differences between different mixes become.</p>
-
 
 
 </section>
@@ -504,7 +536,7 @@ P(m,d)=\frac{m}{m+d}\cdot P(m-1,d,\text{milk})\,+\,\frac{d}{m+d}\cdot P(m,d-1,\t
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/www\.basjacobs\.com");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

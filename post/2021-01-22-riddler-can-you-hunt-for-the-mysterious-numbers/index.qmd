@@ -2,7 +2,6 @@
 title: 'Riddler: Can You Hunt For The Mysterious Numbers?'
 author: Bas
 date: '2021-01-22'
-math: true
 ---
 
 This week's [FiveThirtyEight Riddler Classic](https://fivethirtyeight.com/features/can-you-hunt-for-the-mysterious-numbers/) offers a sudoku-like puzzle:
@@ -14,11 +13,11 @@ This week's [FiveThirtyEight Riddler Classic](https://fivethirtyeight.com/featur
 
 ## Linear programming
 
-A nice way to solve problems like this is by Integer Linear Programming. Like in my [Trees and Tents post](/post/2019-04-21-trees-and-tents/), I like to do this in Julia using the JuMP package.  
+A nice way to solve problems like this is by Integer Linear Programming. Like in my [Trees and Tents post](/post/2019-04-21-trees-and-tents/), I like to do this in Julia using the JuMP package.
 
-The constraints we have are on the products of the numbers in the rows and the columns. Therefore the problem is not linear if we implement it naively (a variable for every cell denoting the number between 1 and 9 it should contain). We need to do something a little bit more clever. A natural way to look at this problem is via the prime factorizations of the row and the column products. There are four primes between 1 and 9, namely 2, 3, 5 and 7. Given the prime factorization of every row and column, we only need to distribute these primes over the cells. Since $294 = 2^1\cdot 3^1\cdot 5^0 \cdot 7^2$, we know that in the first row there should be a 2, a 3, no 5 and two 7s. Note that a cell can contain multiple primes, or none at all (meaning it is a 1).  
+The constraints we have are on the products of the numbers in the rows and the columns. Therefore the problem is not linear if we implement it naively (a variable for every cell denoting the number between 1 and 9 it should contain). We need to do something a little bit more clever. A natural way to look at this problem is via the prime factorizations of the row and the column products. There are four primes between 1 and 9, namely 2, 3, 5 and 7. Given the prime factorization of every row and column, we only need to distribute these primes over the cells. Since $294 = 2^1\cdot 3^1\cdot 5^0 \cdot 7^2$, we know that in the first row there should be a 2, a 3, no 5 and two 7s. Note that a cell can contain multiple primes, or none at all (meaning it is a 1).
 
-We therefore need a variable for every cell and each of the 4 possible primes, the value of which denotes the multiplicity of this prime in this cell.  
+We therefore need a variable for every cell and each of the 4 possible primes, the value of which denotes the multiplicity of this prime in this cell.
 
 In Julia, we first import the required packages, and define the row and column products.
 
@@ -92,7 +91,7 @@ end
 And that is all! We let JuMP do the hard work and come up with a feasible solution. As an example, we print out the number of times a 2 (the first prime) appears in every cell.
 
 ```julia
-JuMP.optimize!(model) 
+JuMP.optimize!(model)
 
 solution = JuMP.value.(x);
 

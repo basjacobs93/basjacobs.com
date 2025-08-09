@@ -9,7 +9,7 @@
 <meta name="author" content="Bas">
 <meta name="dcterms.date" content="2018-09-20">
 
-<title>Learning image representation with Keras in R – basjacobs</title>
+<title>Learning image representation with Keras in R – Bas Jacobs</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -67,6 +67,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
+<link href="../../logo.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
@@ -105,7 +106,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   </head><body class="nav-fixed quarto-light">true
 
 <script type="text/javascript">
@@ -145,8 +145,11 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../logo.png" alt="" class="navbar-logo">
+    </a>
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">basjacobs</span>
+    <span class="navbar-title">Bas Jacobs</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -154,14 +157,29 @@ window.Quarto = {
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
     <a class="nav-link" href="../../index.html"> 
-<span class="menu-text">Home</span></a>
+<span class="menu-text">Posts</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/basjacobs93"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/basjacobs93/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
+</i> 
+<span class="menu-text"></span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -217,7 +235,7 @@ window.Quarto = {
 </header>
 
 
-<p>An image can be viewed as a function mapping pixel locations <span class="math inline">\(x,y\)</span> to color values <span class="math inline">\(R,G,B\)</span>. Since neural networks are function approximators, we can train such a network to approximate an image. The network is then a representation of the image as a function and its contents can be displayed by evaluating the network for all pixel pairs <span class="math inline">\(x,y\)</span>.</p>
+<p>An image can be viewed as a function mapping pixel locations <span class="math inline">x,y</span> to color values <span class="math inline">R,G,B</span>. Since neural networks are function approximators, we can train such a network to approximate an image. The network is then a representation of the image as a function and its contents can be displayed by evaluating the network for all pixel pairs <span class="math inline">x,y</span>.</p>
 <p>The <code>Keras</code> package for <code>R</code> is now approximately <a href="https://blog.rstudio.com/2017/09/05/keras-for-r/">1 year old</a> but I have to admit that I usually go to Python to implement neural networks. Since I wanted to try the <code>imager</code> package for <code>R</code> for a while, let’s hit two birds with one stone and do this exercise in <code>R</code>.</p>
 <p>First, we need the right packages.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -285,7 +303,7 @@ We create input and output matrices which can be fed into keras.</p>
 </figure>
 </div>
 <p>Training takes about 1 minute, and as can be seen from the training plot, it seems that both the loss and the accuracy have saturated. An accuracy of 0.9 sounds good, but let’s take a look at the output image before we get too happy.<br>
-First, we need to recreate the original dataframe with the predicted pixel values. For every <span class="math inline">\((x,y)\)</span> pair in our matrix <em>X</em> we need to make a prediction. We duplicate the original dataframe fill the color channel columns with the network’s output values. We then call <code>gather</code> on this dataframe to create the <em>cc</em> and <em>value</em> columns necessary for the <code>imager</code> library.</p>
+First, we need to recreate the original dataframe with the predicted pixel values. For every <span class="math inline">(x,y)</span> pair in our matrix <em>X</em> we need to make a prediction. We duplicate the original dataframe fill the color channel columns with the network’s output values. We then call <code>gather</code> on this dataframe to create the <em>cc</em> and <em>value</em> columns necessary for the <code>imager</code> library.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>df_out <span class="ot">&lt;-</span> df</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>df_out[, <span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>] <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">predict</span>(X)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>df_out <span class="ot">&lt;-</span> df_out <span class="sc">%&gt;%</span></span>
@@ -458,7 +476,7 @@ First, we need to recreate the original dataframe with the predicted pixel value
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/www\.basjacobs\.com");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

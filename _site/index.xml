@@ -395,7 +395,7 @@ font-style: inherit;">"magenta"</span></span>
 <p>Last week, Dr.&nbsp;Riccardo Taormina gave a guest lecture in my organization in which he explained the workings and advantages of PINNs. In the accompanying workshop he used synthetic data to show that it is possible to estimate the parameters of differential equations of a harmonic oscillator and an advection–diffusion process.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://www2.nau.edu/lrm22/lessons/predator_prey/hare-lynx.jpg" class="img-fluid figure-img"></p>
+<p><img src="https://www.leesonphoto.com/img-get/I0000kPSyrcMzSLs/s/600/600/TK115901.jpg" class="img-fluid figure-img"></p>
 <figcaption>Lynx and snowshoe hare (photo by Tom and Pat Leeson)</figcaption>
 </figure>
 </div>
@@ -750,8 +750,7 @@ font-style: inherit;">"Number of pelts (thousands)"</span>)</span></code></pre><
 <section id="the-lotka-volterra-model" class="level2">
 <h2 class="anchored" data-anchor-id="the-lotka-volterra-model">The Lotka-Volterra model</h2>
 <p>The Lotka-Volterra population model the change of predator and pray populations over time: - <img src="https://latex.codecogs.com/png.latex?u(t)%5Cge0"> is the population size of the prey species at time t (the hare in our case), and - <img src="https://latex.codecogs.com/png.latex?v(t)%5Cge0"> is the population size of the predator species (the lynx in our case).</p>
-<p>By using such a model, some assumptions are made on the dynamics of these populations. We will not go into those here, but they can be found on the <a href="https://en.wikipedia.org/wiki/Lotka–Volterra_equations">Wikipedia page</a>.<br>
-The population sizes over times of the two species are modelled in terms of four parameters, <img src="https://latex.codecogs.com/png.latex?%5Calpha,%5Cbeta,%5Cgamma,%5Cdelta%5Cge0"> as</p>
+<p>By using such a model, some assumptions are made on the dynamics of these populations. We will not go into those here, but they can be found on the <a href="https://en.wikipedia.org/wiki/Lotka–Volterra_equations">Wikipedia page</a>. The population sizes over times of the two species are modelled in terms of four parameters, <img src="https://latex.codecogs.com/png.latex?%5Calpha,%5Cbeta,%5Cgamma,%5Cdelta%5Cge0"> as</p>
 <p><img src="https://latex.codecogs.com/png.latex?%0A%5Cfrac%7B%5Cmathrm%7Bd%7D%7D%7B%5Cmathrm%7Bd%7Dt%7D%20u%20=%20%5Calpha%20u%20-%20%5Cbeta%20u%20v%0A"> <img src="https://latex.codecogs.com/png.latex?%0A%5Cfrac%7B%5Cmathrm%7Bd%7D%7D%7B%5Cmathrm%7Bd%7Dt%7D%20v%20=%20%5Cdelta%20uv%20-%20%5Cgamma%20v%0A"></p>
 <p>It is these four parameters we will estimate in this post. They have the following interpretations: - <img src="https://latex.codecogs.com/png.latex?%5Calpha"> is the growth rate of the prey population, - <img src="https://latex.codecogs.com/png.latex?%5Cbeta"> is the rate of shrinkage relative to the product of the population sizes, - <img src="https://latex.codecogs.com/png.latex?%5Cgamma"> is the shrinkage rate of the predator population, - <img src="https://latex.codecogs.com/png.latex?%5Cdelta"> is the growth rate of the predator population as a factor of the product of the population sizes.</p>
 <p>In the Stan article, the author obtains posterior mean point estimates</p>
@@ -1083,7 +1082,7 @@ background-color: null;
 font-style: inherit;">self</span>.decode <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> nn.Linear(n_hidden, n_output)</span>
-<span id="cb6-7">        </span>
+<span id="cb6-7"></span>
 <span id="cb6-8">    <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -1174,7 +1173,7 @@ font-style: inherit;">0</span>:</span>
 <span id="cb7-13">        yh <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> model(t).detach()</span>
-<span id="cb7-14">        </span>
+<span id="cb7-14"></span>
 <span id="cb7-15">        plot_result(i, t, y, yh, loss, <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">None</span>)</span></code></pre></div>
@@ -1273,10 +1272,7 @@ background-color: null;
 font-style: inherit;">1</span>).requires_grad_(<span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">True</span>)</span></code></pre></div>
-<p>Training the PINN is identical to training the normal neural network, except that the loss function consists of a combination of the data loss and the physics loss.<br>
-The data loss is identical to the loss of the previous neural network.<br>
-For the physics loss, note that we can rewrite the Lotka-Volterra equations as <img src="https://latex.codecogs.com/png.latex?%0A%5Cfrac%7B%5Cmathrm%7Bd%7D%7D%7B%5Cmathrm%7Bd%7Dt%7D%20u%20-%20(%5Calpha%20u%20-%20%5Cbeta%20u%20v)%20=%200,%0A"> <img src="https://latex.codecogs.com/png.latex?%0A%5Cfrac%7B%5Cmathrm%7Bd%7D%7D%7B%5Cmathrm%7Bd%7Dt%7D%20v%20-%20(%5Cdelta%20uv%20-%20%5Cgamma%20v)%20=%200.%0A"> We calculate the mean of the square of the left-hand side across the values of <img src="https://latex.codecogs.com/png.latex?t"> in <code>t_physics</code>, thus punishing the model if the equations are far away from 0. We use <code>torch.autograd</code> to estimate the partial derivatives, which means that these partial derivatives are based on what the neural network has learned so far.<br>
-We calculate a weighted sum of the physics and data loss, using a weight of <code>lambda1</code> set to 0.01. The value of this weight can matter quite a lot and depends on the relative sizes of the errors. Intuitively, it captures how much you trust the data versus the physical laws.</p>
+<p>Training the PINN is identical to training the normal neural network, except that the loss function consists of a combination of the data loss and the physics loss. The data loss is identical to the loss of the previous neural network. For the physics loss, note that we can rewrite the Lotka-Volterra equations as <img src="https://latex.codecogs.com/png.latex?%0A%5Cfrac%7B%5Cmathrm%7Bd%7D%7D%7B%5Cmathrm%7Bd%7Dt%7D%20u%20-%20(%5Calpha%20u%20-%20%5Cbeta%20u%20v)%20=%200,%0A"> <img src="https://latex.codecogs.com/png.latex?%0A%5Cfrac%7B%5Cmathrm%7Bd%7D%7D%7B%5Cmathrm%7Bd%7Dt%7D%20v%20-%20(%5Cdelta%20uv%20-%20%5Cgamma%20v)%20=%200.%0A"> We calculate the mean of the square of the left-hand side across the values of <img src="https://latex.codecogs.com/png.latex?t"> in <code>t_physics</code>, thus punishing the model if the equations are far away from 0. We use <code>torch.autograd</code> to estimate the partial derivatives, which means that these partial derivatives are based on what the neural network has learned so far. We calculate a weighted sum of the physics and data loss, using a weight of <code>lambda1</code> set to 0.01. The value of this weight can matter quite a lot and depends on the relative sizes of the errors. Intuitively, it captures how much you trust the data versus the physical laws.</p>
 <div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1">lambda1 <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
@@ -1418,7 +1414,7 @@ font-style: inherit;">=</span> model(t).detach()</span>
 <span id="cb10-24">        tp <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> t_physics.detach()</span>
-<span id="cb10-25">        </span>
+<span id="cb10-25"></span>
 <span id="cb10-26">        a, b, c, d <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [<span class="bu" style="color: null;
@@ -1491,7 +1487,6 @@ font-style: inherit;">"</span></span>
 <p><img src="https://latex.codecogs.com/png.latex?%0A%5Chat%7B%5Calpha%7D%20=%200.57,%5Cquad%0A%5Chat%7B%5Cbeta%7D%20=%200.027,%5Cquad%0A%5Chat%7B%5Cgamma%7D%20=%200.94,%5Cquad%0A%5Chat%7B%5Cdelta%7D%20=%200.026,%0A"> which are very close to the results of the other two approaches mentioned above. Only the estimate for <img src="https://latex.codecogs.com/png.latex?%5Cgamma"> deviates significantly from the other estimates.</p>
 <p>However, this approach is very simple to implement and requires no knowledge about the differential equations or Bayesian modelling software.</p>
 <p>Thanks for reading!</p>
-
 
 
 </section>
@@ -2292,7 +2287,7 @@ font-style: inherit;">end</span></span></code></pre></div>
 <p>And that is all! Let JuMP do its magic and come up with a feasible solution. As an example, again we print out the number of times a 2 (the first prime) appears in every cell.</p>
 <div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1">JuMP.<span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">optimize!</span>(model) </span>
+font-style: inherit;">optimize!</span>(model)</span>
 <span id="cb7-2"></span>
 <span id="cb7-3">solution <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -2344,7 +2339,6 @@ font-style: inherit;">:</span>n_rows]</span></code></pre></div>
  [5, 7, 8]
  [5, 7, 2]</code></pre>
 <p>Well, that was easy! For the first puzzle, the challenge was to come up with a model. From then on, it is just a matter of changing the inputs. It does feel a bit like cheating, though … I don’t think I’ll continue with these <em>CrossProduct</em> puzzles in this way.</p>
-
 
 
 
@@ -2657,7 +2651,7 @@ font-style: inherit;">end</span></span></code></pre></div>
 <p>And that is all! We let JuMP do the hard work and come up with a feasible solution. As an example, we print out the number of times a 2 (the first prime) appears in every cell.</p>
 <div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1">JuMP.<span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">optimize!</span>(model) </span>
+font-style: inherit;">optimize!</span>(model)</span>
 <span id="cb7-2"></span>
 <span id="cb7-3">solution <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -2715,7 +2709,6 @@ font-style: inherit;">:</span>n_rows]</span></code></pre></div>
  [5, 7, 7]
  [8, 5, 1]</code></pre>
 <p>And there’s the solution! I love how easy it is to have JuMP solve such a problem after coming up with a way to phrase it as a linear program.</p>
-
 
 
 </section>
@@ -3650,7 +3643,7 @@ background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">sample</span>(chocolates)</span>
-<span id="cb1-6">  </span>
+<span id="cb1-6"></span>
 <span id="cb1-7">  <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># eat the first chocolate</span></span>
@@ -3666,7 +3659,7 @@ background-color: null;
 font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>]</span>
-<span id="cb1-10">  </span>
+<span id="cb1-10"></span>
 <span id="cb1-11">  <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># eat the rest of the chocolates</span></span>
@@ -3695,7 +3688,7 @@ background-color: null;
 font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>]</span>
-<span id="cb1-16">    </span>
+<span id="cb1-16"></span>
 <span id="cb1-17">    <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># put back and shuffle if differs from previous piece</span></span>
@@ -3713,12 +3706,12 @@ font-style: inherit;">sample</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">c</span>(to_eat, chocolates_left))</span>
 <span id="cb1-20">    }</span>
-<span id="cb1-21">    </span>
+<span id="cb1-21"></span>
 <span id="cb1-22">    last_taken <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> to_eat</span>
 <span id="cb1-23">  }</span>
-<span id="cb1-24">  </span>
+<span id="cb1-24"></span>
 <span id="cb1-25">  last_taken</span>
 <span id="cb1-26">}</span></code></pre></div>
 </div>
@@ -3741,7 +3734,7 @@ font-style: inherit;">==</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"m"</span>)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.46128</code></pre>
+<pre><code>[1] 0.45907</code></pre>
 </div>
 </div>
 <p>In a couple of seconds, this gives an estimate of a 46% probability of ending with a piece of milk chocolate. This is closer to 50% than I initially expected. Intuitively though, it does make sense, given the nature of the problem that the majority chocolate type will be eaten relatively quickly, since it is easier to get a ‘streak’ of those.</p>
@@ -3809,7 +3802,7 @@ font-style: inherit;">return</span>(<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>)</span>
 <span id="cb4-6">  }</span>
-<span id="cb4-7">  </span>
+<span id="cb4-7"></span>
 <span id="cb4-8">  <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -4025,12 +4018,12 @@ font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">100</span>) <span class="sc" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">%&gt;%</span> </span>
+font-style: inherit;">%&gt;%</span></span>
 <span id="cb15-4">  <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">rowwise</span>() <span class="sc" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">%&gt;%</span> </span>
+font-style: inherit;">%&gt;%</span></span>
 <span id="cb15-5">  <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">mutate</span>(<span class="at" style="color: #657422;
@@ -4045,7 +4038,7 @@ font-style: inherit;">ggplot</span>(simulations, <span class="fu" style="color: 
 background-color: null;
 font-style: inherit;">aes</span>(d, p)) <span class="sc" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">+</span> </span>
+font-style: inherit;">+</span></span>
 <span id="cb15-8">  <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">geom_line</span>() <span class="sc" style="color: #5E5E5E;
@@ -4163,7 +4156,7 @@ font-style: inherit;">return</span>(<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>)</span>
 <span id="cb16-10">  }</span>
-<span id="cb16-11">  </span>
+<span id="cb16-11"></span>
 <span id="cb16-12">  <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -4182,7 +4175,7 @@ font-style: inherit;">is.na</span>(mem[[previous]][m, d])) {</span>
 background-color: null;
 font-style: inherit;">return</span>(mem[[previous]][m, d])</span>
 <span id="cb16-14">  }</span>
-<span id="cb16-15">  </span>
+<span id="cb16-15"></span>
 <span id="cb16-16">  <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -4325,7 +4318,7 @@ font-style: inherit;">"milk"</span>)</span>
 background-color: null;
 font-style: inherit;">&lt;&lt;-</span> res</span>
 <span id="cb16-24">  }</span>
-<span id="cb16-25">  </span>
+<span id="cb16-25"></span>
 <span id="cb16-26">  res</span>
 <span id="cb16-27">}</span>
 <span id="cb16-28"></span>
@@ -4347,12 +4340,12 @@ font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">:</span>n_max) <span class="sc" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">%&gt;%</span> </span>
+font-style: inherit;">%&gt;%</span></span>
 <span id="cb16-30">  <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">rowwise</span>() <span class="sc" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">%&gt;%</span> </span>
+font-style: inherit;">%&gt;%</span></span>
 <span id="cb16-31">  <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">mutate</span>(<span class="at" style="color: #657422;
@@ -4369,7 +4362,7 @@ font-style: inherit;">aes</span>(m, d, <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">fill =</span> p)) <span class="sc" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">+</span> </span>
+font-style: inherit;">+</span></span>
 <span id="cb16-34">  <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">geom_raster</span>() <span class="sc" style="color: #5E5E5E;
@@ -4417,7 +4410,6 @@ font-style: inherit;">"Probability"</span>)</span></code></pre></div>
 </div>
 </div>
 <p>This graph shows that the more chocolates there are in the bag, the smaller the differences between different mixes become.</p>
-
 
 
 </section>
@@ -5923,9 +5915,7 @@ The complete <code>R</code> code used can be viewed on my <a href="https://githu
 <section id="buying-and-assembling" class="level1">
 <h1>Buying and assembling</h1>
 <p>I ordered the EleksDraw from BangGood, which means that the product came from China and took around 3 weeks to arrive. It came in more than a hundred pieces and assembling it took me a couple of hours. The instructions on the website were just clear enough; they consisted of just a series of pictures with no text.</p>
-<p>The EleksDraw consists of an arm that is connected via a cable to two motors which together can move the arm in the x and y direction. You can mount any pen or pencil to it which is held in place by a screw.<br>
-After assembling it and hooking it up to my computer, I downloaded the EleksMaker software that can be used to convert an image to commands that this plotter can interpret. However, this software only works on Windows (I’m on a MacBook), and even after booting into Windows, it did not work as it should. Most of the menus didn’t show any text and when loading an image, I got an error that I couldn’t understand because it was in Chinese.<br>
-I decided to boot back into MacOS and create some software myself. How hard could it be, right?</p>
+<p>The EleksDraw consists of an arm that is connected via a cable to two motors which together can move the arm in the x and y direction. You can mount any pen or pencil to it which is held in place by a screw. After assembling it and hooking it up to my computer, I downloaded the EleksMaker software that can be used to convert an image to commands that this plotter can interpret. However, this software only works on Windows (I’m on a MacBook), and even after booting into Windows, it did not work as it should. Most of the menus didn’t show any text and when loading an image, I got an error that I couldn’t understand because it was in Chinese. I decided to boot back into MacOS and create some software myself. How hard could it be, right?</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://www.basjacobs.com/post/2018-06-28-pen-plotter/plotter.jpg" class="img-fluid figure-img" width="600"></p>
@@ -5935,18 +5925,13 @@ I decided to boot back into MacOS and create some software myself. How hard coul
 </section>
 <section id="hello-world" class="level1">
 <h1>Hello, World!</h1>
-<p>The MacOS terminal has a <code>screen</code> command that allows you to send commands to an external device. In my case, typing <code>screen /dev/wchusbserial1420</code> connects with the EleksDraw and opens a terminal in which I could write commands.<br>
-The language that this plotter understands is called G-code. With this code, you can give the device the following commands:</p>
+<p>The MacOS terminal has a <code>screen</code> command that allows you to send commands to an external device. In my case, typing <code>screen /dev/wchusbserial1420</code> connects with the EleksDraw and opens a terminal in which I could write commands. The language that this plotter understands is called G-code. With this code, you can give the device the following commands:</p>
 <ul>
-<li><code>S0 M5</code> lifts the pen<br>
-</li>
-<li><code>S1000 M3</code> lowers the pen<br>
-</li>
+<li><code>S0 M5</code> lifts the pen</li>
+<li><code>S1000 M3</code> lowers the pen</li>
 <li><code>G01 Xa Yb</code> moves to position (a,b)</li>
 </ul>
-<p>Note that G-code has many variants, so the above commands may not be exactly the same for other pen plotters.<br>
-Weirdly, the plotter’s <code>(0,0)</code> position was in the top right corner, so I had to make all the coordinates negative to get it to work properly. Could be because I somehow wired it wrong, but I could not figure it out. Anyway, writing my own software allowed me to work around this very easily!<br>
-Writing these instructions one by one, I could create all kinds of shapes consisting of straight lines. After every command I wrote, the device would either send back the message <code>ok</code> or an error. After this response, I could send it a new instruction. However, I wanted to automatically generate these commands and send them to the device using a script.</p>
+<p>Note that G-code has many variants, so the above commands may not be exactly the same for other pen plotters. Weirdly, the plotter’s <code>(0,0)</code> position was in the top right corner, so I had to make all the coordinates negative to get it to work properly. Could be because I somehow wired it wrong, but I could not figure it out. Anyway, writing my own software allowed me to work around this very easily! Writing these instructions one by one, I could create all kinds of shapes consisting of straight lines. After every command I wrote, the device would either send back the message <code>ok</code> or an error. After this response, I could send it a new instruction. However, I wanted to automatically generate these commands and send them to the device using a script.</p>
 <section id="plotter-meets-python" class="level2">
 <h2 class="anchored" data-anchor-id="plotter-meets-python">Plotter meets Python</h2>
 <p>Using the Python package <a href="https://github.com/pyserial/pyserial">pySerial</a>, I was able to send commands to the plotter through just a couple of lines of code (see <a href="https://github.com/grbl/grbl/blob/master/doc/script/simple_stream.py">here</a>):</p>
@@ -5975,7 +5960,7 @@ font-style: inherit;">"</span>)</span>
 background-color: null;
 font-style: inherit;">2</span>)       <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># wait for grbl to initialize </span></span>
+font-style: inherit;"># wait for grbl to initialize</span></span>
 <span id="cb1-7">s.flushInput()      <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># flush startup text in serial input</span></span>
@@ -6056,8 +6041,7 @@ font-style: inherit;">"</span>) <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># pen up</span></span>
 <span id="cb1-28">s.readline()</span></code></pre></div>
-<p>This piece of code wakes up the plotter, raises the pen, moves to <code>(10, 10)</code> (note I wrote -10 for reasons described above), lowers the pen, moves to <code>(20, 10)</code> and finally raises the pen again. Effectively, this draws a straight line from <code>(10mm, 10mm)</code> to <code>(20mm, 10mm)</code>.<br>
-Since I figured I would be needing this code more, I wrapped it in a function. I decided to go object-oriented and created classes <code>Point</code> and <code>Line</code>, respectively. For now, these classes only contained <code>draw</code> methods, but I knew more was going to be needed.</p>
+<p>This piece of code wakes up the plotter, raises the pen, moves to <code>(10, 10)</code> (note I wrote -10 for reasons described above), lowers the pen, moves to <code>(20, 10)</code> and finally raises the pen again. Effectively, this draws a straight line from <code>(10mm, 10mm)</code> to <code>(20mm, 10mm)</code>. Since I figured I would be needing this code more, I wrapped it in a function. I decided to go object-oriented and created classes <code>Point</code> and <code>Line</code>, respectively. For now, these classes only contained <code>draw</code> methods, but I knew more was going to be needed.</p>
 </section>
 </section>
 <section id="plotting-svgs" class="level1">
@@ -6072,8 +6056,7 @@ Since I figured I would be needing this code more, I wrapped it in a function. I
 <figcaption>Dog (Picasso), pen on paper</figcaption>
 </figure>
 </div>
-<p>An example of the SVG path syntax can be found on <a href="https://www.w3schools.com/graphics/svg_path.asp">w3schools</a>.<br>
-It turned out that parsing such a path was straightforward with regular expressions. There were three things that made things slightly more complicated.</p>
+<p>An example of the SVG path syntax can be found on <a href="https://www.w3schools.com/graphics/svg_path.asp">w3schools</a>. It turned out that parsing such a path was straightforward with regular expressions. There were three things that made things slightly more complicated.</p>
 <ol type="1">
 <li>Different instructions can have different numbers of parameters. For example, the <code>M</code> command (move) takes two numbers (an x and y coordinate), the <code>Z</code> (close path) command takes zero parameters, and some curve commands can take up to 7 parameters.</li>
 <li>A command letter does not need to be repeated. For example, <code>L 10 20 10 30</code> draws a line from the current position to <code>(10, 20)</code> and then another line to <code>(10, 30)</code> and is the same as <code>L 10 20 L 10 30</code>.</li>
@@ -6083,16 +6066,14 @@ It turned out that parsing such a path was straightforward with regular expressi
 </section>
 <section id="bézier-curves" class="level2">
 <h2 class="anchored" data-anchor-id="bézier-curves">Bézier curves</h2>
-<p>Still, I had only created code for drawing points and lines. To plot arcs, I could of course interpolate these using points, but the results were what I expected them to be: not very pretty. G-code supports circle arcs (an arc obtained by tracing part of a circle), so a better way would be to try to approximate the curves using circle arcs.<br>
-When tracing an image with a vector graphics tool like Sketch or Inkscape, the result will be a path consisting of <a href="https://en.wikipedia.org/wiki/B%C3%A9zier_curve">Bézier curves</a>. A Bézier curve is a parametric curve that can be described mathematically. I won’t go into more detail on Bézier curves; that is worth a blog post in itself. One thing that’s important to know is that there are quadratic and cubic Bézier curves. The quadratic curves are a special case of the cubic ones, so if I’m able to draw cubic Bézier curves I’m able to draw both.</p>
+<p>Still, I had only created code for drawing points and lines. To plot arcs, I could of course interpolate these using points, but the results were what I expected them to be: not very pretty. G-code supports circle arcs (an arc obtained by tracing part of a circle), so a better way would be to try to approximate the curves using circle arcs. When tracing an image with a vector graphics tool like Sketch or Inkscape, the result will be a path consisting of <a href="https://en.wikipedia.org/wiki/B%C3%A9zier_curve">Bézier curves</a>. A Bézier curve is a parametric curve that can be described mathematically. I won’t go into more detail on Bézier curves; that is worth a blog post in itself. One thing that’s important to know is that there are quadratic and cubic Bézier curves. The quadratic curves are a special case of the cubic ones, so if I’m able to draw cubic Bézier curves I’m able to draw both.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://www.basjacobs.com/post/2018-06-28-pen-plotter/cubic_bezier.png" class="img-fluid figure-img" width="600"></p>
 <figcaption>A cubic Bézier curve is defined by 4 points (source: Wikipedia)</figcaption>
 </figure>
 </div>
-<p>It is in general not possible to convert a Bézier curve to a combination of circle arcs, but there are ways that are ‘good enough’. In particular, I implemented <a href="http://dlacko.org/blog/2016/10/19/approximating-bezier-curves-by-biarcs/">this</a> approach in Python, which approximates a cubic Bézier curve with two circle arcs. I updated the classes for points and lines to include addition of points, multiplication of points with scalars, intersections of lines and so on. After these adjustments, it was relatively straightforward to write a <code>CubicBezier</code> class of which an instantiation could convert itself to two objects of class <code>CircleArc</code>.<br>
-For debugging purposes, I gave every such class a method that could draw the corresponding shape on a PyGame canvas. That way, I had a way of testing if everything worked without having to go through stacks of paper. In the end, this also allowed me to check if the thing I was going to plot looked the way it should, before actually sending it to the EleksDraw. For example, find below the code for <code>Line</code>.</p>
+<p>It is in general not possible to convert a Bézier curve to a combination of circle arcs, but there are ways that are ‘good enough’. In particular, I implemented <a href="http://dlacko.org/blog/2016/10/19/approximating-bezier-curves-by-biarcs/">this</a> approach in Python, which approximates a cubic Bézier curve with two circle arcs. I updated the classes for points and lines to include addition of points, multiplication of points with scalars, intersections of lines and so on. After these adjustments, it was relatively straightforward to write a <code>CubicBezier</code> class of which an instantiation could convert itself to two objects of class <code>CircleArc</code>. For debugging purposes, I gave every such class a method that could draw the corresponding shape on a PyGame canvas. That way, I had a way of testing if everything worked without having to go through stacks of paper. In the end, this also allowed me to check if the thing I was going to plot looked the way it should, before actually sending it to the EleksDraw. For example, find below the code for <code>Line</code>.</p>
 <div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> plotter <span class="im" style="color: #00769E;
@@ -6124,7 +6105,7 @@ background-color: null;
 font-style: inherit;">self</span>.P2 <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> point2</span>
-<span id="cb2-8">        </span>
+<span id="cb2-8"></span>
 <span id="cb2-9">    <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -6195,7 +6176,7 @@ background-color: null;
 font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">-</span>u))</span>
-<span id="cb2-19">    </span>
+<span id="cb2-19"></span>
 <span id="cb2-20">    <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -6221,7 +6202,7 @@ font-style: inherit;">self</span>.P2.x)</span>
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> Line(P, P.plus(U))</span>
-<span id="cb2-23">    </span>
+<span id="cb2-23"></span>
 <span id="cb2-24">    <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -6243,7 +6224,7 @@ background-color: null;
 font-style: inherit;">-</span><span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>.P2.y))</span>
-<span id="cb2-28">        </span>
+<span id="cb2-28"></span>
 <span id="cb2-29">    <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -6273,8 +6254,7 @@ font-style: inherit;">self</span>.P2.y)]</span></code></pre></div>
 <section id="drawing-a-harmonograph" class="level1">
 <h1>Drawing a harmonograph</h1>
 <p>Another <a href="https://aschinchon.wordpress.com/2014/10/13/beautiful-curves-the-harmonograph/">blog post</a> inspired me to try and plot some harmonographs. A harmonograph is a device that uses pendulums to draw trajectories on a piece of paper. The output of such a harmonograph can be described mathematically and we can simulate a random harmonograph by drawing random numbers and following a trajectory defined by sine waves. I followed the blog post mentioned above which draws 12 random numbers and plots the trajectory defined by</p>
-<p><img src="https://latex.codecogs.com/png.latex?%20x(t)=e%5E%7B-d_1t%7D%5Csin(tf_1+p_1)+e%5E%7B-d_2t%7D%5Csin(tf_2+p_2)"> <img src="https://latex.codecogs.com/png.latex?y(t)=e%5E%7B-d_3t%7D%5Csin(tf_3+p_3)+e%5E%7B-d_4t%7D%5Csin(tf_4+p_4)"> where <img src="https://latex.codecogs.com/png.latex?t"> runs from <img src="https://latex.codecogs.com/png.latex?0"> to <img src="https://latex.codecogs.com/png.latex?1">.<br>
-In his post, the author implemented the harmonograph in R, but since my plotter works from Python, I ported his code to Python.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%20x(t)=e%5E%7B-d_1t%7D%5Csin(tf_1+p_1)+e%5E%7B-d_2t%7D%5Csin(tf_2+p_2)"> <img src="https://latex.codecogs.com/png.latex?y(t)=e%5E%7B-d_3t%7D%5Csin(tf_3+p_3)+e%5E%7B-d_4t%7D%5Csin(tf_4+p_4)"> where <img src="https://latex.codecogs.com/png.latex?t"> runs from <img src="https://latex.codecogs.com/png.latex?0"> to <img src="https://latex.codecogs.com/png.latex?1">. In his post, the author implemented the harmonograph in R, but since my plotter works from Python, I ported his code to Python.</p>
 <div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> numpy <span class="im" style="color: #00769E;
@@ -6386,7 +6366,7 @@ background-color: null;
 font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>)]</span>
-<span id="cb4-6">   </span>
+<span id="cb4-6"></span>
 <span id="cb4-7">s <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> wake_up_serial(<span class="st" style="color: #20794D;
@@ -6405,9 +6385,7 @@ font-style: inherit;">115200</span>)</span>
 </section>
 <section id="conclusion" class="level1">
 <h1>Conclusion</h1>
-<p>All in all, it was a nice journey. I never considered myself an artist, but now I kind of know what it feels like to be one, even though I did not design anything by hand.<br>
-Someday, I want to learn <a href="https://processing.org/">Processing</a>, a programming language designed specifically for creating computer generated art.</p>
-
+<p>All in all, it was a nice journey. I never considered myself an artist, but now I kind of know what it feels like to be one, even though I did not design anything by hand. Someday, I want to learn <a href="https://processing.org/">Processing</a>, a programming language designed specifically for creating computer generated art.</p>
 
 
 </section>

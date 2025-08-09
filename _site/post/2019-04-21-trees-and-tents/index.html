@@ -9,7 +9,7 @@
 <meta name="author" content="Bas">
 <meta name="dcterms.date" content="2019-04-21">
 
-<title>Trees and Tents – basjacobs</title>
+<title>Trees and Tents – Bas Jacobs</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -67,6 +67,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
+<link href="../../logo.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
@@ -105,7 +106,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   </head><body class="nav-fixed quarto-light">true
 
 <script type="text/javascript">
@@ -145,8 +145,11 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../logo.png" alt="" class="navbar-logo">
+    </a>
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">basjacobs</span>
+    <span class="navbar-title">Bas Jacobs</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -154,14 +157,29 @@ window.Quarto = {
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
     <a class="nav-link" href="../../index.html"> 
-<span class="menu-text">Home</span></a>
+<span class="menu-text">Posts</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/basjacobs93"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/basjacobs93/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
+</i> 
+<span class="menu-text"></span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -262,7 +280,7 @@ The complete code as a jupyter notebook can be found <a href="https://github.com
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>trees <span class="op">=</span> [(i, j) for i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>n, j <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>n if puzzle[(i<span class="op">-</span><span class="fl">1</span>)<span class="op">*</span>n <span class="op">+</span> j] <span class="op">==</span> <span class="fl">1</span>]</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>row_sums <span class="op">=</span> [<span class="fu">parse</span>(<span class="dt">Int</span>, i) for i <span class="kw">in</span> lcrownumbers]</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>col_sums <span class="op">=</span> [<span class="fu">parse</span>(<span class="dt">Int</span>, i) for i <span class="kw">in</span> lccolnumbers]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>We initialize the solver, telling JuMP that we want to use GLPK. The variable that JuMP optimizes over is an <span class="math inline">\(n\times n\)</span> matrix <code>x</code>, consisting of binary values, where a 0 means no tent for that cell, and a 1 means that the cell contains a tent.</p>
+<p>We initialize the solver, telling JuMP that we want to use GLPK. The variable that JuMP optimizes over is an <span class="math inline">n\times n</span> matrix <code>x</code>, consisting of binary values, where a 0 means no tent for that cell, and a 1 means that the cell contains a tent.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> <span class="fu">Model</span>(<span class="fu">with_optimizer</span>(GLPK.Optimizer))</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="pp">@variable</span>(model, x[<span class="fl">1</span><span class="op">:</span>n, <span class="fl">1</span><span class="op">:</span>n], Bin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -270,8 +288,8 @@ The complete code as a jupyter notebook can be found <a href="https://github.com
 <section id="constraints" class="level2">
 <h2 class="anchored" data-anchor-id="constraints">Constraints</h2>
 <p>We are now ready to define the constraints. We start with the requirement that a tent be next to a tree.</p>
-<p>First, a tent cannot be on top of a tree. Hence, if a tree is on position <code>(row, col)</code>, then <code>x[row, col]</code> must be <span class="math inline">\(0\)</span>.</p>
-<p>Next, for every cell <code>(row, col)</code> we check whether there is a tree next to this cell. If not, then this cell cannot contain a tent, hence <code>x[row, col]</code> should be <span class="math inline">\(0\)</span>.</p>
+<p>First, a tent cannot be on top of a tree. Hence, if a tree is on position <code>(row, col)</code>, then <code>x[row, col]</code> must be <span class="math inline">0</span>.</p>
+<p>Next, for every cell <code>(row, col)</code> we check whether there is a tree next to this cell. If not, then this cell cannot contain a tent, hence <code>x[row, col]</code> should be <span class="math inline">0</span>.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> row <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>n, col <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>n</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># is not on a tree</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (row, col) <span class="kw">in</span> trees</span>
@@ -294,7 +312,7 @@ The complete code as a jupyter notebook can be found <a href="https://github.com
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@constraint</span>(model, <span class="fu">sum</span>(x[i, <span class="op">:</span>]) <span class="op">==</span> row_sums[i])</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@constraint</span>(model, <span class="fu">sum</span>(x[<span class="op">:</span>, i]) <span class="op">==</span> col_sums[i])</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Lastly, we need to encode the fact that the tents may not touch horizontally, vertically or diagonally. In other words, every <span class="math inline">\(2\times2\)</span> square contains at most one tree, which is also easy to establish using the representation we chose.</p>
+<p>Lastly, we need to encode the fact that the tents may not touch horizontally, vertically or diagonally. In other words, every <span class="math inline">2\times2</span> square contains at most one tree, which is also easy to establish using the representation we chose.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> row <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>(n<span class="op">-</span><span class="fl">1</span>), col <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>(n<span class="op">-</span><span class="fl">1</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@constraint</span>(model, <span class="fu">sum</span>(x[row<span class="op">:</span>row<span class="op">+</span><span class="fl">1</span>, col<span class="op">:</span>col<span class="op">+</span><span class="fl">1</span>]) <span class="op">&lt;=</span> <span class="fl">1</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -410,7 +428,7 @@ The complete code as a jupyter notebook can be found <a href="https://github.com
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/www\.basjacobs\.com");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

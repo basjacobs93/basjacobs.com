@@ -2,18 +2,17 @@
 title: 'Physics-informed neural network for population dynamics'
 author: Bas
 date: '2024-02-09'
-math: true
 ---
 
-A Physics-Informed Neural Network (PINN) is a neural network that incorporates knowledge about physical laws alongside data. These physical (or chemical, or biological) laws can be incorporated into the network in the form of differential equations. Among other things, PINNs can be used to estimate parameters of a differential equation based on observational data.  
+A Physics-Informed Neural Network (PINN) is a neural network that incorporates knowledge about physical laws alongside data. These physical (or chemical, or biological) laws can be incorporated into the network in the form of differential equations. Among other things, PINNs can be used to estimate parameters of a differential equation based on observational data.
 
-Last week, Dr. Riccardo Taormina gave a guest lecture in my organization in which he explained the workings and advantages of PINNs. In the accompanying workshop he used synthetic data to show that it is possible to estimate the parameters of differential equations of a harmonic oscillator and an advection–diffusion process.  
+Last week, Dr. Riccardo Taormina gave a guest lecture in my organization in which he explained the workings and advantages of PINNs. In the accompanying workshop he used synthetic data to show that it is possible to estimate the parameters of differential equations of a harmonic oscillator and an advection–diffusion process.
 
 
-![Lynx and snowshoe hare (photo by Tom and Pat Leeson)](https://www2.nau.edu/lrm22/lessons/predator_prey/hare-lynx.jpg)
+![Lynx and snowshoe hare (photo by Tom and Pat Leeson)](https://www.leesonphoto.com/img-get/I0000kPSyrcMzSLs/s/600/600/TK115901.jpg)
 
-I once read [an article by Bob Carpenter](https://mc-stan.org/users/documentation/case-studies/lotka-volterra-predator-prey.html) about predator-prey population dynamics of hares and lynxes in Canada. The interesting thing of this article is that it uses actual observations rather than synthetical data. The author uses data for the number of pelts of these hares and lynxes obtained by Hudson’s Bay Company in the years 1900-1920 to estimate the parameters of a [Lotka-Volterra model](https://en.wikipedia.org/wiki/Lotka–Volterra_equations). He uses the statistical modeling software [Stan](https://mc-stan.org) to generate these estimates based on Markov-Chain Monte-Carlo. This gives posterior estimates (distributions), which elegantly account for measurement and estimation uncertainty. 
-In the [Joseph M. Mahaffy course Mathematical Modeling](https://jmahaffy.sdsu.edu/courses/f09/math636/lectures/lotka/qualde2.html), the author uses an optimization routine to estimate the parameters of the Lotka-Volterra equations using the same dataset.  
+I once read [an article by Bob Carpenter](https://mc-stan.org/users/documentation/case-studies/lotka-volterra-predator-prey.html) about predator-prey population dynamics of hares and lynxes in Canada. The interesting thing of this article is that it uses actual observations rather than synthetical data. The author uses data for the number of pelts of these hares and lynxes obtained by Hudson’s Bay Company in the years 1900-1920 to estimate the parameters of a [Lotka-Volterra model](https://en.wikipedia.org/wiki/Lotka–Volterra_equations). He uses the statistical modeling software [Stan](https://mc-stan.org) to generate these estimates based on Markov-Chain Monte-Carlo. This gives posterior estimates (distributions), which elegantly account for measurement and estimation uncertainty.
+In the [Joseph M. Mahaffy course Mathematical Modeling](https://jmahaffy.sdsu.edu/courses/f09/math636/lectures/lotka/qualde2.html), the author uses an optimization routine to estimate the parameters of the Lotka-Volterra equations using the same dataset.
 
 In this post, I will show that PINNs can also be used to estimate those parameters. Let's get started!
 
@@ -184,7 +183,7 @@ The data follow a cyclical pattern in which increases in the population of hares
 
 ```python
 df[["Hare", "Lynx"]].plot(figsize=(10,6), grid=True, xticks = df.index.astype(int)[::2], title="Hudson Bay Lynx-Hare Dataset", ylabel="Number of pelts (thousands)")
-```   
+```
 ![](images/lynx_5_1.png){width=600px}
 
 ## The Lotka-Volterra model
@@ -193,7 +192,7 @@ The Lotka-Volterra population model the change of predator and pray populations 
  - $u(t)\ge0$ is the population size of the prey species at time t (the hare in our case), and
  - $v(t)\ge0$ is the population size of the predator species (the lynx in our case).
 
-By using such a model, some assumptions are made on the dynamics of these populations. We will not go into those here, but they can be found on the [Wikipedia page](https://en.wikipedia.org/wiki/Lotka–Volterra_equations).  
+By using such a model, some assumptions are made on the dynamics of these populations. We will not go into those here, but they can be found on the [Wikipedia page](https://en.wikipedia.org/wiki/Lotka–Volterra_equations).
 The population sizes over times of the two species are modelled in terms of four parameters, $\alpha,\beta,\gamma,\delta\ge0$ as
 
 $$
@@ -281,7 +280,7 @@ class NN(nn.Module):
         self.encode = nn.Sequential(nn.Linear(n_input, n_hidden), nn.Tanh())
         self.hidden = nn.Sequential(*[nn.Sequential(nn.Linear(n_hidden, n_hidden), nn.Tanh()) for _ in range(n_layers-1)])
         self.decode = nn.Linear(n_hidden, n_output)
-        
+
     def forward(self, x):
         x = self.encode(x)
         x = self.hidden(x)
@@ -306,41 +305,41 @@ for i in range(50000):
     optimizer.step()
     if i%10000 == 0:
         yh = model(t).detach()
-        
+
         plot_result(i, t, y, yh, loss, None)
 ```
 
 
-    
+
 ![](images/lynx_14_0.png)
-    
 
 
 
-    
+
+
 ![](images/lynx_14_1.png)
-    
 
 
 
-    
+
+
 ![](images/lynx_14_2.png)
-    
 
 
 
-    
+
+
 ![](images/lynx_14_3.png)
-    
 
 
 
-    
+
+
 ![](images/lynx_14_4.png)
-    
 
 
-Next, we use exactly the same architecture but add parameters `alpha`, `beta`, `gamma` and `delta` reflecting the parameters in the Lotka-Volterra equations. We initialize them randomly between 0 and 1, and add them to the list of model paramters so that they are updated in the backpropagation steps.  
+
+Next, we use exactly the same architecture but add parameters `alpha`, `beta`, `gamma` and `delta` reflecting the parameters in the Lotka-Volterra equations. We initialize them randomly between 0 and 1, and add them to the list of model paramters so that they are updated in the backpropagation steps.
 
 
 ```python
@@ -364,8 +363,8 @@ We define `t_physics`; the range of timesteps on which we numerically evaluate t
 t_physics = torch.arange(0, len(t), 0.1, dtype=torch.float32).view(-1,1).requires_grad_(True)
 ```
 
-Training the PINN is identical to training the normal neural network, except that the loss function consists of a combination of the data loss and the physics loss.  
-The data loss is identical to the loss of the previous neural network.  
+Training the PINN is identical to training the normal neural network, except that the loss function consists of a combination of the data loss and the physics loss.
+The data loss is identical to the loss of the previous neural network.
 For the physics loss, note that we can rewrite the Lotka-Volterra equations as
 $$
 \frac{\mathrm{d}}{\mathrm{d}t} u - (\alpha u - \beta u v) = 0,
@@ -373,7 +372,7 @@ $$
 $$
 \frac{\mathrm{d}}{\mathrm{d}t} v - (\delta uv - \gamma v) = 0.
 $$
-We calculate the mean of the square of the left-hand side across the values of $t$ in `t_physics`, thus punishing the model if the equations are far away from 0. We use `torch.autograd` to estimate the partial derivatives, which means that these partial derivatives are based on what the neural network has learned so far.  
+We calculate the mean of the square of the left-hand side across the values of $t$ in `t_physics`, thus punishing the model if the equations are far away from 0. We use `torch.autograd` to estimate the partial derivatives, which means that these partial derivatives are based on what the neural network has learned so far.
 We calculate a weighted sum of the physics and data loss, using a weight of `lambda1` set to 0.01. The value of this weight can matter quite a lot and depends on the relative sizes of the errors. Intuitively, it captures how much you trust the data versus the physical laws.
 
 
@@ -402,39 +401,39 @@ for i in range(50000):
     if i%10000 == 0:
         yh = model(t).detach()
         tp = t_physics.detach()
-        
+
         a, b, c, d = [round(param.item(), 3) for param in extra_parameters]
         params = rf"$\alpha={a}, \beta={b}, \gamma={c}, \delta={d}$"
         plot_result(i, t, y, yh, loss, tp, physics_loss, params)
 ```
 
 
-    
+
 ![](images/lynx_20_0.png)
-    
 
 
-    
+
+
 ![](images/lynx_20_1.png)
-    
 
 
 
-    
+
+
 ![](images/lynx_20_2.png)
-    
 
 
 
-    
+
+
 ![](images/lynx_20_3.png)
-    
 
 
 
-    
+
+
 ![](images/lynx_20_4.png)
-    
+
 
 
 We see that the model is still able to fit well (albeit a little bit worse), and is able to estimate values for the parameters. Specifically, it estimates
@@ -445,8 +444,8 @@ $$
 \hat{\gamma} = 0.94,\quad
 \hat{\delta} = 0.026,
 $$
-which are very close to the results of the other two approaches mentioned above. Only the estimate for $\gamma$ deviates significantly from the other estimates.  
+which are very close to the results of the other two approaches mentioned above. Only the estimate for $\gamma$ deviates significantly from the other estimates.
 
-However, this approach is very simple to implement and requires no knowledge about the differential equations or Bayesian modelling software.  
+However, this approach is very simple to implement and requires no knowledge about the differential equations or Bayesian modelling software.
 
 Thanks for reading!

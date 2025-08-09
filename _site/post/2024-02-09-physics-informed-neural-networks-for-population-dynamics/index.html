@@ -106,8 +106,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  </head><body class="nav-fixed quarto-light">true
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -137,9 +151,9 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../../styles.css">
+</head>
 
-
-
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -242,7 +256,7 @@ window.Quarto = {
 <p>Last week, Dr.&nbsp;Riccardo Taormina gave a guest lecture in my organization in which he explained the workings and advantages of PINNs. In the accompanying workshop he used synthetic data to show that it is possible to estimate the parameters of differential equations of a harmonic oscillator and an advection–diffusion process.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://www2.nau.edu/lrm22/lessons/predator_prey/hare-lynx.jpg" class="img-fluid figure-img"></p>
+<p><img src="https://www.leesonphoto.com/img-get/I0000kPSyrcMzSLs/s/600/600/TK115901.jpg" class="img-fluid figure-img"></p>
 <figcaption>Lynx and snowshoe hare (photo by Tom and Pat Leeson)</figcaption>
 </figure>
 </div>
@@ -528,27 +542,26 @@ Year
 </section>
 <section id="the-lotka-volterra-model" class="level2">
 <h2 class="anchored" data-anchor-id="the-lotka-volterra-model">The Lotka-Volterra model</h2>
-<p>The Lotka-Volterra population model the change of predator and pray populations over time: - <span class="math inline">\(u(t)\ge0\)</span> is the population size of the prey species at time t (the hare in our case), and - <span class="math inline">\(v(t)\ge0\)</span> is the population size of the predator species (the lynx in our case).</p>
-<p>By using such a model, some assumptions are made on the dynamics of these populations. We will not go into those here, but they can be found on the <a href="https://en.wikipedia.org/wiki/Lotka–Volterra_equations">Wikipedia page</a>.<br>
-The population sizes over times of the two species are modelled in terms of four parameters, <span class="math inline">\(\alpha,\beta,\gamma,\delta\ge0\)</span> as</p>
-<p><span class="math display">\[
+<p>The Lotka-Volterra population model the change of predator and pray populations over time: - <span class="math inline">u(t)\ge0</span> is the population size of the prey species at time t (the hare in our case), and - <span class="math inline">v(t)\ge0</span> is the population size of the predator species (the lynx in our case).</p>
+<p>By using such a model, some assumptions are made on the dynamics of these populations. We will not go into those here, but they can be found on the <a href="https://en.wikipedia.org/wiki/Lotka–Volterra_equations">Wikipedia page</a>. The population sizes over times of the two species are modelled in terms of four parameters, <span class="math inline">\alpha,\beta,\gamma,\delta\ge0</span> as</p>
+<p><span class="math display">
 \frac{\mathrm{d}}{\mathrm{d}t} u = \alpha u - \beta u v
-\]</span> <span class="math display">\[
+</span> <span class="math display">
 \frac{\mathrm{d}}{\mathrm{d}t} v = \delta uv - \gamma v
-\]</span></p>
-<p>It is these four parameters we will estimate in this post. They have the following interpretations: - <span class="math inline">\(\alpha\)</span> is the growth rate of the prey population, - <span class="math inline">\(\beta\)</span> is the rate of shrinkage relative to the product of the population sizes, - <span class="math inline">\(\gamma\)</span> is the shrinkage rate of the predator population, - <span class="math inline">\(\delta\)</span> is the growth rate of the predator population as a factor of the product of the population sizes.</p>
+</span></p>
+<p>It is these four parameters we will estimate in this post. They have the following interpretations: - <span class="math inline">\alpha</span> is the growth rate of the prey population, - <span class="math inline">\beta</span> is the rate of shrinkage relative to the product of the population sizes, - <span class="math inline">\gamma</span> is the shrinkage rate of the predator population, - <span class="math inline">\delta</span> is the growth rate of the predator population as a factor of the product of the population sizes.</p>
 <p>In the Stan article, the author obtains posterior mean point estimates</p>
-<p><span class="math display">\[
+<p><span class="math display">
 \hat{\alpha} = 0.55,\quad
 \hat{\beta} = 0.028,\quad
 \hat{\gamma} = 0.80,\quad
 \hat{\delta} = 0.024,
-\]</span> and in the Mathematical Modeling course, the author obtains <span class="math display">\[
+</span> and in the Mathematical Modeling course, the author obtains <span class="math display">
 \alpha^* = 0.55,\quad
 \beta^* = 0.028,\quad
 \gamma^* = 0.84,\quad
 \delta^* = 0.026.
-\]</span></p>
+</span></p>
 <p>To begin, we first set up some plotting functionality for keeping track of the training progress.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_result(i, t, y, yh, loss, xp<span class="op">=</span><span class="va">None</span>, lossp<span class="op">=</span><span class="va">None</span>, params<span class="op">=</span><span class="va">None</span>):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
@@ -579,7 +592,7 @@ The population sizes over times of the two species are modelled in terms of four
 <span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    plt.axis(<span class="st">"off"</span>)</span>
 <span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The inputs for the model are the timesteps <span class="math inline">\(t=0..20\)</span> corresponding to the years 1900-1920 and the outputs are the numbers of hares and lynxes.</p>
+<p>The inputs for the model are the timesteps <span class="math inline">t=0..20</span> corresponding to the years 1900-1920 and the outputs are the numbers of hares and lynxes.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"Timestep"</span>] <span class="op">=</span> df.index <span class="op">-</span> <span class="bu">min</span>(df.index)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> torch.tensor(df[<span class="st">"Timestep"</span>].values, dtype<span class="op">=</span>torch.float32).view(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> torch.tensor(df[[<span class="st">"Hare"</span>, <span class="st">"Lynx"</span>]].values, dtype<span class="op">=</span>torch.float32)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -590,13 +603,13 @@ The population sizes over times of the two species are modelled in terms of four
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.encode <span class="op">=</span> nn.Sequential(nn.Linear(n_input, n_hidden), nn.Tanh())</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.hidden <span class="op">=</span> nn.Sequential(<span class="op">*</span>[nn.Sequential(nn.Linear(n_hidden, n_hidden), nn.Tanh()) <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_layers<span class="op">-</span><span class="dv">1</span>)])</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.decode <span class="op">=</span> nn.Linear(n_hidden, n_output)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.encode(x)</span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.hidden(x)</span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.decode(x)</span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>We can train neural network on the dataset (predicting the number of lynx and hares based on timestep <span class="math inline">\(t\)</span>) and see that it is complex enough to be able to fit the dataset well. This takes a couple of seconds on my machine.</p>
+<p>We can train neural network on the dataset (predicting the number of lynx and hares based on timestep <span class="math inline">t</span>) and see that it is complex enough to be able to fit the dataset well. This takes a couple of seconds on my machine.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">123</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> NN(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">8</span>, <span class="dv">2</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.Adam(model.parameters(), lr<span class="op">=</span><span class="fl">1e-3</span>)</span>
@@ -610,7 +623,7 @@ The population sizes over times of the two species are modelled in terms of four
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    optimizer.step()</span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">%</span><span class="dv">10000</span> <span class="op">==</span> <span class="dv">0</span>:</span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        yh <span class="op">=</span> model(t).detach()</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        plot_result(i, t, y, yh, loss, <span class="va">None</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><img src="images/lynx_14_0.png" class="img-fluid"></p>
 <p><img src="images/lynx_14_1.png" class="img-fluid"></p>
@@ -631,14 +644,11 @@ The population sizes over times of the two species are modelled in terms of four
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.Adam(parameters, lr<span class="op">=</span><span class="fl">1e-3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>We define <code>t_physics</code>; the range of timesteps on which we numerically evaluate the differential equations. In this case, we evaluate them every 0.1 year.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>t_physics <span class="op">=</span> torch.arange(<span class="dv">0</span>, <span class="bu">len</span>(t), <span class="fl">0.1</span>, dtype<span class="op">=</span>torch.float32).view(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>).requires_grad_(<span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Training the PINN is identical to training the normal neural network, except that the loss function consists of a combination of the data loss and the physics loss.<br>
-The data loss is identical to the loss of the previous neural network.<br>
-For the physics loss, note that we can rewrite the Lotka-Volterra equations as <span class="math display">\[
+<p>Training the PINN is identical to training the normal neural network, except that the loss function consists of a combination of the data loss and the physics loss. The data loss is identical to the loss of the previous neural network. For the physics loss, note that we can rewrite the Lotka-Volterra equations as <span class="math display">
 \frac{\mathrm{d}}{\mathrm{d}t} u - (\alpha u - \beta u v) = 0,
-\]</span> <span class="math display">\[
+</span> <span class="math display">
 \frac{\mathrm{d}}{\mathrm{d}t} v - (\delta uv - \gamma v) = 0.
-\]</span> We calculate the mean of the square of the left-hand side across the values of <span class="math inline">\(t\)</span> in <code>t_physics</code>, thus punishing the model if the equations are far away from 0. We use <code>torch.autograd</code> to estimate the partial derivatives, which means that these partial derivatives are based on what the neural network has learned so far.<br>
-We calculate a weighted sum of the physics and data loss, using a weight of <code>lambda1</code> set to 0.01. The value of this weight can matter quite a lot and depends on the relative sizes of the errors. Intuitively, it captures how much you trust the data versus the physical laws.</p>
+</span> We calculate the mean of the square of the left-hand side across the values of <span class="math inline">t</span> in <code>t_physics</code>, thus punishing the model if the equations are far away from 0. We use <code>torch.autograd</code> to estimate the partial derivatives, which means that these partial derivatives are based on what the neural network has learned so far. We calculate a weighted sum of the physics and data loss, using a weight of <code>lambda1</code> set to 0.01. The value of this weight can matter quite a lot and depends on the relative sizes of the errors. Intuitively, it captures how much you trust the data versus the physical laws.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>lambda1 <span class="op">=</span> <span class="fl">1e-2</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">50000</span>):</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    optimizer.zero_grad()</span>
@@ -663,7 +673,7 @@ We calculate a weighted sum of the physics and data loss, using a weight of <cod
 <span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">%</span><span class="dv">10000</span> <span class="op">==</span> <span class="dv">0</span>:</span>
 <span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>        yh <span class="op">=</span> model(t).detach()</span>
 <span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>        tp <span class="op">=</span> t_physics.detach()</span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>        a, b, c, d <span class="op">=</span> [<span class="bu">round</span>(param.item(), <span class="dv">3</span>) <span class="cf">for</span> param <span class="kw">in</span> extra_parameters]</span>
 <span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>        params <span class="op">=</span> <span class="vs">rf"</span><span class="dv">$</span><span class="ch">\a</span><span class="vs">lpha=</span><span class="sc">{</span>a<span class="sc">}</span><span class="vs">, </span><span class="dv">\b</span><span class="vs">eta=</span><span class="sc">{</span>b<span class="sc">}</span><span class="vs">, </span><span class="er">\</span><span class="vs">gamma=</span><span class="sc">{</span>c<span class="sc">}</span><span class="vs">, </span><span class="dv">\d</span><span class="vs">elta=</span><span class="sc">{</span>d<span class="sc">}</span><span class="dv">$</span><span class="vs">"</span></span>
 <span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>        plot_result(i, t, y, yh, loss, tp, physics_loss, params)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -673,15 +683,14 @@ We calculate a weighted sum of the physics and data loss, using a weight of <cod
 <p><img src="images/lynx_20_3.png" class="img-fluid"></p>
 <p><img src="images/lynx_20_4.png" class="img-fluid"></p>
 <p>We see that the model is still able to fit well (albeit a little bit worse), and is able to estimate values for the parameters. Specifically, it estimates</p>
-<p><span class="math display">\[
+<p><span class="math display">
 \hat{\alpha} = 0.57,\quad
 \hat{\beta} = 0.027,\quad
 \hat{\gamma} = 0.94,\quad
 \hat{\delta} = 0.026,
-\]</span> which are very close to the results of the other two approaches mentioned above. Only the estimate for <span class="math inline">\(\gamma\)</span> deviates significantly from the other estimates.</p>
+</span> which are very close to the results of the other two approaches mentioned above. Only the estimate for <span class="math inline">\gamma</span> deviates significantly from the other estimates.</p>
 <p>However, this approach is very simple to implement and requires no knowledge about the differential equations or Bayesian modelling software.</p>
 <p>Thanks for reading!</p>
-
 
 
 </section>

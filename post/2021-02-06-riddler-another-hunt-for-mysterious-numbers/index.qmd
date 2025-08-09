@@ -2,7 +2,6 @@
 title: 'Riddler: Another Hunt For Mysterious Numbers'
 author: Bas
 date: '2021-02-06'
-math: true
 ---
 
 This week's [FiveThirtyEight Riddler Express](https://fivethirtyeight.com/features/can-you-randomly-move-the-tower/) is similar to the Riddler Classic of two weeks ago:
@@ -50,7 +49,7 @@ col_factors = [[DefaultDict(0, col_factors[col])[prms[i]] for i in 1:4] for col 
  [7, 0, 1, 0]
 ```
 
-Again, onto the actual problem definition. 
+Again, onto the actual problem definition.
 
 ```julia
 model = Model(with_optimizer(GLPK.Optimizer))
@@ -81,7 +80,7 @@ end
 And that is all! Let JuMP do its magic and come up with a feasible solution. As an example, again we print out the number of times a 2 (the first prime) appears in every cell.
 
 ```julia
-JuMP.optimize!(model) 
+JuMP.optimize!(model)
 
 solution = JuMP.value.(x);
 

@@ -100,8 +100,22 @@ ul.task-list li input[type="checkbox"] {
   })
   </script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -233,7 +247,7 @@ Apr 28, 2024
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-listing-date-sort="1707433200000" data-listing-file-modified-sort="1754675266560" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="13" data-listing-word-count-sort="2416">
+<div class="quarto-post image-right" data-index="1" data-listing-date-sort="1707433200000" data-listing-file-modified-sort="1754754133467" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2288">
 <div class="body">
 <h3 class="no-anchor listing-title">
 <a href="./post/2024-02-09-physics-informed-neural-networks-for-population-dynamics/index.html" class="no-external">Physics-informed neural network for population dynamics</a>
@@ -261,7 +275,7 @@ May 18, 2022
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="3" data-listing-date-sort="1612566000000" data-listing-file-modified-sort="1754675266619" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="568">
+<div class="quarto-post image-right" data-index="3" data-listing-date-sort="1612566000000" data-listing-file-modified-sort="1754754267256" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="566">
 <div class="body">
 <h3 class="no-anchor listing-title">
 <a href="./post/2021-02-06-riddler-another-hunt-for-mysterious-numbers/index.html" class="no-external">Riddler: Another Hunt For Mysterious Numbers</a>
@@ -275,7 +289,7 @@ Feb 6, 2021
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="4" data-listing-date-sort="1611270000000" data-listing-file-modified-sort="1754730836560" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="753">
+<div class="quarto-post image-right" data-index="4" data-listing-date-sort="1611270000000" data-listing-file-modified-sort="1754754274362" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="746">
 <div class="body">
 <h3 class="no-anchor listing-title">
 <a href="./post/2021-01-22-riddler-can-you-hunt-for-the-mysterious-numbers/index.html" class="no-external">Riddler: Can You Hunt For The Mysterious Numbers?</a>
@@ -317,7 +331,7 @@ Nov 18, 2020
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="7" data-listing-date-sort="1601589600000" data-listing-file-modified-sort="1754675266622" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1500">
+<div class="quarto-post image-right" data-index="7" data-listing-date-sort="1601589600000" data-listing-file-modified-sort="1754754304151" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1472">
 <div class="body">
 <h3 class="no-anchor listing-title">
 <a href="./post/2020-10-02-riddler-can-you-eat-all-the-chocolates/index.html" class="no-external">Riddler: Can You Eat All The Chocolates?</a>
@@ -331,7 +345,7 @@ Oct 2, 2020
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="8" data-listing-date-sort="1555797600000" data-listing-file-modified-sort="1754730843707" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1195">
+<div class="quarto-post image-right" data-index="8" data-listing-date-sort="1555797600000" data-listing-file-modified-sort="1754754299895" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1165">
 <div class="body">
 <h3 class="no-anchor listing-title">
 <a href="./post/2019-04-21-trees-and-tents/index.html" class="no-external">Trees and Tents</a>
@@ -359,7 +373,7 @@ Oct 28, 2018
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="10" data-listing-date-sort="1537394400000" data-listing-file-modified-sort="1754675266525" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1284">
+<div class="quarto-post image-right" data-index="10" data-listing-date-sort="1537394400000" data-listing-file-modified-sort="1754754299895" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1250">
 <div class="body">
 <h3 class="no-anchor listing-title">
 <a href="./post/2018-09-20-image-approximation-with-keras-in-r/index.html" class="no-external">Learning image representation with Keras in R</a>
@@ -387,7 +401,7 @@ Jul 15, 2018
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="12" data-listing-date-sort="1530136800000" data-listing-file-modified-sort="1754675266600" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2108">
+<div class="quarto-post image-right" data-index="12" data-listing-date-sort="1530136800000" data-listing-file-modified-sort="1754754292967" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2040">
 <div class="body">
 <h3 class="no-anchor listing-title">
 <a href="./post/2018-06-28-pen-plotter/index.html" class="no-external">Pen plotter</a>
