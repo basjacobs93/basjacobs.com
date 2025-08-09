@@ -4435,8 +4435,7 @@ font-style: inherit;">"Probability"</span>)</span></code></pre></div>
 <figcaption>A 12x12 Trees and Tents puzzle from https://brainbashers.com/tents.asp</figcaption>
 </figure>
 </div>
-<p>In this post, I will implement a solver for this puzzle in Julia using the <a href="https://github.com/JuliaOpt/JuMP.jl">JuMP</a> package for mathematical optimization.<br>
-The complete code as a jupyter notebook can be found <a href="https://github.com/basjacobs93/trees_and_tents">here</a>.</p>
+<p>In this post, I will implement a solver for this puzzle in Julia using the <a href="https://github.com/JuliaOpt/JuMP.jl">JuMP</a> package for mathematical optimization. The complete code as a jupyter notebook can be found <a href="https://github.com/basjacobs93/trees_and_tents">here</a>.</p>
 <section id="problem-definition" class="level2">
 <h2 class="anchored" data-anchor-id="problem-definition">Problem definition</h2>
 <p>The puzzle can be formulated as a linear programming problem. There are three types of constraints:</p>
@@ -4618,10 +4617,10 @@ font-style: inherit;">0</span>)</span>
 background-color: null;
 font-weight: bold;
 font-style: inherit;">end</span></span>
-<span id="cb5-6">    </span>
+<span id="cb5-6"></span>
 <span id="cb5-7">    <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># should be next to a tree </span></span>
+font-style: inherit;"># should be next to a tree</span></span>
 <span id="cb5-8">    found <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
@@ -4866,20 +4865,19 @@ font-style: inherit;">""</span>)</span>
 background-color: null;
 font-weight: bold;
 font-style: inherit;">end</span></span></code></pre></div>
-<pre><code>◻️ ◻️ 🌲 ⛺ ◻️ ⛺ ◻️ 🌲 🌲 ⛺ ◻️ ◻️ 
-◻️ ⛺ 🌲 ◻️ ◻️ 🌲 ◻️ ⛺ ◻️ ◻️ 🌲 ⛺ 
-◻️ ◻️ ◻️ 🌲 ⛺ ◻️ ◻️ ◻️ 🌲 ⛺ ◻️ ◻️ 
-◻️ ⛺ ◻️ 🌲 ◻️ ◻️ 🌲 ◻️ ◻️ ◻️ ◻️ ◻️ 
-◻️ 🌲 ◻️ ⛺ ◻️ ◻️ ⛺ ◻️ ◻️ ◻️ ◻️ ◻️ 
-⛺ ◻️ 🌲 ◻️ ◻️ ◻️ ◻️ ◻️ 🌲 ⛺ 🌲 ⛺ 
-🌲 ◻️ ⛺ ◻️ ⛺ ◻️ ◻️ ◻️ ◻️ ◻️ ◻️ ◻️ 
-◻️ ◻️ ◻️ ◻️ 🌲 ◻️ ◻️ ⛺ 🌲 ◻️ 🌲 ⛺ 
-⛺ ◻️ 🌲 ◻️ ◻️ ◻️ ◻️ ◻️ ◻️ ⛺ ◻️ ◻️ 
-🌲 ◻️ ⛺ ◻️ ◻️ ⛺ ◻️ ⛺ ◻️ 🌲 ◻️ ⛺ 
-◻️ ◻️ ◻️ ◻️ ◻️ 🌲 ◻️ 🌲 ◻️ ◻️ ◻️ 🌲 
-◻️ ◻️ 🌲 ⛺ ◻️ 🌲 ⛺ ◻️ 🌲 ⛺ 🌲 ⛺ </code></pre>
+<pre><code>◻️ ◻️ 🌲 ⛺ ◻️ ⛺ ◻️ 🌲 🌲 ⛺ ◻️ ◻️
+◻️ ⛺ 🌲 ◻️ ◻️ 🌲 ◻️ ⛺ ◻️ ◻️ 🌲 ⛺
+◻️ ◻️ ◻️ 🌲 ⛺ ◻️ ◻️ ◻️ 🌲 ⛺ ◻️ ◻️
+◻️ ⛺ ◻️ 🌲 ◻️ ◻️ 🌲 ◻️ ◻️ ◻️ ◻️ ◻️
+◻️ 🌲 ◻️ ⛺ ◻️ ◻️ ⛺ ◻️ ◻️ ◻️ ◻️ ◻️
+⛺ ◻️ 🌲 ◻️ ◻️ ◻️ ◻️ ◻️ 🌲 ⛺ 🌲 ⛺
+🌲 ◻️ ⛺ ◻️ ⛺ ◻️ ◻️ ◻️ ◻️ ◻️ ◻️ ◻️
+◻️ ◻️ ◻️ ◻️ 🌲 ◻️ ◻️ ⛺ 🌲 ◻️ 🌲 ⛺
+⛺ ◻️ 🌲 ◻️ ◻️ ◻️ ◻️ ◻️ ◻️ ⛺ ◻️ ◻️
+🌲 ◻️ ⛺ ◻️ ◻️ ⛺ ◻️ ⛺ ◻️ 🌲 ◻️ ⛺
+◻️ ◻️ ◻️ ◻️ ◻️ 🌲 ◻️ 🌲 ◻️ ◻️ ◻️ 🌲
+◻️ ◻️ 🌲 ⛺ ◻️ 🌲 ⛺ ◻️ 🌲 ⛺ 🌲 ⛺</code></pre>
 <p>That’s it! I like the JuMP syntax a lot and will definitely use it to solve more puzzles!</p>
-
 
 
 </section>

@@ -106,7 +106,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  </head><body class="nav-fixed quarto-light">true
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -136,9 +151,9 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../../styles.css">
+</head>
 
-
-
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -245,8 +260,7 @@ window.Quarto = {
 <figcaption>A 12x12 Trees and Tents puzzle from https://brainbashers.com/tents.asp</figcaption>
 </figure>
 </div>
-<p>In this post, I will implement a solver for this puzzle in Julia using the <a href="https://github.com/JuliaOpt/JuMP.jl">JuMP</a> package for mathematical optimization.<br>
-The complete code as a jupyter notebook can be found <a href="https://github.com/basjacobs93/trees_and_tents">here</a>.</p>
+<p>In this post, I will implement a solver for this puzzle in Julia using the <a href="https://github.com/JuliaOpt/JuMP.jl">JuMP</a> package for mathematical optimization. The complete code as a jupyter notebook can be found <a href="https://github.com/basjacobs93/trees_and_tents">here</a>.</p>
 <section id="problem-definition" class="level2">
 <h2 class="anchored" data-anchor-id="problem-definition">Problem definition</h2>
 <p>The puzzle can be formulated as a linear programming problem. There are three types of constraints:</p>
@@ -295,8 +309,8 @@ The complete code as a jupyter notebook can be found <a href="https://github.com
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (row, col) <span class="kw">in</span> trees</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        <span class="pp">@constraint</span>(model, x[row, col] <span class="op">==</span> <span class="fl">0</span>)</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># should be next to a tree </span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># should be next to a tree</span></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    found <span class="op">=</span> <span class="cn">false</span></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> tree <span class="kw">in</span> trees</span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="fu">abs</span>(tree[<span class="fl">1</span>] <span class="op">-</span> row) <span class="op">+</span> <span class="fu">abs</span>(tree[<span class="fl">2</span>] <span class="op">-</span> col) <span class="op">&lt;=</span> <span class="fl">1</span></span>
@@ -337,20 +351,19 @@ The complete code as a jupyter notebook can be found <a href="https://github.com
 <span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
 <span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(<span class="st">""</span>)</span>
 <span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre><code>◻️ ◻️ 🌲 ⛺ ◻️ ⛺ ◻️ 🌲 🌲 ⛺ ◻️ ◻️ 
-◻️ ⛺ 🌲 ◻️ ◻️ 🌲 ◻️ ⛺ ◻️ ◻️ 🌲 ⛺ 
-◻️ ◻️ ◻️ 🌲 ⛺ ◻️ ◻️ ◻️ 🌲 ⛺ ◻️ ◻️ 
-◻️ ⛺ ◻️ 🌲 ◻️ ◻️ 🌲 ◻️ ◻️ ◻️ ◻️ ◻️ 
-◻️ 🌲 ◻️ ⛺ ◻️ ◻️ ⛺ ◻️ ◻️ ◻️ ◻️ ◻️ 
-⛺ ◻️ 🌲 ◻️ ◻️ ◻️ ◻️ ◻️ 🌲 ⛺ 🌲 ⛺ 
-🌲 ◻️ ⛺ ◻️ ⛺ ◻️ ◻️ ◻️ ◻️ ◻️ ◻️ ◻️ 
-◻️ ◻️ ◻️ ◻️ 🌲 ◻️ ◻️ ⛺ 🌲 ◻️ 🌲 ⛺ 
-⛺ ◻️ 🌲 ◻️ ◻️ ◻️ ◻️ ◻️ ◻️ ⛺ ◻️ ◻️ 
-🌲 ◻️ ⛺ ◻️ ◻️ ⛺ ◻️ ⛺ ◻️ 🌲 ◻️ ⛺ 
-◻️ ◻️ ◻️ ◻️ ◻️ 🌲 ◻️ 🌲 ◻️ ◻️ ◻️ 🌲 
-◻️ ◻️ 🌲 ⛺ ◻️ 🌲 ⛺ ◻️ 🌲 ⛺ 🌲 ⛺ </code></pre>
+<pre><code>◻️ ◻️ 🌲 ⛺ ◻️ ⛺ ◻️ 🌲 🌲 ⛺ ◻️ ◻️
+◻️ ⛺ 🌲 ◻️ ◻️ 🌲 ◻️ ⛺ ◻️ ◻️ 🌲 ⛺
+◻️ ◻️ ◻️ 🌲 ⛺ ◻️ ◻️ ◻️ 🌲 ⛺ ◻️ ◻️
+◻️ ⛺ ◻️ 🌲 ◻️ ◻️ 🌲 ◻️ ◻️ ◻️ ◻️ ◻️
+◻️ 🌲 ◻️ ⛺ ◻️ ◻️ ⛺ ◻️ ◻️ ◻️ ◻️ ◻️
+⛺ ◻️ 🌲 ◻️ ◻️ ◻️ ◻️ ◻️ 🌲 ⛺ 🌲 ⛺
+🌲 ◻️ ⛺ ◻️ ⛺ ◻️ ◻️ ◻️ ◻️ ◻️ ◻️ ◻️
+◻️ ◻️ ◻️ ◻️ 🌲 ◻️ ◻️ ⛺ 🌲 ◻️ 🌲 ⛺
+⛺ ◻️ 🌲 ◻️ ◻️ ◻️ ◻️ ◻️ ◻️ ⛺ ◻️ ◻️
+🌲 ◻️ ⛺ ◻️ ◻️ ⛺ ◻️ ⛺ ◻️ 🌲 ◻️ ⛺
+◻️ ◻️ ◻️ ◻️ ◻️ 🌲 ◻️ 🌲 ◻️ ◻️ ◻️ 🌲
+◻️ ◻️ 🌲 ⛺ ◻️ 🌲 ⛺ ◻️ 🌲 ⛺ 🌲 ⛺</code></pre>
 <p>That’s it! I like the JuMP syntax a lot and will definitely use it to solve more puzzles!</p>
-
 
 
 </section>
