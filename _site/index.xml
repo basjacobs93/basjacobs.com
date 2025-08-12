@@ -20,6 +20,7 @@
 
 
 
+
 <p>Inspired by https://placenames.rtwilson.com, I thought I’d try to make such place name visualizations of the Netherlands myself.</p>
 <p>The Dutch platform <a href="https://www.pdok.nl">PDOK</a> provides open geo-information datasets through webservices and downloads. Here, we use the <a href="https://api.pdok.nl/bzk/locatieserver/search/v3_1/ui/">location API</a> to search for residence locations using <a href="https://solr.apache.org/guide/6_6/the-standard-query-parser.html#the-standard-query-parser">Solr-syntax</a>. We also use the gray background map from PDOK, and use leaflet to create interactive maps.</p>
 <div class="cell">
