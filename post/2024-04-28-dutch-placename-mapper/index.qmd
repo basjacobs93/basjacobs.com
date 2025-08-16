@@ -7,7 +7,7 @@ categories: []
 tags: []
 ---
 
-Inspired by https://placenames.rtwilson.com, I thought I'd try to make such place name visualizations of the Netherlands myself.  
+Inspired by [British Placename Mapper](https://placenames.rtwilson.com), I thought I'd try to make such place name visualizations of the Netherlands myself.
 
 The Dutch platform [PDOK](https://www.pdok.nl) provides open geo-information datasets through webservices and downloads. Here, we use the [location API](https://api.pdok.nl/bzk/locatieserver/search/v3_1/ui/) to search for residence locations using [Solr-syntax](https://solr.apache.org/guide/6_6/the-standard-query-parser.html#the-standard-query-parser). We also use the gray background map from PDOK, and use leaflet to create interactive maps.
 
@@ -22,26 +22,26 @@ pdok_map_url <- "https://service.pdok.nl/brt/achtergrondkaart/wmts/v2_0/grijs/EP
 addLocationMarkers <- function(map, location, fillColor) {
   url <- URLencode(str_glue(pdok_query_url))
   res <- jsonlite::read_json(url, simplifyVector = TRUE)
-  
-  df <- bind_rows(res$response$docs) %>% 
+
+  df <- bind_rows(res$response$docs) %>%
     mutate(lng = as.numeric(str_extract(centroide_ll, "[\\d\\.]+\\s")),
            lat = as.numeric(str_extract(centroide_ll, "\\s[\\d\\.]+")))
-  
+
   map <- addCircleMarkers(map, lng=df$lng, lat=df$lat, popup = df$woonplaatsnaam,
                           stroke = F, radius = 5, fillOpacity = 1, fillColor = fillColor, color = fillColor)
-  
+
   return(map)
 }
 
 create_map <- function(markers) {
-  
-  map <- leaflet() %>% 
+
+  map <- leaflet() %>%
     setView(zoom=7, lng=5.4, lat=52.2) %>%
     addTiles(urlTemplate = pdok_map_url,
              attribution = "<a href='https://www.pdok.nl/'>PDOK</a>",
              options = tileOptions(minZoom = 6, maxZoom = 18)
     )
-  
+
   for (location in names(markers)) {
     map <- addLocationMarkers(map, location, markers[[location]])
   }
@@ -78,4 +78,3 @@ create_map(list(
   "*waal*" = "magenta"
 ))
 ```
-

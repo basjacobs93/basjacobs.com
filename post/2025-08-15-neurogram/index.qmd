@@ -1,0 +1,17 @@
+---
+title: Neurogram
+author: Bas
+date: '2025-08-16'
+---
+
+Find in [this repository](https://github.com/basjacobs93/neurogram) an implementation of the [CPPN-NEAT algorithm](https://en.wikipedia.org/wiki/Compositional_pattern-producing_network) to create networks that represent images. I tried to keep things simple and lightweight, using only `matplotlib` as a dependency for drawing the images. The dependency `networkx` was added for drawing the networks for debugging purposes. The networks themselves are simple Python objects. 6 networks (and hence images) are generated at random, and from then on two images can crossover in various ways into 6 new images, and so on.
+
+I was heavily inspired by [this blogpost](https://blog.otoro.net/2015/07/31/neurogram/). They are able to generate way prettier images and explain how they did it in the post. I did not bother to fine-tune my parameters, this was merely a fun exercise to try and implement a neural network that evolves using a genetic algorithm. The topological sorting of the nodes was an interesting sub-problem to solve, because the nodes are not arranged in layers like in "normal" neural networks. According [to Wikipedia](https://en.wikipedia.org/wiki/Depth-first_search), listing the nodes in the opposite order of their last visit of a depth-first search produces a topological sorting. So that is what I did.
+
+Also, I used `uv` for the first time (late to the party, I know), was impressed by the speed and convenience. I especially enjoyed the inline metadata format which allows the dependencies to be declared in the `.py` file itself. I will definitely use this more often for small scripts like this.
+Some output screenshots:
+
+![](neurogram-1.png)
+![](neurogram-2.png)
+![](neurogram-3.png)
+![](neurogram-4.png)
