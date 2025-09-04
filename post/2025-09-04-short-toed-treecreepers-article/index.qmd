@@ -1,0 +1,11 @@
+---
+title: Short-toed Treecreepers Article
+author: Bas
+date: '2025-09-04'
+---
+
+The paper called *Factors influencing roost use by Short-toed Treecreepers Certhia brachydactyla at urban sites*, has been [published](https://bioone.org/journals/ardea/volume-113/issue-1/arde.2024.a19/Factors-influencing-roost-use-by-Short-toed-Treecreepers-Certhia-brachydactyla/10.5253/arde.2024.a19.short).
+
+The most work was done by Dook who put in a lot of effort to create this great dataset, and Paul who did research and wrote the article. I am really happy and proud that I was able to assist with the statistics and graphs.
+
+![](img.png)
