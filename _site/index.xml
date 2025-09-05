@@ -10,7 +10,32 @@
 <atom:link href="https://www.basjacobs.com/index.xml" rel="self" type="application/rss+xml"/>
 <description>My blog about math, programming and data science</description>
 <generator>quarto-1.7.33</generator>
-<lastBuildDate>Wed, 03 Sep 2025 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 04 Sep 2025 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>Japanese Learning Helper for Safari</title>
+  <dc:creator>Bas </dc:creator>
+  <link>https://www.basjacobs.com/post/2025-09-05-japanese-learning-helper-for-safari/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>I vibe-coded a Safari extension that helps me practice Japanese while I am browsing the web. Find it <a href="https://github.com/basjacobs93/japanese-learning-helper">here</a>.</p>
+<p>It connects to WaniKani to translate words of your level. It can translate a fixed set of nouns, all your WaniKani words, or full sentences. You can select the percentage of sentences it should translate. It is still a bit buggy, but it works for me. It is fun how easy it now is to create something like this!</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://www.basjacobs.com/post/2025-09-05-japanese-learning-helper-for-safari/screenshot.png" class="img-fluid figure-img"></p>
+<figcaption>Screenshot of the extension in action</figcaption>
+</figure>
+</div>
+
+
+
+ ]]></description>
+  <guid>https://www.basjacobs.com/post/2025-09-05-japanese-learning-helper-for-safari/</guid>
+  <pubDate>Thu, 04 Sep 2025 22:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Short-toed Treecreepers Article</title>
   <dc:creator>Bas </dc:creator>

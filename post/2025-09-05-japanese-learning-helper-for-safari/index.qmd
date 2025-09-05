@@ -1,0 +1,12 @@
+---
+title: Japanese Learning Helper for Safari
+author: Bas
+date: '2025-09-05'
+---
+
+I vibe-coded a Safari extension that helps me practice Japanese while I am browsing the web. Find it [here](https://github.com/basjacobs93/japanese-learning-helper).
+
+It connects to WaniKani to translate words of your level. It can translate a fixed set of nouns, all your WaniKani words, or full sentences. You can select the percentage of sentences it should translate.
+It is still a bit buggy, but it works for me. It is fun how easy it now is to create something like this!
+
+![Screenshot of the extension in action](screenshot.png)
