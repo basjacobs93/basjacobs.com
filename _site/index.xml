@@ -10,7 +10,34 @@
 <atom:link href="https://www.basjacobs.com/index.xml" rel="self" type="application/rss+xml"/>
 <description>My blog about math, programming and data science</description>
 <generator>quarto-1.7.33</generator>
-<lastBuildDate>Thu, 04 Sep 2025 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 22 Oct 2025 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>WK-NHK</title>
+  <dc:creator>Bas </dc:creator>
+  <link>https://www.basjacobs.com/post/2025-10-23-wk-nhk/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>I created a website <a href="https://www.wk-nhk.com/">www.wk-nhk.com</a> that shows <a href="https://news.web.nhk/news/easy/">NHK Web Easy</a> articles with custom furigana based on WaniKani level.</p>
+<p>I try to read a couple of NHK Easy articles each day, but I found that even though I know some of the kanji, my eyes read the furigana anyways. That feels like cheating and it does not force me to practice the kanji.</p>
+<p>In this new website, you can select your WaniKani level with the slider and watch the furigana you know disappear. That way, you are forced to read the kanji you are supposed know, and only see furigana for kanji you do not know.</p>
+<p>The site updates each day via GitHub actions to show the latest articles. Find the code <a href="https://github.com/basjacobs93/wk-nhk/">here</a>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://www.basjacobs.com/post/2025-10-23-wk-nhk/screenshot.png" class="img-fluid figure-img"></p>
+<figcaption>Screenshot of the front page</figcaption>
+</figure>
+</div>
+
+
+
+ ]]></description>
+  <guid>https://www.basjacobs.com/post/2025-10-23-wk-nhk/</guid>
+  <pubDate>Wed, 22 Oct 2025 22:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Japanese Learning Helper for Safari</title>
   <dc:creator>Bas </dc:creator>
