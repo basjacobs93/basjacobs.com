@@ -28,3 +28,7 @@ format:
     css: styles.css
     toc: true
     html-math-method: katex
+    include-in-header:
+      - text: |
+          <script data-goatcounter="https://basjacobs.goatcounter.com/count"
+                  async src="//gc.zgo.at/count.js"></script>
