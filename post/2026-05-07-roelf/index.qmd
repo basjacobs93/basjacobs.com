@@ -1,0 +1,42 @@
+---
+title: Roelf (Dutch)
+author: Bas
+date: '2026-05-07'
+---
+
+In de podcast "We Love Nederlands" vertelt Yannick waaorm hij de naam _Roelf_ zo mooi vindt. Volgens hem kan je elke letter weghalen en blijft er telkens weer een bestaande naam over. Haal je de _f_  weg, krijg je _Roel_, haal je de _l_ weg, krijg je _Roef_, et cetera. Haal je de _R_ weg, krijg je _Oelf_, weer een naam. Helaas is volgens de Nederlandse Voornamenbank van het Meertens Instituut [Oelf](https://nvb.meertens.knaw.nl/naam/is/Oelf) geen Nederlandse voornaam.
+
+Benieuwd naar of er wel dat soort namen bestaan waarbij je na het weglaten van elke letter weer een naam krijgt, zocht ik naar een dataset van de voornamen van het Meertens Instituut. Ik vond [deze lijst](https://raw.githubusercontent.com/bartbroere/namenlijsten/refs/heads/master/voornamen.json) die gemaakt is in 2013.
+
+Er zijn veel namen waarvoor de _Roelf-eigenschap_ geldt, maar de meeste komen weinig voor. Als het niet uitmaakt hoe vaak een naam voorkomt, zijn
+```
+fionne: ionne, fonne, finne, fione, fione, fionn
+rianna: ianna, ranna, rinna, riana, riana, riann
+rienko: ienko, renko, rinko, rieko, rieno, rienk
+```
+voorbeelden van gevallen met 6 letters.
+
+Namen met minstens 4 letters waarvan alle varianten minstens 10 keer voorkomen, zijn de volgende.
+```
+dayo: ayo, dyo, dao, day
+dian: ian, dan, din, dia
+jian: ian, jan, jin, jia
+kayan: ayan, kyan, kaan, kayn, kaya
+lian: ian, lan, lin, lia
+mian: ian, man, min, mia
+rian: ian, ran, rin, ria
+shai: hai, sai, shi, sha
+shui: hui, sui, shi, shu
+wian: ian, wan, win, wia
+yuri: uri, yri, yui, yur
+```
+
+Als ze minstens 100 keer moeten zijn gegeven, blijven
+```
+dian: ian, dan, din, dia
+jian: ian, jan, jin, jia
+lian: ian, lan, lin, lia
+```
+over.
+
+Overigens zijn er enorm veel 2- en 1-letterige namen, maar dat is valsspelen. Blijkbaar zijn JM, M én J allemaal namen die minstens 500 keer voorkomen in Nederland ...

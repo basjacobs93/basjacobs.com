@@ -10,7 +10,49 @@
 <atom:link href="https://www.basjacobs.com/index.xml" rel="self" type="application/rss+xml"/>
 <description>My blog about math, programming and data science</description>
 <generator>quarto-1.7.33</generator>
-<lastBuildDate>Wed, 22 Oct 2025 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 06 May 2026 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>Roelf (Dutch)</title>
+  <dc:creator>Bas </dc:creator>
+  <link>https://www.basjacobs.com/post/2026-05-07-roelf/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>In de podcast “We Love Nederlands” vertelt Yannick waaorm hij de naam <em>Roelf</em> zo mooi vindt. Volgens hem kan je elke letter weghalen en blijft er telkens weer een bestaande naam over. Haal je de <em>f</em> weg, krijg je <em>Roel</em>, haal je de <em>l</em> weg, krijg je <em>Roef</em>, et cetera. Haal je de <em>R</em> weg, krijg je <em>Oelf</em>, weer een naam. Helaas is volgens de Nederlandse Voornamenbank van het Meertens Instituut <a href="https://nvb.meertens.knaw.nl/naam/is/Oelf">Oelf</a> geen Nederlandse voornaam.</p>
+<p>Benieuwd naar of er wel dat soort namen bestaan waarbij je na het weglaten van elke letter weer een naam krijgt, zocht ik naar een dataset van de voornamen van het Meertens Instituut. Ik vond <a href="https://raw.githubusercontent.com/bartbroere/namenlijsten/refs/heads/master/voornamen.json">deze lijst</a> die gemaakt is in 2013.</p>
+<p>Er zijn veel namen waarvoor de <em>Roelf-eigenschap</em> geldt, maar de meeste komen weinig voor. Als het niet uitmaakt hoe vaak een naam voorkomt, zijn</p>
+<pre><code>fionne: ionne, fonne, finne, fione, fione, fionn
+rianna: ianna, ranna, rinna, riana, riana, riann
+rienko: ienko, renko, rinko, rieko, rieno, rienk</code></pre>
+<p>voorbeelden van gevallen met 6 letters.</p>
+<p>Namen met minstens 4 letters waarvan alle varianten minstens 10 keer voorkomen, zijn de volgende.</p>
+<pre><code>dayo: ayo, dyo, dao, day
+dian: ian, dan, din, dia
+jian: ian, jan, jin, jia
+kayan: ayan, kyan, kaan, kayn, kaya
+lian: ian, lan, lin, lia
+mian: ian, man, min, mia
+rian: ian, ran, rin, ria
+shai: hai, sai, shi, sha
+shui: hui, sui, shi, shu
+wian: ian, wan, win, wia
+yuri: uri, yri, yui, yur</code></pre>
+<p>Als ze minstens 100 keer moeten zijn gegeven, blijven</p>
+<pre><code>dian: ian, dan, din, dia
+jian: ian, jan, jin, jia
+lian: ian, lan, lin, lia</code></pre>
+<p>over.</p>
+<p>Overigens zijn er enorm veel 2- en 1-letterige namen, maar dat is valsspelen. Blijkbaar zijn JM, M én J allemaal namen die minstens 500 keer voorkomen in Nederland …</p>
+
+
+
+ ]]></description>
+  <guid>https://www.basjacobs.com/post/2026-05-07-roelf/</guid>
+  <pubDate>Wed, 06 May 2026 22:00:00 GMT</pubDate>
+</item>
 <item>
   <title>WK-NHK</title>
   <dc:creator>Bas </dc:creator>
