@@ -1505,6 +1505,31 @@ font-style: inherit;">;</span> plt.show()</span></code></pre></div>
   <pubDate>Sat, 04 Jul 2026 22:00:00 GMT</pubDate>
 </item>
 <item>
+  <title>Kanji components</title>
+  <dc:creator>Bas </dc:creator>
+  <link>https://www.basjacobs.com/post/2026-07-05-kanji-components/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>I made a small website where you can browse kanji and visualize their radicals and phonetic components. You can search for kanji or component.</p>
+<p>The website is here: <a href="https://basjacobs93.github.io/kanji-phonetic-components/">basjacobs93.github.io/kanji-phonetic-components</a>, and source code is here: <a href="https://github.com/basjacobs93/kanji-phonetic-components">github.com/basjacobs93/kanji-phonetic-components</a>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://www.basjacobs.com/post/2026-07-05-kanji-components/images/kanji-components.png" class="img-fluid figure-img"></p>
+<figcaption>Screenshot of the kanji components website</figcaption>
+</figure>
+</div>
+
+
+
+ ]]></description>
+  <guid>https://www.basjacobs.com/post/2026-07-05-kanji-components/</guid>
+  <pubDate>Sat, 04 Jul 2026 22:00:00 GMT</pubDate>
+</item>
+<item>
   <title>Roelf (in Dutch)</title>
   <dc:creator>Bas </dc:creator>
   <link>https://www.basjacobs.com/post/2026-05-07-roelf/</link>
