@@ -10,7 +10,1500 @@
 <atom:link href="https://www.basjacobs.com/index.xml" rel="self" type="application/rss+xml"/>
 <description>My blog about math, programming and data science</description>
 <generator>quarto-1.7.33</generator>
-<lastBuildDate>Wed, 06 May 2026 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 04 Jul 2026 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>MNIST-1D: From logistic regression to ROCKET</title>
+  <dc:creator>Bas </dc:creator>
+  <link>https://www.basjacobs.com/post/2026-07-05-mnist1d/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>MNIST-1D (<a href="https://arxiv.org/abs/2011.14439">Greydanus &amp; Steinbach, 2020</a>) is a procedurally generated dataset that contains 1D-representations of the digits in the MNIST dataset. Here we try to fit some simple models on it and see if we can do well without neural networks. First, let’s load it and look at some examples.</p>
+<div id="8dd9a2dd" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> numpy <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> np</span>
+<span id="cb1-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> matplotlib.pyplot <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> plt</span>
+<span id="cb1-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> sklearn.linear_model <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> LogisticRegression</span>
+<span id="cb1-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> sklearn.metrics <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> accuracy_score, confusion_matrix</span>
+<span id="cb1-5"></span>
+<span id="cb1-6"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> mnist1d <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> get_dataset</span>
+<span id="cb1-7"></span>
+<span id="cb1-8">data <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_dataset()</span>
+<span id="cb1-9">X, y <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> data[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"x"</span>], data[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"y"</span>]</span>
+<span id="cb1-10">X_test, y_test <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> data[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"x_test"</span>], data[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"y_test"</span>]</span>
+<span id="cb1-11"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"train: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>X<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>shape<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">, test: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>X_test<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>shape<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">, classes: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>np<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>unique(y)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>train: (4000, 40), test: (1000, 40), classes: [0 1 2 3 4 5 6 7 8 9]</code></pre>
+</div>
+</div>
+<section id="visualize-examples" class="level2">
+<h2 class="anchored" data-anchor-id="visualize-examples">Visualize examples</h2>
+<p>We show one example per class. Each signal is a sequence of length 40.</p>
+<div id="f60985ca" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1">fig, axes <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> plt.subplots(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, figsize<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">13</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>), sharex<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>, sharey<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>)</span>
+<span id="cb3-2"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> digit, ax <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">enumerate</span>(axes.ravel()):</span>
+<span id="cb3-3">    idx <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.where(y <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> digit)[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>][<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>]</span>
+<span id="cb3-4">    ax.plot(X[idx], <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"k-"</span>, lw<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span>
+<span id="cb3-5">    ax.set_title(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"class </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>digit<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb3-6">    ax.set_xticks([])<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span> ax.set_yticks([])</span>
+<span id="cb3-7">fig.suptitle(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"One MNIST-1D example per class"</span>, y<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1.02</span>)</span>
+<span id="cb3-8">fig.tight_layout()</span>
+<span id="cb3-9">plt.show()</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://www.basjacobs.com/post/2026-07-05-mnist1d/index_files/figure-html/cell-3-output-1.png" width="1238" height="494" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We also show some examples of the class “3” to show within-class variation.</p>
+<div id="84bf0ae4" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Several examples of a single class to show within-class variation</span></span>
+<span id="cb4-2">digit <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span></span>
+<span id="cb4-3">idxs <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.where(y <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> digit)[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>][:<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span>]</span>
+<span id="cb4-4">plt.figure(figsize<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>))</span>
+<span id="cb4-5"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> idxs:</span>
+<span id="cb4-6">    plt.plot(X[i], alpha<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.7</span>)</span>
+<span id="cb4-7">plt.title(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"8 examples of class </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>digit<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> (translation, noise, shear vary)"</span>)</span>
+<span id="cb4-8">plt.xlabel(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"position"</span>)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span> plt.ylabel(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"value"</span>)</span>
+<span id="cb4-9">plt.show()</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://www.basjacobs.com/post/2026-07-05-mnist1d/index_files/figure-html/cell-4-output-1.png" width="812" height="377" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Unlike “normal” 2D MNIST, the class structure is not visually obvious, which is what makes the benchmark interesting. Still, we can see a rotated “3” in each of the lines, though not always in the same place.</p>
+<p>In the paper, several models were fit to the dataset. Their scores are below: | Model | Test acc | |—|—| | Logistic regression | 33% | | MLP (paper) | 68% | | GRU (paper) | 91% | | CNN (paper) | 94% | | Human expert (paper) | 96% |</p>
+</section>
+<section id="train-logistic-regression" class="level2">
+<h2 class="anchored" data-anchor-id="train-logistic-regression">Train logistic regression</h2>
+<p>In the article, the authors show that a logistic regression model (which can obtain 94% accuracy on the MNIST dataset), only obtains 32% accuracy on this MNIST-1D dataset. Let’s try to reproduce that.<br>
+We fit a logistic regression model on the raw 40 features.</p>
+<div id="fc9dc3f3" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1">clf <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> LogisticRegression(max_iter<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5000</span>, C<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1.0</span>)</span>
+<span id="cb5-2">clf.fit(X, y)</span>
+<span id="cb5-3"></span>
+<span id="cb5-4">train_acc <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> accuracy_score(y, clf.predict(X))</span>
+<span id="cb5-5">test_acc <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> accuracy_score(y_test, clf.predict(X_test))</span>
+<span id="cb5-6"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"train accuracy: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>train_acc<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:.1%}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb5-7"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"test  accuracy: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>test_acc<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:.1%}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>train accuracy: 37.4%
+test  accuracy: 32.9%</code></pre>
+</div>
+</div>
+<div id="65692c9c" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1">cm <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> confusion_matrix(y_test, clf.predict(X_test))</span>
+<span id="cb7-2">plt.figure(figsize<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>))</span>
+<span id="cb7-3">plt.imshow(cm, cmap<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Blues"</span>)</span>
+<span id="cb7-4">plt.colorbar(label<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"count"</span>)</span>
+<span id="cb7-5">plt.xlabel(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"predicted"</span>)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span> plt.ylabel(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"true"</span>)</span>
+<span id="cb7-6">plt.title(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Logistic regression confusion matrix (test)"</span>)</span>
+<span id="cb7-7">plt.xticks(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>))<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span> plt.yticks(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>))</span>
+<span id="cb7-8">plt.show()</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://www.basjacobs.com/post/2026-07-05-mnist1d/index_files/figure-html/cell-6-output-1.png" width="499" height="438" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Indeed we obtain around 32% on the test set.</p>
+</section>
+<section id="translation-invariance-by-alignment-peak-anchor" class="level2">
+<h2 class="anchored" data-anchor-id="translation-invariance-by-alignment-peak-anchor">Translation invariance by alignment (peak anchor)</h2>
+<p>As mentioned previously, the sideways-3 we saw in each example was not always in the same place. Logistic regression on the raw signal cannot cope with this random translation. The same digit drawn at position 5 vs 25 looks like a different input to a linear model.</p>
+<p>To try to cope with this, we can roll each signal so its point of peak activity sits at index 0. That removes the shift while keeping the full ordered shape. We can also try to feed the model first differences (the pen’s velocity when drawing the digit).</p>
+<div id="edf05c18" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> scipy.ndimage <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> gaussian_filter1d</span>
+<span id="cb8-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> scipy.signal <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> detrend</span>
+<span id="cb8-3"></span>
+<span id="cb8-4"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> velocity(Z):</span>
+<span id="cb8-5">    V <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.diff(detrend(Z, axis<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>), axis<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)          <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># pen velocity, shear removed</span></span>
+<span id="cb8-6">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> V <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> (V.std(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, keepdims<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1e-8</span>)</span>
+<span id="cb8-7"></span>
+<span id="cb8-8"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> peak_align(V):</span>
+<span id="cb8-9">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""Roll each signal so its peak (smoothed |velocity|) sits at index 0."""</span></span>
+<span id="cb8-10">    anchor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> gaussian_filter1d(np.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">abs</span>(V), <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, axis<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>).argmax(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb8-11">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> np.stack([np.roll(v, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>a) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> v, a <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">zip</span>(V, anchor)])</span>
+<span id="cb8-12"></span>
+<span id="cb8-13">raw <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> LogisticRegression(max_iter<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5000</span>).fit(velocity(X), y)</span>
+<span id="cb8-14">aligned <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> LogisticRegression(max_iter<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5000</span>).fit(peak_align(X), y)</span>
+<span id="cb8-15">aligned_velocity <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> LogisticRegression(max_iter<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5000</span>).fit(peak_align(velocity(X)), y)</span>
+<span id="cb8-16"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"logreg on velocity (no alignment) : </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>(raw.predict(velocity(X_test)) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> y_test)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>mean()<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:.1%}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb8-17"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"logreg on peak-aligned raw values : </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>(aligned.predict(peak_align(X_test)) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> y_test)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>mean()<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:.1%}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb8-18"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"logreg on peak-aligned velocity   : </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>(aligned_velocity.predict(peak_align(velocity(X_test))) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> y_test)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>mean()<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:.1%}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>logreg on velocity (no alignment) : 19.9%
+logreg on peak-aligned raw values : 56.9%
+logreg on peak-aligned velocity   : 71.6%</code></pre>
+</div>
+</div>
+<p>Feeding the model the first differences hurts performance. Feeding it the peak-aligned raw values increases the performance from 33% to 57%, and combining the two, gives us 71.6%, just beating the MLP of the paper.</p>
+<p>To see what the alignment does, here are the same 8 class-3 examples after peak-aligning the raw values (left) and after peak-aligning their first differences (right).</p>
+<div id="a5efec70" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1">idxs <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.where(y <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>][:<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span>]</span>
+<span id="cb10-2">aligned_raw <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> peak_align(X[idxs])</span>
+<span id="cb10-3">aligned_diff <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> peak_align(velocity(X[idxs]))</span>
+<span id="cb10-4"></span>
+<span id="cb10-5">fig, (ax1, ax2) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> plt.subplots(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, figsize<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">12</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>))</span>
+<span id="cb10-6"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> r <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> aligned_raw:</span>
+<span id="cb10-7">    ax1.plot(r, alpha<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.7</span>)</span>
+<span id="cb10-8">ax1.set_title(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"peak-aligned raw values"</span>)</span>
+<span id="cb10-9"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> d <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> aligned_diff:</span>
+<span id="cb10-10">    ax2.plot(d, alpha<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.7</span>)</span>
+<span id="cb10-11">ax2.set_title(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"peak-aligned first differences"</span>)</span>
+<span id="cb10-12"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> ax <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> (ax1, ax2):</span>
+<span id="cb10-13">    ax.set_xlabel(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"position (peak at 0)"</span>)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span> ax.set_ylabel(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"value"</span>)</span>
+<span id="cb10-14">fig.suptitle(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"8 examples of class 3, aligned"</span>)</span>
+<span id="cb10-15">fig.tight_layout()</span>
+<span id="cb10-16">plt.show()</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://www.basjacobs.com/post/2026-07-05-mnist1d/index_files/figure-html/cell-8-output-1.png" width="1143" height="381" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Immediately we see some problems with this approach. Sometimes the noise dominates the “3” shape, so the shape itself ends up in the middle. Also, sometimes the shape is aligned at the first bump of the 3, sometimes at the second, causing the first bump to be all the way at the end of the image.</p>
+<section id="dynamic-time-warping" class="level3">
+<h3 class="anchored" data-anchor-id="dynamic-time-warping">Dynamic Time Warping</h3>
+<p>Let’s try something more fancy: Dynamic Time Warping (DTW). This technique stretches and translates time series to try to align them, giving a score on the final alignment obtained. We can then make a classifier that combines this score with a k-NN model, selecting the most common class of the <em>k</em> examples that align best with the input.</p>
+<div id="b0eb4471" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> dtaidistance <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> dtw</span>
+<span id="cb11-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> scipy.signal <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> detrend</span>
+<span id="cb11-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> scipy.stats <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> mode</span>
+<span id="cb11-4"></span>
+<span id="cb11-5"></span>
+<span id="cb11-6"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> prep(Z):</span>
+<span id="cb11-7">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""Remove the shear (detrend) and amplitude/offset (z-normalize) per signal."""</span></span>
+<span id="cb11-8">    Z <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> detrend(Z, axis<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb11-9">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> (Z <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> Z.mean(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, keepdims<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>)) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> (Z.std(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, keepdims<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1e-8</span>)</span>
+<span id="cb11-10"></span>
+<span id="cb11-11"></span>
+<span id="cb11-12"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> knn_vote(cross, ytr, yte, k):</span>
+<span id="cb11-13">    nn <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.argsort(cross, axis<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)[:, :k]</span>
+<span id="cb11-14">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> (mode(ytr[nn], axis<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, keepdims<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span>).mode <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> yte).mean()</span>
+<span id="cb11-15"></span>
+<span id="cb11-16"></span>
+<span id="cb11-17">Xtr_p, Xte_p <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> prep(X), prep(X_test)</span>
+<span id="cb11-18"></span>
+<span id="cb11-19"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Euclidean k-NN baseline (no time warping)</span></span>
+<span id="cb11-20">eu <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.linalg.norm(Xte_p[:, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>, :] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> Xtr_p[<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>, :, :], axis<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span>
+<span id="cb11-21"></span>
+<span id="cb11-22"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Full 1000x4000 DTW cross-distance matrix (~7s with the C backend)</span></span>
+<span id="cb11-23">series <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [np.ascontiguousarray(s, dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>np.double) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> s <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> np.vstack([Xte_p, Xtr_p])]</span>
+<span id="cb11-24">nA <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(Xte_p)</span>
+<span id="cb11-25">full <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> dtw.distance_matrix_fast(series, block<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>((<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, nA), (nA, <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(series))), compact<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span>)</span>
+<span id="cb11-26">dtw_d <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> full[:nA, nA:]</span>
+<span id="cb11-27"></span>
+<span id="cb11-28">ks <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">7</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">9</span>)</span>
+<span id="cb11-29"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> name, d <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> [(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Euclidean"</span>, eu), (<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"DTW"</span>, dtw_d)]:</span>
+<span id="cb11-30">    best_k <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">max</span>(ks, key<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">lambda</span> k: knn_vote(d, y, y_test, k))</span>
+<span id="cb11-31">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>name<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:&gt;10}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> k-NN (detrend+znorm)   best k=</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>best_k<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>knn_vote(d, y, y_test, best_k)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:.1%}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Euclidean k-NN (detrend+znorm)   best k=7: 57.5%
+       DTW k-NN (detrend+znorm)   best k=9: 83.3%</code></pre>
+</div>
+</div>
+<p>Applying k-NN to the raw data scores around 57% (k=7), but first applying DTW scores 83% (with k=9), beating our logistic regression.</p>
+<p>To see what DTW does, here is the optimal alignment it finds between two different class-3 examples. The orange lines connect matched points: DTW stretches and shifts the horizontal (time) axis so the bumps of one “3” line up with the bumps of the other, even though they were drawn at different positions.</p>
+<div id="d880c202" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> dtaidistance <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> dtw_visualisation <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> dtwvis</span>
+<span id="cb13-2"></span>
+<span id="cb13-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Two different class-3 examples, prepared the way the classifier sees them</span></span>
+<span id="cb13-4">a, b <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.where(y <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>][:<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>]</span>
+<span id="cb13-5">s1, s2 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> prep(X[[a]])[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>], prep(X[[b]])[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>]</span>
+<span id="cb13-6">path <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> dtw.warping_path(s1, s2, psi <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span>
+<span id="cb13-7"></span>
+<span id="cb13-8">fig, axs <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> plt.subplots(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, figsize<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>))</span>
+<span id="cb13-9">dtwvis.plot_warping(s1, s2, path, fig<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>fig, axs<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>axs)</span>
+<span id="cb13-10">axs[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>].set_title(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Two class-3 examples and the DTW alignment between them"</span>)</span>
+<span id="cb13-11">plt.show()</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://www.basjacobs.com/post/2026-07-05-mnist1d/index_files/figure-html/cell-10-output-1.png" width="951" height="491" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We see a problem, however, which is that the DTW is not “cyclic”; the beginning of one shape is mapped to the beginning of the other shape, and the ends are mapped as well. In this example, there is not enough signal to the left of the top 3 to accommodate for everything that is on the left of the bottom 3.</p>
+<p>We can run DTW “open-ended” by setting the <code>psi</code> argument in <code>dtadistance</code>. That way, we let a few points at the start and end of each signal be skipped for free, so the path no longer has to pin 0 to 0 and 40 to 40. Setting <code>psi</code> to 2 improved the accuracy to 86%.</p>
+</section>
+</section>
+<section id="rocket" class="level2">
+<h2 class="anchored" data-anchor-id="rocket">ROCKET</h2>
+<p>Maybe we do need convolutions to deal with the combination of noise and translations applied to our digits. But instead of using CNN, we apply random convolutions and put linear models on top. This is the idea of the <a href="https://arxiv.org/abs/1910.13051">ROCKET</a> model.</p>
+<p>Here, we create 400 random convolutional kernels of length 5, 7 or 9 and apply them to our digit. After that, we apply max pooling and PPV (proportion of positive values, see the paper) pooling to the resulting arrays. That gives us a 800 (400x2) numbers per digit, which we feed into a Ridge classifier. This classifier can deal with multicolinnearity. We keep only the 200 kernels with the highest contributions to the model.</p>
+<p>This is a bit like a CNN, but with random instead of learned convolutions and applying a linear model rather than a neural network.</p>
+<div id="eb6400de" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> numpy.lib.stride_tricks <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> sliding_window_view</span>
+<span id="cb14-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> scipy.signal <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> detrend</span>
+<span id="cb14-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> sklearn.linear_model <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> RidgeClassifierCV</span>
+<span id="cb14-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> sklearn.preprocessing <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> StandardScaler</span>
+<span id="cb14-5"></span>
+<span id="cb14-6"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> znorm(Z):</span>
+<span id="cb14-7">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> (Z <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> Z.mean(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, keepdims<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>)) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> (Z.std(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, keepdims<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1e-8</span>)</span>
+<span id="cb14-8"></span>
+<span id="cb14-9"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> make_kernels(n, maxlen, seed<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>):</span>
+<span id="cb14-10">    rng <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.random.default_rng(seed)</span>
+<span id="cb14-11">    ks <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> []</span>
+<span id="cb14-12">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> _ <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(n):</span>
+<span id="cb14-13">        L <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">int</span>(rng.choice([<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">7</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">9</span>]))</span>
+<span id="cb14-14">        w <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> rng.standard_normal(L)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span> w <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-=</span> w.mean()</span>
+<span id="cb14-15">        dil <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">int</span>(rng.choice([<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>]))</span>
+<span id="cb14-16">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> (L <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> dil <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> maxlen: dil <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb14-17">        ks.append((w, rng.uniform(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>), dil))</span>
+<span id="cb14-18">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> ks</span>
+<span id="cb14-19"></span>
+<span id="cb14-20"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> rocket(Z, ks):</span>
+<span id="cb14-21">    feats <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> []</span>
+<span id="cb14-22">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> w, b, dil <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> ks:</span>
+<span id="cb14-23">        eff <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(w) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> dil <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb14-24">        conv <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> sliding_window_view(Z, eff, axis<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)[:, :, ::dil] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">@</span> w <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> b</span>
+<span id="cb14-25">        feats.append((conv <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>).mean(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>))   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># PPV pooling</span></span>
+<span id="cb14-26">        feats.append(conv.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">max</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>))          <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># max pooling</span></span>
+<span id="cb14-27">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> np.column_stack(feats)</span>
+<span id="cb14-28"></span>
+<span id="cb14-29"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> fit_ridge(Ftr):</span>
+<span id="cb14-30">    sc <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> StandardScaler().fit(Ftr)</span>
+<span id="cb14-31">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> sc, RidgeClassifierCV(alphas<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>np.logspace(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>)).fit(sc.transform(Ftr), y)</span>
+<span id="cb14-32"></span>
+<span id="cb14-33">Xz, Xtz <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> znorm(detrend(X, axis<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)), znorm(detrend(X_test, axis<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>))</span>
+<span id="cb14-34"></span>
+<span id="cb14-35"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 400 random kernels</span></span>
+<span id="cb14-36">pool <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> make_kernels(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">400</span>, Xz.shape[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>])</span>
+<span id="cb14-37">_, pclf <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> fit_ridge(rocket(Xz, pool))</span>
+<span id="cb14-38"></span>
+<span id="cb14-39"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Select the 200 best kernels</span></span>
+<span id="cb14-40">imp <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.linalg.norm(pclf.coef_, axis<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>).reshape(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(pool), <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>).<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sum</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ridge weight per kernel</span></span>
+<span id="cb14-41">keep <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.argsort(imp)[::<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>][:<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">200</span>]</span>
+<span id="cb14-42">kernels <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [pool[i] <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> keep]                       <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># the 200 selected kernels</span></span>
+<span id="cb14-43">Ftr, Fte <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> rocket(Xz, kernels), rocket(Xtz, kernels)    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 2 features (PPV, max) per kernel</span></span>
+<span id="cb14-44"></span>
+<span id="cb14-45"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 200 best kernels</span></span>
+<span id="cb14-46">sc, clf <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> fit_ridge(Ftr)</span>
+<span id="cb14-47">acc <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (clf.predict(sc.transform(Fte)) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> y_test).mean()</span>
+<span id="cb14-48"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"selected ROCKET (best 200 of 400 random kernels -&gt; </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>Ftr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>shape[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> features) + ridge: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>acc<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:.1%}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>selected ROCKET (best 200 of 400 random kernels -&gt; 400 features) + ridge: 96.5%</code></pre>
+</div>
+</div>
+<p>This gives a score of 96%, beating all the models in the paper and becoming on-par with human performance. And it’s fast!</p>
+<section id="what-did-the-kernels-detect" class="level3">
+<h3 class="anchored" data-anchor-id="what-did-the-kernels-detect">What did the kernels detect?</h3>
+<p>To try to explain what the model learned, we rank the 200 kernels by how much the ridge weighs their features and plot the top kernels. We also show the training example that gives the highest value for each kernel.</p>
+<div id="89fa3c3f" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1">imp_feat <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.linalg.norm(clf.coef_, axis<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>)</span>
+<span id="cb16-2">imp_kernel <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> imp_feat.reshape(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(kernels), <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>).<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sum</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb16-3">order <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.argsort(imp_kernel)[::<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]</span>
+<span id="cb16-4"></span>
+<span id="cb16-5">ppv_share <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> imp_feat[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>::<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>].<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sum</span>() <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> imp_feat.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sum</span>()      <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># how much weight PPV vs max carries</span></span>
+<span id="cb16-6"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"share of ridge weight on PPV pooling: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>ppv_share<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:.0%}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">  (rest on max)"</span>)</span>
+<span id="cb16-7"></span>
+<span id="cb16-8"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> conv1d(z, w, b, dil):</span>
+<span id="cb16-9">    eff <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(w) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> dil <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb16-10">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> sliding_window_view(z, eff)[:, ::dil] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">@</span> w <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> b</span>
+<span id="cb16-11"></span>
+<span id="cb16-12"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Top row: the filter shape. Bottom row: the training stroke that maximally fires it.</span></span>
+<span id="cb16-13">fig, axes <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> plt.subplots(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, figsize<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">13</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>))</span>
+<span id="cb16-14"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> top, (ax_w, ax_s, ki) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">enumerate</span>(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">zip</span>(axes[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>], axes[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>], order[:<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>])):</span>
+<span id="cb16-15">    w, b, dil <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> kernels[ki]</span>
+<span id="cb16-16">    ax_w.plot(np.arange(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(w)) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> dil, w, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"o-"</span>)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span> ax_w.axhline(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, color<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"grey"</span>, lw<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">.5</span>)</span>
+<span id="cb16-17">    ax_w.set_title(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"#</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>top<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">: kernel </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>ki<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> (len </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(w)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">, dil </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>dil<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">)"</span>)</span>
+<span id="cb16-18">    acts <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.array([conv1d(z, w, b, dil) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> z <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> Xz])</span>
+<span id="cb16-19">    s, p <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.unravel_index(acts.argmax(), acts.shape)</span>
+<span id="cb16-20">    eff <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(w) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> dil <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb16-21">    ax_s.plot(Xz[s, p:p <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> eff], <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"k-"</span>)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span> ax_s.set_title(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"stroke it fires on (class </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>y[s]<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">)"</span>)</span>
+<span id="cb16-22">fig.suptitle(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Top kernels: filter shape (top) and the pen-stroke that maximally activates it (bottom)"</span>)</span>
+<span id="cb16-23">fig.tight_layout()<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span> plt.show()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>share of ridge weight on PPV pooling: 25%  (rest on max)</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://www.basjacobs.com/post/2026-07-05-mnist1d/index_files/figure-html/cell-12-output-2.png" width="1241" height="475" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Squinting our eyes and looking at the bottom row, we can see the sideways shapes of the 4, 7, 9, 5 … Nice!</p>
+</section>
+</section>
+<section id="final-scoreboard" class="level1">
+<h1>Final scoreboard</h1>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Model</th>
+<th>Test acc</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Logistic regression</td>
+<td>33%</td>
+</tr>
+<tr class="even">
+<td><em>MLP (paper)</em></td>
+<td>68%</td>
+</tr>
+<tr class="odd">
+<td>Logistic regression on aligned first-difference</td>
+<td>72%</td>
+</tr>
+<tr class="even">
+<td>DTW <em>k</em>-NN, k=9</td>
+<td>86%</td>
+</tr>
+<tr class="odd">
+<td><em>GRU (paper)</em></td>
+<td>91%</td>
+</tr>
+<tr class="even">
+<td><em>CNN (paper)</em></td>
+<td>94%</td>
+</tr>
+<tr class="odd">
+<td><em>Human expert (paper)</em></td>
+<td>96%</td>
+</tr>
+<tr class="even">
+<td>ROCKET + ridge</td>
+<td>96%</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="todo" class="level1">
+<h1>TODO</h1>
+<p>Lasso ipv ridge?</p>
+
+
+</section>
+
+ ]]></description>
+  <guid>https://www.basjacobs.com/post/2026-07-05-mnist1d/</guid>
+  <pubDate>Sat, 04 Jul 2026 22:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Roelf (in Dutch)</title>
   <dc:creator>Bas </dc:creator>

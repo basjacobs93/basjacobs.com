@@ -1,0 +1,13 @@
+[project]
+name = "basjacobs-blog"
+version = "0.1.0"
+description = "Python environment for executing Quarto posts on the blog"
+requires-python = ">=3.11"
+dependencies = [
+    "jupyter>=1.0.0",
+    "numpy>=2.0",
+    "matplotlib>=3.9",
+    "scikit-learn>=1.5",
+    "scipy>=1.14",
+    "dtaidistance>=2.4",
+]
